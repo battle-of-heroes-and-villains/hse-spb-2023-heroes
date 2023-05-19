@@ -8,40 +8,67 @@
 namespace game_interface {
 class ResourceManager {
 public:
-    ResourceManager();
-    ~ResourceManager() = default;
+    [[nodiscard]] const static sf::Texture &load_cell_texture(CellType texture);
 
-    const sf::Texture &load_cell_texture(CellType texture);
+    [[nodiscard]] const static sf::Texture &load_cell_property_texture(
+        CellType texture
+    );
 
-    const sf::Texture &load_cell_property_texture(CellType texture);
+    [[nodiscard]] const static sf::Texture &load_unit_texture(UnitType texture);
 
-    const sf::Texture &load_unit_texture(UnitType texture);
+    [[nodiscard]] const static sf::Texture &load_selected_unit_texture(
+        UnitType texture
+    );
 
-    const sf::Texture &load_selected_unit_texture(UnitType texture);
+    [[nodiscard]] const static sf::Texture &load_attack_animation_sprite_sheet(
+        UnitType texture
+    );
 
-    const sf::Texture &load_animation_sprite_sheet(AnimationType type);
+    [[nodiscard]] const static sf::Texture &load_hurt_animation_sprite_sheet(
+        UnitType texture
+    );
 
-    int amount_of_frames_in_animation(AnimationType type);
+    [[nodiscard]] const static sf::Texture &load_move_animation_sprite_sheet(
+        UnitType texture
+    );
 
-    const sf::Texture &load_texture(TextureType texture);
+    [[nodiscard]] static int amount_of_frames_in_attack_animation(UnitType type
+    );
 
-    const sf::Font &load_font(interface::Fonts font);
+    [[nodiscard]] static int amount_of_frames_in_hurt_animation(UnitType type);
 
-    const sf::Image &load_cursor(CursorType cursor);
+    [[nodiscard]] static int amount_of_frames_in_move_animation(UnitType type);
+
+    [[nodiscard]] const static sf::Texture &load_texture(TextureType texture);
+
+    [[nodiscard]] const static sf::Font &load_font(interface::Fonts font);
+
+    [[nodiscard]] const static sf::Image &load_cursor(CursorType cursor);
+
+    static void load_resources();
 
 private:
-    std::unordered_map<CellType, sf::Texture> m_cell_textures;
-    std::unordered_map<CellType, sf::Texture> m_cell_property_textures;
-    std::unordered_map<UnitType, sf::Texture> m_unit_textures;
-    std::unordered_map<UnitType, sf::Texture> m_selected_unit_textures;
-    std::unordered_map<AnimationType, sf::Texture> m_animation_sprite_sheets;
-    std::unordered_map<AnimationType, int> m_amount_of_sprites_in_animation;
-    std::unordered_map<TextureType, sf::Texture> m_textures;
-    std::unordered_map<interface::Fonts, sf::Font> m_fonts;
-    std::unordered_map<CursorType, sf::Image> m_cursors;
-};
+    static std::unordered_map<TextureType, sf::Texture> m_textures;
+    static std::unordered_map<interface::Fonts, sf::Font> m_fonts;
+    static std::unordered_map<CursorType, sf::Image> m_cursors;
 
-ResourceManager *resource_manager();
+    static std::unordered_map<CellType, sf::Texture> m_cell_textures;
+    static std::unordered_map<CellType, sf::Texture> m_cell_property_textures;
+    static std::unordered_map<UnitType, sf::Texture> m_unit_textures;
+
+    static std::unordered_map<UnitType, sf::Texture> m_selected_unit_textures;
+
+    static std::unordered_map<UnitType, sf::Texture> m_attack_animation;
+    static std::unordered_map<UnitType, sf::Texture> m_hurt_animation;
+    static std::unordered_map<UnitType, sf::Texture> m_move_animation;
+
+    static std::unordered_map<UnitType, int>
+        m_amount_of_sprites_in_attack_animation;
+    static std::unordered_map<UnitType, int>
+        m_amount_of_sprites_in_hurt_animation;
+    static std::unordered_map<UnitType, int>
+        m_amount_of_sprites_in_move_animation;
+};
 }  // namespace game_interface
 
 #endif  // BATTLE_OF_HEROES_MANAGER_HPP

@@ -33,22 +33,29 @@ Board::Board(sf::Vector2i window_size) {
 [[nodiscard]] sf::Vector2f Board::get_cell_position(Coords coords) const {
     return {
         static_cast<float>(
-            m_boarder_size.x +
-            m_cell_size.x * coords.get_column()
+            m_boarder_size.x + m_cell_size.x * coords.get_column()
         ),
         static_cast<float>(
-            m_boarder_size.y +
-            m_cell_size.y * coords.get_row()
+            m_boarder_size.y + m_cell_size.y * coords.get_row()
         )};
 }
 
-sf::Vector2i Board::get_boarder_size() const {
-    return m_boarder_size;
-}
-
-void Board::play_animation(Coords cell_coords) {
-    if (m_board[cell_coords.get_row()][cell_coords.get_column()].is_have_unit()) {
-        m_board[cell_coords.get_row()][cell_coords.get_column()].get_unit()->play_animation();
+void Board::play_animation(Coords source_cell, Coords destination_cell) {
+    if (m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .is_have_unit() &&
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->get_hero_id() != get_client_state()->m_user.user().id()) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Attack);
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::GetAttacked);
+    } else {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Move, destination_cell);
     }
 }
 
@@ -169,7 +176,8 @@ void Board::update_board(const namespace_proto::GameState &game_state) {
             int unit_id = server_cell.unit().id_unit();
             auto server_unit = game_state.game_cells(cell_index).unit();
             m_units[unit_id].update_unit(
-                server_cell, server_unit, m_board[row][column].get_cell_position(),
+                server_cell, server_unit,
+                m_board[row][column].get_cell_position(),
                 static_cast<sf::Vector2f>(m_cell_size)
             );
             m_board[row][column].set_unit(&m_units[unit_id]);

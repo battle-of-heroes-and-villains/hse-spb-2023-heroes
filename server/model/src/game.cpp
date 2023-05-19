@@ -6,9 +6,8 @@
 namespace game_model {
 
 std::vector<std::vector<int>> game::troops = {
-    {1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}};
+    {1, 2, 3, 4, 5, 1, 2, 3, 4, 5}
+};
 
 cell &game::get_cell(const coordinates &cell_coordinates) {
     return m_board.get_cell(cell_coordinates);
@@ -16,7 +15,7 @@ cell &game::get_cell(const coordinates &cell_coordinates) {
 
 int game::get_troop(){
     int items = static_cast<int>(troops.size());
-    return rand() % items;
+    return 0;
 }
 
 std::vector<std::reference_wrapper<cell>>

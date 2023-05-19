@@ -19,8 +19,7 @@ Spell::Spell(
     m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
     m_table.setPosition(position);
 
-    m_data.setFont(resource_manager()->load_font(interface::Fonts::CaptionFont)
-    );
+    m_data.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont));
     m_is_name_showed = false;
     update_data();
     m_data.setPosition(position);

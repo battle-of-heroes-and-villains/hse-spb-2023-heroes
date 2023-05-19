@@ -13,7 +13,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_turn_label.setOrigin(label_size.x / 2.0f, label_size.y / 2.0f);
     m_turn_label.setPosition(wind_size.x / 2, 40.0f);
 
-    m_username.setFont(game_interface::resource_manager()->load_font(
+    m_username.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_username.setString(get_client_state()->m_hero.name());
@@ -24,7 +24,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     sf::FloatRect data_bounds = m_username.getLocalBounds();
     m_username.setOrigin(data_bounds.left, data_bounds.top);
 
-    m_mana.setFont(game_interface::resource_manager()->load_font(
+    m_mana.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_mana.setFillColor(sf::Color::White);
@@ -33,7 +33,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_mana.setString("");
     align_text_origin(m_mana);
 
-    m_data.setFont(game_interface::resource_manager()->load_font(
+    m_data.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_data.setString("Nobody's turn");
@@ -137,7 +137,7 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         get_client_state()->m_game_state.move_turn() != 0) {
         Client::get_opponent();
         m_opponent_username.setFont(
-            game_interface::resource_manager()->load_font(
+            game_interface::ResourceManager::load_font(
                 interface::Fonts::CaptionFont
             )
         );
@@ -153,7 +153,7 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         m_opponent_username.setOrigin(
             data_bounds.left + data_bounds.width, data_bounds.top
         );
-        m_opponent_mana.setFont(game_interface::resource_manager()->load_font(
+        m_opponent_mana.setFont(game_interface::ResourceManager::load_font(
             interface::Fonts::CaptionFont
         ));
         m_opponent_mana.setFillColor(sf::Color::White);
