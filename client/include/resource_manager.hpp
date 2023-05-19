@@ -8,40 +8,37 @@
 namespace game_interface {
 class ResourceManager {
 public:
-    ResourceManager();
-    ~ResourceManager() = default;
+    const static sf::Texture &load_cell_texture(CellType texture);
 
-    const sf::Texture &load_cell_texture(CellType texture);
+    const static sf::Texture &load_cell_property_texture(CellType texture);
 
-    const sf::Texture &load_cell_property_texture(CellType texture);
+    const static sf::Texture &load_unit_texture(UnitType texture);
 
-    const sf::Texture &load_unit_texture(UnitType texture);
+    const static sf::Texture &load_selected_unit_texture(UnitType texture);
 
-    const sf::Texture &load_selected_unit_texture(UnitType texture);
+    const static sf::Texture &load_animation_sprite_sheet(UnitType type);
 
-    const sf::Texture &load_animation_sprite_sheet(AnimationType type);
+    static int amount_of_frames_in_animation(UnitType type);
 
-    int amount_of_frames_in_animation(AnimationType type);
+    const static sf::Texture &load_texture(TextureType texture);
 
-    const sf::Texture &load_texture(TextureType texture);
+    const static sf::Font &load_font(interface::Fonts font);
 
-    const sf::Font &load_font(interface::Fonts font);
+    const static sf::Image &load_cursor(CursorType cursor);
 
-    const sf::Image &load_cursor(CursorType cursor);
+    static void load_resources();
 
 private:
-    std::unordered_map<CellType, sf::Texture> m_cell_textures;
-    std::unordered_map<CellType, sf::Texture> m_cell_property_textures;
-    std::unordered_map<UnitType, sf::Texture> m_unit_textures;
-    std::unordered_map<UnitType, sf::Texture> m_selected_unit_textures;
-    std::unordered_map<AnimationType, sf::Texture> m_animation_sprite_sheets;
-    std::unordered_map<AnimationType, int> m_amount_of_sprites_in_animation;
-    std::unordered_map<TextureType, sf::Texture> m_textures;
-    std::unordered_map<interface::Fonts, sf::Font> m_fonts;
-    std::unordered_map<CursorType, sf::Image> m_cursors;
+    static std::unordered_map<CellType, sf::Texture> m_cell_textures;
+    static std::unordered_map<CellType, sf::Texture> m_cell_property_textures;
+    static std::unordered_map<UnitType, sf::Texture> m_unit_textures;
+    static std::unordered_map<UnitType, sf::Texture> m_selected_unit_textures;
+    static std::unordered_map<UnitType, sf::Texture> m_animation_sprite_sheets;
+    static std::unordered_map<UnitType, int> m_amount_of_sprites_in_animation;
+    static std::unordered_map<TextureType, sf::Texture> m_textures;
+    static std::unordered_map<interface::Fonts, sf::Font> m_fonts;
+    static std::unordered_map<CursorType, sf::Image> m_cursors;
 };
-
-ResourceManager *resource_manager();
 }  // namespace game_interface
 
 #endif  // BATTLE_OF_HEROES_MANAGER_HPP

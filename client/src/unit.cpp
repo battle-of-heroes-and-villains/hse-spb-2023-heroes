@@ -25,13 +25,13 @@ void Unit::render_statistic(sf::RenderWindow *window) {
 
 void Unit::set_selection() {
     auto old_scale = m_unit.getScale();
-    m_unit.setTexture(resource_manager()->load_selected_unit_texture(m_type));
+    m_unit.setTexture(ResourceManager::load_selected_unit_texture(m_type));
     m_unit.setScale(old_scale);
 }
 
 void Unit::disable_selection() {
-    auto old_scale =  m_unit.getScale();
-    m_unit.setTexture(resource_manager()->load_unit_texture(m_type));
+    auto old_scale = m_unit.getScale();
+    m_unit.setTexture(ResourceManager::load_unit_texture(m_type));
     m_unit.setScale(old_scale);
 }
 
@@ -54,14 +54,13 @@ void Unit::update_unit(
     if (unit.type_unit() != 0) {
         if (m_type != static_cast<UnitType>(unit.type_unit())) {
             m_type = static_cast<UnitType>(unit.type_unit());
-            m_unit.setTexture(resource_manager()->load_unit_texture(m_type));
+            m_unit.setTexture(ResourceManager::load_unit_texture(m_type));
             m_unit.setScale(
                 0.9f * size.y / m_unit.getGlobalBounds().height,
                 0.9f * size.y / m_unit.getGlobalBounds().height
             );
             if (unit.id_hero() != get_client_state()->m_user.user().id()) {
-                m_unit.setOrigin(m_unit.getTexture()->getSize().x,
-                                 0);
+                m_unit.setOrigin(m_unit.getTexture()->getSize().x, 0);
                 m_unit.scale(-1, 1);
             }
         }
@@ -73,9 +72,15 @@ void Unit::update_unit(
         update_characteristics(unit);
 
         m_unit.setPosition(new_position);
-        m_unit.move(-m_unit.getGlobalBounds().width / 2, -m_unit.getGlobalBounds().height / 2);
+        m_unit.move(
+            -m_unit.getGlobalBounds().width / 2,
+            -m_unit.getGlobalBounds().height / 2
+        );
 
-        m_animation.update_animation(size, new_position, AnimationType::Attack);
+        m_animation.update_animation(
+            {m_unit.getGlobalBounds().width, m_unit.getGlobalBounds().height},
+            new_position, m_type
+        );
 
         m_table.setSize(sf::Vector2f(size.x / 4, size.y / 4));
         m_table.setFillColor(sf::Color(71, 78, 50));
@@ -84,9 +89,8 @@ void Unit::update_unit(
             new_position.x + 3 * size.x / 4, new_position.y + 3 * size.y / 4
         ));
 
-        m_label.setFont(
-            resource_manager()->load_font(interface::Fonts::CaptionFont)
-        );
+        m_label.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont
+        ));
         m_label.setString(sf::String(std::to_string(m_amount_of_units)));
         m_label.setCharacterSize(24);
 
@@ -139,11 +143,6 @@ std::string Unit::get_unit_info() const {
 
 void Unit::update_statistic(EventType event_type, const sf::Window *window) {
     m_statistic.update(get_unit_info(), event_type, window);
-}
-
-void Unit::update_animation() {
-    m_animation.update_position(m_unit.getPosition());
-    m_animation.update();
 }
 
 void Unit::play_animation() {

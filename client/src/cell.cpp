@@ -15,7 +15,7 @@ Cell::Cell(Coords coords, sf::Vector2f position, sf::Vector2f size) {
     m_unit = nullptr;
     m_cell_size = size;
 
-    m_cell.setTexture(resource_manager()->load_cell_texture(m_cell_type));
+    m_cell.setTexture(ResourceManager::load_cell_texture(m_cell_type));
     m_cell.setScale(
         size.x / static_cast<float>(m_cell.getTexture()->getSize().x),
         size.y / static_cast<float>(m_cell.getTexture()->getSize().y)
@@ -23,7 +23,7 @@ Cell::Cell(Coords coords, sf::Vector2f position, sf::Vector2f size) {
     m_cell.setPosition(position);
 
     m_cell_property.setTexture(
-        resource_manager()->load_cell_property_texture(CellType::Type1)
+        ResourceManager::load_cell_property_texture(CellType::Type1)
     );
     m_cell_property.setScale(
         size.x / static_cast<float>(m_cell_property.getTexture()->getSize().x),
@@ -78,9 +78,9 @@ void Cell::update_cell_texture(CellType type) {
         m_cell_type = CellType::Type1;
     }
 
-    m_cell.setTexture(resource_manager()->load_cell_texture(m_cell_type));
+    m_cell.setTexture(ResourceManager::load_cell_texture(m_cell_type));
     m_cell_property.setTexture(
-        resource_manager()->load_cell_property_texture(m_cell_property_type)
+        ResourceManager::load_cell_property_texture(m_cell_property_type)
     );
 }
 
@@ -103,8 +103,7 @@ void Cell::update_cell() {
     update_cell_durability();
     m_unit = nullptr;
 
-    m_label.setFont(resource_manager()->load_font(interface::Fonts::CaptionFont)
-    );
+    m_label.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont));
     m_label.setString(std::to_string(m_durability));
     m_label.setCharacterSize(24);
 
@@ -204,8 +203,8 @@ bool Cell::change_cursor(sf::Window *window) {
         mouse_position.y >= 0 && mouse_position.y <= m_cell_size.y &&
         m_cell_property_type == CellType::Attack) {
         get_cursor().loadFromPixels(
-            resource_manager()->load_cursor(CursorType::Attack).getPixelsPtr(),
-            resource_manager()->load_cursor(CursorType::Attack).getSize(),
+            ResourceManager::load_cursor(CursorType::Attack).getPixelsPtr(),
+            ResourceManager::load_cursor(CursorType::Attack).getSize(),
             sf::Vector2u(0, 0)
         );
         window->setMouseCursor(get_cursor());
@@ -215,8 +214,10 @@ bool Cell::change_cursor(sf::Window *window) {
 }
 
 sf::Vector2f Cell::get_cell_position() {
-    return {m_cell.getGlobalBounds().left + m_cell.getGlobalBounds().width / 2.0f, m_cell.getGlobalBounds().top + m_cell.getGlobalBounds().height / 2.0f + 8
-    };
+    return {
+        m_cell.getGlobalBounds().left + m_cell.getGlobalBounds().width / 2.0f,
+        m_cell.getGlobalBounds().top + m_cell.getGlobalBounds().height / 2.0f +
+            8};
 }
 
 namespace_proto::Cell reverse_cell(namespace_proto::Cell cell) {

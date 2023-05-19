@@ -49,7 +49,10 @@ void EventManager::update_cell(
             from = reverse_cell(from);
             to = reverse_cell(to);
         }
-        get_game_state()->get_board()->play_animation({(*selected_unit)->get_coords().get_row(), (*selected_unit)->get_coords().get_column()});
+        get_game_state()->get_board()->play_animation(
+            {(*selected_unit)->get_coords().get_row(),
+             (*selected_unit)->get_coords().get_column()}
+        );
         Client::move_unit(from, to);
 
         get_game_state()->get_board()->remove_available_for_moving_cells();

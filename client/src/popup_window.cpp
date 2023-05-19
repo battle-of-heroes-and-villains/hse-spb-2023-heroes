@@ -12,7 +12,7 @@ PopUpWindow::PopUpWindow(
     m_table.setFillColor(sf::Color(71, 78, 50));
     m_table.setPosition(position);
 
-    m_data.setFont(game_interface::resource_manager()->load_font(font));
+    m_data.setFont(game_interface::ResourceManager::load_font(font));
     m_data.setString(sf::String(text));
     m_data.setFillColor(sf::Color::White);
     m_data.setCharacterSize(character_size);

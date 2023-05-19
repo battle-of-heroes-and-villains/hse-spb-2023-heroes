@@ -4,11 +4,10 @@ namespace game_interface {
 void Animation::update_animation(
     sf::Vector2f size,
     sf::Vector2f position,
-    AnimationType type
+    UnitType type
 ) {
-    m_animation_sheet = resource_manager()->load_animation_sprite_sheet(type);
-    m_amount_of_frames =
-        resource_manager()->amount_of_frames_in_animation(type);
+    m_animation_sheet = ResourceManager::load_animation_sprite_sheet(type);
+    m_amount_of_frames = ResourceManager::amount_of_frames_in_animation(type);
 
     m_frame_width = m_animation_sheet.getSize().x / m_amount_of_frames;
     m_current_frame =
@@ -22,7 +21,10 @@ void Animation::update_animation(
     );
 
     m_animation.setPosition(position);
-    m_animation.move(-m_animation.getGlobalBounds().width / 2, -3 * m_animation.getGlobalBounds().height / 4);
+    m_animation.move(
+        -m_animation.getGlobalBounds().width / 2,
+        -3 * m_animation.getGlobalBounds().height / 4
+    );
 }
 
 void Animation::update_position(sf::Vector2f position) {

@@ -13,7 +13,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_turn_label.setOrigin(label_size.x / 2.0f, label_size.y / 2.0f);
     m_turn_label.setPosition(wind_size.x / 2, 40.0f);
 
-    m_username.setFont(game_interface::resource_manager()->load_font(
+    m_username.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_username.setString("username");
@@ -21,7 +21,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_username.setCharacterSize(24);
     m_username.setPosition({static_cast<float>(134.0f), 30.0f});
 
-    m_opponent_username.setFont(game_interface::resource_manager()->load_font(
+    m_opponent_username.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_opponent_username.setString("opponent username");
@@ -38,7 +38,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
         data_bounds.left + data_bounds.width, data_bounds.top
     );
 
-    m_mana.setFont(game_interface::resource_manager()->load_font(
+    m_mana.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_mana.setFillColor(sf::Color::White);
@@ -47,7 +47,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_mana.setString("");
     align_text_origin(m_mana);
 
-    m_opponent_mana.setFont(game_interface::resource_manager()->load_font(
+    m_opponent_mana.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_opponent_mana.setFillColor(sf::Color::White);
@@ -56,7 +56,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_opponent_mana.setString("");
     align_text_origin(m_opponent_mana);
 
-    m_data.setFont(game_interface::resource_manager()->load_font(
+    m_data.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
     m_data.setString("Nobody's turn");
@@ -87,8 +87,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
         labels[1], button_types[1]
     );
     m_buttons[2] = MenuButton(
-        {wind_size.x - wind_size.x * 0.07f - button_size.x / 2,
-         button_pos.y},
+        {wind_size.x - wind_size.x * 0.07f - button_size.x / 2, button_pos.y},
         button_size, sf::Color(71, 78, 50), interface::Fonts::CaptionFont, 22,
         labels[2], button_types[2]
     );

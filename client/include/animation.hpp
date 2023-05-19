@@ -2,8 +2,8 @@
 #define BATTLE_OF_HEROES_ANIMATION_HPP
 
 #include <SFML/Graphics.hpp>
-#include "window.hpp"
 #include "button.hpp"
+#include "window.hpp"
 
 namespace game_interface {
 class Animation {
@@ -11,7 +11,8 @@ public:
     Animation() = default;
     ~Animation() = default;
 
-    void update_animation(sf::Vector2f size, sf::Vector2f position, AnimationType type);
+    void
+    update_animation(sf::Vector2f size, sf::Vector2f position, UnitType type);
     void update_position(sf::Vector2f position);
 
     void play_animation();
@@ -28,6 +29,6 @@ private:
     sf::Clock m_clock;
     bool m_is_playing{false};
 };
-} // namespace game_view
+}  // namespace game_interface
 
 #endif  // BATTLE_OF_HEROES_ANIMATION_HPP

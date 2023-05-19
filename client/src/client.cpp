@@ -131,7 +131,8 @@ void Client::get_hero() {
     );
     get_client_state()->m_hero = response;
 
-    get_client_state()->m_hero.set_name(get_client_state()->m_user.user().name());
+    get_client_state()->m_hero.set_name(get_client_state()->m_user.user().name()
+    );
 }
 
 void Client::get_opponent() {
