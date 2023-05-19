@@ -32,6 +32,9 @@ public:
     static std::vector<std::pair<int, int>> select_unit(
         namespace_proto::Cell selected
     );
+
+    static bool is_need_log_in();
+
     static void log_in(std::string nickname, std::string password);
     static void sign_up(std::string nickname, std::string password);
 
