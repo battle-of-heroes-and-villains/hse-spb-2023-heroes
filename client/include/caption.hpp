@@ -25,7 +25,7 @@ public:
 private:
     sf::RectangleShape m_table;
     sf::Text m_data;
-    PageType m_current_page{PageType::Game};
+    PageType m_current_page{PageType::SinglePlayer};
 };
 }  // namespace menu_interface
 

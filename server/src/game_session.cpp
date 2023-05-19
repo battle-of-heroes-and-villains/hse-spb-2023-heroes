@@ -69,6 +69,11 @@ void start_game_session(int game_id) {
         }
     });
 
+    if (second_player.get_id() == -2) {
+        first_writer.join();
+        return;
+    }
+
     std::thread second_writer([response_queues_ref, &second_player]() {
         while (true) {
             if ((*response_queues_ref)[second_player.get_id()].size() > 0) {
@@ -78,7 +83,6 @@ void start_game_session(int game_id) {
             }
         }
     });
-
     first_writer.join();
     second_writer.join();
 }

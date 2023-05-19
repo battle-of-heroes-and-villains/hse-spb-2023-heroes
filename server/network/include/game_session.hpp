@@ -20,17 +20,21 @@ class Player final {
     ::grpc::ServerContext *context;
 
 public:
-    Player(int hero_id) : id(-2), hero_id(hero_id) {
+    Player(int hero_id) : id(-2), hero_id(hero_id), name("bot") {
     }
 
     Player(
         int id,
         int hero_id,
-        const std::string & name,
+        const std::string &name,
         ::grpc::ServerWriter<namespace_proto::GameState> *stream,
         ::grpc::ServerContext *context
     )
-        : id(id), hero_id(hero_id), stream(stream), name(name), context(context) {
+        : id(id),
+          hero_id(hero_id),
+          stream(stream),
+          name(name),
+          context(context) {
     }
 
     [[nodiscard]] int get_id() const {

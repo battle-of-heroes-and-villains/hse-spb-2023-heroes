@@ -9,14 +9,7 @@ enum class UnitType { Empty, Type1, Type2, Type3, Type4, Type5 };
 
 enum class AnimationType { Attack };
 
-enum class CellType { Type1,
-    Broken,
-    Move,
-    Enemy,
-    Attack,
-    Spell,
-    AttackSpell
-};
+enum class CellType { Type1, Broken, Move, Enemy, Attack, Spell, AttackSpell };
 
 enum class TextureType { MenuBackground };
 
@@ -28,7 +21,15 @@ enum class CursorType { Attack };
 }  // namespace game_interface
 
 namespace menu_interface {
-enum class PageType { Game, Exit, Entry, SignUp, Registration, GameChoose };
+enum class PageType {
+    SinglePlayer,
+    MultiPlayer,
+    Exit,
+    Entry,
+    SignUp,
+    Registration,
+    GameChoose
+};
 }  // namespace menu_interface
 
 namespace interface {
