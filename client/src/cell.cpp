@@ -10,24 +10,24 @@ Cell::Cell(Coords coords, sf::Vector2f position, sf::Vector2f size) {
     m_coords = coords;
     m_durability = 0;
     m_spell_id = -1;
-    m_cell_type = CellType::Default;
-    m_cell_property_type = CellType::Default;
+    m_cell_type = CellType::Type1;
+    m_cell_property_type = CellType::Type1;
     m_unit = nullptr;
     m_cell_size = size;
 
     m_cell.setTexture(resource_manager()->load_cell_texture(m_cell_type));
-    m_cell.scale(
+    m_cell.setScale(
         size.x / static_cast<float>(m_cell.getTexture()->getSize().x),
         size.y / static_cast<float>(m_cell.getTexture()->getSize().y)
     );
     m_cell.setPosition(position);
 
     m_cell_property.setTexture(
-        resource_manager()->load_cell_property_texture(CellType::Default)
+        resource_manager()->load_cell_property_texture(CellType::Type1)
     );
-    m_cell_property.scale(
-        size.x / static_cast<float>(m_cell.getTexture()->getSize().x),
-        size.y / static_cast<float>(m_cell.getTexture()->getSize().y)
+    m_cell_property.setScale(
+        size.x / static_cast<float>(m_cell_property.getTexture()->getSize().x),
+        size.y / static_cast<float>(m_cell_property.getTexture()->getSize().y)
     );
     m_cell_property.setPosition(position);
 
@@ -60,7 +60,6 @@ void Cell::update_cell_durability() {
 
 void Cell::update_cell_texture(CellType type) {
     m_cell_property_type = type;
-
     if (is_have_unit() &&
         m_unit->get_hero_id() != get_client_state()->m_user.user().id()) {
         if (type == CellType::Spell) {
@@ -76,7 +75,7 @@ void Cell::update_cell_texture(CellType type) {
     if (m_durability < 10) {
         m_cell_type = CellType::Broken;
     } else {
-        m_cell_type = CellType::Default;
+        m_cell_type = CellType::Type1;
     }
 
     m_cell.setTexture(resource_manager()->load_cell_texture(m_cell_type));
@@ -87,7 +86,7 @@ void Cell::update_cell_texture(CellType type) {
 
 void Cell::set_unit(Unit *unit) {
     m_unit = unit;
-    update_cell_texture(CellType::Default);
+    update_cell_texture(CellType::Type1);
 }
 
 void Cell::add_spell(int spell_id) {
@@ -97,7 +96,7 @@ void Cell::add_spell(int spell_id) {
 
 void Cell::remove_spell() {
     m_spell_id = -1;
-    update_cell_texture(CellType::Default);
+    update_cell_texture(CellType::Type1);
 }
 
 void Cell::update_cell() {
@@ -121,7 +120,7 @@ void Cell::update_cell() {
     );
 
     if (is_have_unit()) {
-        update_cell_texture(CellType::Default);
+        update_cell_texture(CellType::Type1);
     }
 }
 
@@ -193,7 +192,7 @@ void Cell::add_selection() {
 }
 
 void Cell::remove_selection() {
-    update_cell_texture(CellType::Default);
+    update_cell_texture(CellType::Type1);
 }
 
 bool Cell::change_cursor(sf::Window *window) {
@@ -213,6 +212,11 @@ bool Cell::change_cursor(sf::Window *window) {
         return true;
     }
     return false;
+}
+
+sf::Vector2f Cell::get_cell_position() {
+    return {m_cell.getGlobalBounds().left + m_cell.getGlobalBounds().width / 2.0f, m_cell.getGlobalBounds().top + m_cell.getGlobalBounds().height / 2.0f + 8
+    };
 }
 
 namespace_proto::Cell reverse_cell(namespace_proto::Cell cell) {

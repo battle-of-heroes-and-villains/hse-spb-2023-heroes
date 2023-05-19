@@ -8,14 +8,14 @@ namespace game_interface {
 }
 
 ResourceManager::ResourceManager() {
-    m_cell_textures[CellType::Default].loadFromFile(
+    m_cell_textures[CellType::Type1].loadFromFile(
         interface::source_dir + "grass.jpg"
     );
     m_cell_textures[CellType::Broken].loadFromFile(
         interface::source_dir + "grass_broken.jpg"
     );
 
-    m_cell_property_textures[CellType::Default].loadFromFile(
+    m_cell_property_textures[CellType::Type1].loadFromFile(
         interface::source_dir + "default.png"
     );
     m_cell_property_textures[CellType::Move].loadFromFile(
@@ -34,19 +34,43 @@ ResourceManager::ResourceManager() {
         interface::source_dir + "attack.png"
     );
 
-    m_unit_textures[UnitType::UnitType1].loadFromFile(
-        interface::source_dir + "hero.png"
+    m_unit_textures[UnitType::Type1].loadFromFile(
+        interface::source_dir + "unit_type1.png"
     );
-    m_unit_textures[UnitType::UnitType2].loadFromFile(
-        interface::source_dir + "hero2.png"
+    m_unit_textures[UnitType::Type2].loadFromFile(
+        interface::source_dir + "unit_type2.png"
+    );
+    m_unit_textures[UnitType::Type3].loadFromFile(
+        interface::source_dir + "unit_type3.png"
+    );
+    m_unit_textures[UnitType::Type4].loadFromFile(
+        interface::source_dir + "unit_type4.png"
+    );
+    m_unit_textures[UnitType::Type5].loadFromFile(
+        interface::source_dir + "unit_type5.png"
     );
 
-    m_selected_unit_textures[UnitType::UnitType1].loadFromFile(
-        interface::source_dir + "selected_hero.png"
+    m_selected_unit_textures[UnitType::Type1].loadFromFile(
+        interface::source_dir + "unit_type1_move.png"
     );
-    m_selected_unit_textures[UnitType::UnitType2].loadFromFile(
-        interface::source_dir + "selected_hero2.png"
+    m_selected_unit_textures[UnitType::Type2].loadFromFile(
+        interface::source_dir + "unit_type2_move.png"
     );
+    m_selected_unit_textures[UnitType::Type3].loadFromFile(
+        interface::source_dir + "unit_type3_move.png"
+    );
+    m_selected_unit_textures[UnitType::Type4].loadFromFile(
+        interface::source_dir + "unit_type4_move.png"
+    );
+    m_selected_unit_textures[UnitType::Type5].loadFromFile(
+        interface::source_dir + "unit_type5_move.png"
+    );
+
+    m_animation_sprite_sheets[AnimationType::Attack].loadFromFile(
+        interface::source_dir + "attack_animation.png"
+    );
+
+    m_amount_of_sprites_in_animation[AnimationType::Attack] = 4;
 
     m_textures[TextureType::MenuBackground].loadFromFile(
         interface::source_dir + "menu_background.jpg"
@@ -88,6 +112,12 @@ ResourceManager::ResourceManager() {
     return m_selected_unit_textures[texture];
 }
 
+const sf::Texture &ResourceManager::load_animation_sprite_sheet(
+    AnimationType texture
+) {
+    return m_animation_sprite_sheets[texture];
+}
+
 [[nodiscard]] const sf::Font &ResourceManager::load_font(interface::Fonts font
 ) {
     return m_fonts[font];
@@ -101,5 +131,9 @@ ResourceManager::ResourceManager() {
 
 const sf::Image &ResourceManager::load_cursor(CursorType cursor) {
     return m_cursors[cursor];
+}
+
+int ResourceManager::amount_of_frames_in_animation(AnimationType type) {
+    return m_amount_of_sprites_in_animation[type];
 }
 }  // namespace game_interface

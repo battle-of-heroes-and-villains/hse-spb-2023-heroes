@@ -5,10 +5,11 @@
 #include "config.hpp"
 
 namespace game_interface {
-enum class UnitType { Empty, UnitType1, UnitType2 };
+enum class UnitType { Empty, Type1, Type2, Type3, Type4, Type5 };
 
-enum class CellType {
-    Default,
+enum class AnimationType { Attack };
+
+enum class CellType { Type1,
     Broken,
     Move,
     Enemy,

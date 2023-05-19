@@ -33,17 +33,23 @@ Board::Board(sf::Vector2i window_size) {
 [[nodiscard]] sf::Vector2f Board::get_cell_position(Coords coords) const {
     return {
         static_cast<float>(
-            m_boarder_size.x + m_cell_size.x / 2 +
+            m_boarder_size.x +
             m_cell_size.x * coords.get_column()
         ),
         static_cast<float>(
-            m_boarder_size.y + m_cell_size.y / 2 +
+            m_boarder_size.y +
             m_cell_size.y * coords.get_row()
         )};
 }
 
 sf::Vector2i Board::get_boarder_size() const {
     return m_boarder_size;
+}
+
+void Board::play_animation(Coords cell_coords) {
+    if (m_board[cell_coords.get_row()][cell_coords.get_column()].is_have_unit()) {
+        m_board[cell_coords.get_row()][cell_coords.get_column()].get_unit()->play_animation();
+    }
 }
 
 void Board::add_available_for_moving_cells(
@@ -163,7 +169,7 @@ void Board::update_board(const namespace_proto::GameState &game_state) {
             int unit_id = server_cell.unit().id_unit();
             auto server_unit = game_state.game_cells(cell_index).unit();
             m_units[unit_id].update_unit(
-                server_cell, server_unit, get_cell_position({row, column}),
+                server_cell, server_unit, m_board[row][column].get_cell_position(),
                 static_cast<sf::Vector2f>(m_cell_size)
             );
             m_board[row][column].set_unit(&m_units[unit_id]);

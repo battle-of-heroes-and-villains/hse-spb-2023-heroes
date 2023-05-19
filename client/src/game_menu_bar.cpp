@@ -87,7 +87,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
         labels[1], button_types[1]
     );
     m_buttons[2] = MenuButton(
-        {wind_size.x - wind_size.x * 0.07f - button_size.x / 2 + 4,
+        {wind_size.x - wind_size.x * 0.07f - button_size.x / 2,
          button_pos.y},
         button_size, sf::Color(71, 78, 50), interface::Fonts::CaptionFont, 22,
         labels[2], button_types[2]

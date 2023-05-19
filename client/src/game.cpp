@@ -8,7 +8,7 @@ Game::Game()
       m_board(sf::Vector2i(1920, 980)) {
     m_background.setTexture(
         game_interface::resource_manager()->load_cell_texture(
-            game_interface::CellType::Default
+            game_interface::CellType::Type1
         )
     );
     m_background.setPosition(0, 0);

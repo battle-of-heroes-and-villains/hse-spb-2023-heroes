@@ -12,10 +12,9 @@ int main() {
         std::make_unique<namespace_proto::Server::Stub>(channel);
     get_client_state()->m_user.mutable_user()->set_id(-1);
 
-    menu_interface::Menu main_menu{};
-    while (!main_menu.get_window()->is_done()) {
-        main_menu.update();
-        main_menu.render();
+    while (!menu_interface::get_menu_state()->get_window()->is_done()) {
+        menu_interface::get_menu_state()->update();
+        menu_interface::get_menu_state()->render();
     }
 
     Client::get_hero();

@@ -19,9 +19,7 @@ private:
     static void clear_cell(cell &current_cell);
     void attack_cell(const cell &attacking, cell &attacked);
 
-    std::vector<std::vector<int>> troops = {
-        {1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+    static std::vector<std::vector<int>> troops;
 
 public:
     explicit game(
@@ -36,6 +34,8 @@ public:
         m_players_list[0]->set_start_units(0, m_board, troops[first_troop]);
         m_players_list[1]->set_start_units(1, m_board, troops[second_troop]);
     }
+
+    static int get_troop();
 
     [[nodiscard]] cell &get_cell(const coordinates &cell_coordinates);
     [[nodiscard]] std::vector<std::reference_wrapper<cell>>

@@ -402,4 +402,8 @@ void Menu::update() {
         }
     }
 }
+[[nodiscard]] Menu *get_menu_state() {
+    static Menu menu{};
+    return &menu;
+}
 }  // namespace menu_interface

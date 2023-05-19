@@ -13,6 +13,7 @@ public:
     ~Board() = default;
 
     [[nodiscard]] sf::Vector2f get_cell_position(Coords coords) const;
+    Cell *get_cell(Coords coords) const;
     sf::Vector2i get_boarder_size() const;
 
     void add_available_for_moving_cells(
@@ -23,6 +24,9 @@ public:
         std::vector<std::pair<int, int>> selected_cells,
         int spell_id
     );
+
+    void play_animation(Coords cell_coords);
+
     void remove_enable_for_spelling_cells();
     void handling_event(sf::Event event, sf::Window *window);
     void update_board(const namespace_proto::GameState &game_state);
