@@ -66,6 +66,12 @@ ResourceManager::ResourceManager() {
         interface::source_dir + "unit_type5_move.png"
     );
 
+    m_animation_sprite_sheets[AnimationType::Attack].loadFromFile(
+        interface::source_dir + "attack_animation.png"
+    );
+
+    m_amount_of_sprites_in_animation[AnimationType::Attack] = 4;
+
     m_textures[TextureType::MenuBackground].loadFromFile(
         interface::source_dir + "menu_background.jpg"
     );
@@ -106,6 +112,12 @@ ResourceManager::ResourceManager() {
     return m_selected_unit_textures[texture];
 }
 
+const sf::Texture &ResourceManager::load_animation_sprite_sheet(
+    AnimationType texture
+) {
+    return m_animation_sprite_sheets[texture];
+}
+
 [[nodiscard]] const sf::Font &ResourceManager::load_font(interface::Fonts font
 ) {
     return m_fonts[font];
@@ -119,5 +131,9 @@ ResourceManager::ResourceManager() {
 
 const sf::Image &ResourceManager::load_cursor(CursorType cursor) {
     return m_cursors[cursor];
+}
+
+int ResourceManager::amount_of_frames_in_animation(AnimationType type) {
+    return m_amount_of_sprites_in_animation[type];
 }
 }  // namespace game_interface

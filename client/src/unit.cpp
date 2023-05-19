@@ -10,7 +10,11 @@ int Unit::get_hero_id() const {
 }
 
 void Unit::render(sf::RenderWindow *window) {
-    window->draw(m_unit);
+    if (!m_animation.is_playing()) {
+        window->draw(m_unit);
+    }
+    m_animation.update();
+    m_animation.render(window);
     window->draw(m_table);
     window->draw(m_label);
 }
@@ -71,6 +75,8 @@ void Unit::update_unit(
         m_unit.setPosition(new_position);
         m_unit.move(-m_unit.getGlobalBounds().width / 2, -m_unit.getGlobalBounds().height / 2);
 
+        m_animation.update_animation(size, new_position, AnimationType::Attack);
+
         m_table.setSize(sf::Vector2f(size.x / 4, size.y / 4));
         m_table.setFillColor(sf::Color(71, 78, 50));
         m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
@@ -101,6 +107,8 @@ void Unit::update_unit(
         is_selected = unit.is_selected();
         m_coords = {cell.row(), cell.column()};
         m_unit.setPosition(new_position);
+        m_animation.update_position(new_position);
+        m_animation.update();
         m_label.setPosition(sf::Vector2f(
             new_position.x + 13 * size.x / 16, new_position.y + 3 * size.y / 4
         ));
@@ -131,5 +139,14 @@ std::string Unit::get_unit_info() const {
 
 void Unit::update_statistic(EventType event_type, const sf::Window *window) {
     m_statistic.update(get_unit_info(), event_type, window);
+}
+
+void Unit::update_animation() {
+    m_animation.update_position(m_unit.getPosition());
+    m_animation.update();
+}
+
+void Unit::play_animation() {
+    m_animation.play_animation();
 }
 }  // namespace game_interface

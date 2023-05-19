@@ -46,6 +46,12 @@ sf::Vector2i Board::get_boarder_size() const {
     return m_boarder_size;
 }
 
+void Board::play_animation(Coords cell_coords) {
+    if (m_board[cell_coords.get_row()][cell_coords.get_column()].is_have_unit()) {
+        m_board[cell_coords.get_row()][cell_coords.get_column()].get_unit()->play_animation();
+    }
+}
+
 void Board::add_available_for_moving_cells(
     std::vector<std::pair<int, int>> selected_cells
 ) {
