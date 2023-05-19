@@ -77,13 +77,12 @@ void Unit::update_unit(
     );
 
     m_animation.update_animation(
-        {m_unit.getGlobalBounds().width, m_unit.getGlobalBounds().height},
+        {m_unit.getGlobalBounds().width, m_unit.getGlobalBounds().height}, size,
         new_position, m_type
     );
     if (unit.id_hero() != get_client_state()->m_user.user().id()) {
         m_animation.reverse();
     }
-    m_animation.update_position(new_position);
 
     m_table.setSize(sf::Vector2f(size.x / 4, size.y / 4));
     m_table.setFillColor(sf::Color(71, 78, 50));
@@ -133,6 +132,6 @@ void Unit::update_statistic(EventType event_type, const sf::Window *window) {
 }
 
 void Unit::play_animation(AnimationType type, Coords destination_cell) {
-    m_animation.play_animation(type, destination_cell);
+    m_animation.play_animation(type, m_coords, destination_cell);
 }
 }  // namespace game_interface

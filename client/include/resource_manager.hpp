@@ -10,19 +10,34 @@ class ResourceManager {
 public:
     [[nodiscard]] const static sf::Texture &load_cell_texture(CellType texture);
 
-    [[nodiscard]] const static sf::Texture &load_cell_property_texture(CellType texture);
+    [[nodiscard]] const static sf::Texture &load_cell_property_texture(
+        CellType texture
+    );
 
     [[nodiscard]] const static sf::Texture &load_unit_texture(UnitType texture);
 
-    [[nodiscard]] const static sf::Texture &load_selected_unit_texture(UnitType texture);
+    [[nodiscard]] const static sf::Texture &load_selected_unit_texture(
+        UnitType texture
+    );
 
-    [[nodiscard]] const static sf::Texture &load_attack_animation_sprite_sheet(UnitType texture);
+    [[nodiscard]] const static sf::Texture &load_attack_animation_sprite_sheet(
+        UnitType texture
+    );
 
-    [[nodiscard]] const static sf::Texture &load_hurt_animation_sprite_sheet(UnitType texture);
+    [[nodiscard]] const static sf::Texture &load_hurt_animation_sprite_sheet(
+        UnitType texture
+    );
 
-    [[nodiscard]] static int amount_of_frames_in_attack_animation(UnitType type);
+    [[nodiscard]] const static sf::Texture &load_move_animation_sprite_sheet(
+        UnitType texture
+    );
+
+    [[nodiscard]] static int amount_of_frames_in_attack_animation(UnitType type
+    );
 
     [[nodiscard]] static int amount_of_frames_in_hurt_animation(UnitType type);
+
+    [[nodiscard]] static int amount_of_frames_in_move_animation(UnitType type);
 
     [[nodiscard]] const static sf::Texture &load_texture(TextureType texture);
 
@@ -45,10 +60,14 @@ private:
 
     static std::unordered_map<UnitType, sf::Texture> m_attack_animation;
     static std::unordered_map<UnitType, sf::Texture> m_hurt_animation;
+    static std::unordered_map<UnitType, sf::Texture> m_move_animation;
+
     static std::unordered_map<UnitType, int>
         m_amount_of_sprites_in_attack_animation;
     static std::unordered_map<UnitType, int>
         m_amount_of_sprites_in_hurt_animation;
+    static std::unordered_map<UnitType, int>
+        m_amount_of_sprites_in_move_animation;
 };
 }  // namespace game_interface
 

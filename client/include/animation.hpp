@@ -12,13 +12,20 @@ public:
     Animation() = default;
     ~Animation() = default;
 
-    void
-    update_animation(sf::Vector2f size, sf::Vector2f position, UnitType type);
-    void update_position(sf::Vector2f position);
+    void update_animation(
+        sf::Vector2f unit_size,
+        sf::Vector2f cell_size,
+        sf::Vector2f position,
+        UnitType type
+    );
     void update_texture();
     void reverse();
 
-    void play_animation(AnimationType type, Coords destination_cell = {-1, -1});
+    void play_animation(
+        AnimationType type,
+        Coords source_cell,
+        Coords destination_cell = {-1, -1}
+    );
     bool is_playing() const;
     void update();
     void render(sf::RenderWindow *window);
@@ -32,7 +39,11 @@ private:
     sf::Clock m_clock;
     bool m_is_playing{false};
     UnitType m_unit_type;
-    sf::Vector2f m_size;
+    sf::Vector2f m_unit_size;
+    sf::Vector2f m_cell_size;
+    sf::Vector2f m_delta;
+    int m_repeats;
+    float m_delta_time;
 };
 }  // namespace game_interface
 

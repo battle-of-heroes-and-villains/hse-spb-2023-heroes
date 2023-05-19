@@ -14,14 +14,16 @@ std::unordered_map<UnitType, sf::Texture> ResourceManager::m_unit_textures{};
 std::unordered_map<UnitType, sf::Texture>
     ResourceManager::m_selected_unit_textures{};
 
-std::unordered_map<UnitType, sf::Texture>
-    ResourceManager::m_attack_animation{};
-std::unordered_map<UnitType, sf::Texture>
-    ResourceManager::m_hurt_animation{};
+std::unordered_map<UnitType, sf::Texture> ResourceManager::m_attack_animation{};
+std::unordered_map<UnitType, sf::Texture> ResourceManager::m_hurt_animation{};
+std::unordered_map<UnitType, sf::Texture> ResourceManager::m_move_animation{};
+
 std::unordered_map<UnitType, int>
     ResourceManager::m_amount_of_sprites_in_attack_animation{};
 std::unordered_map<UnitType, int>
     ResourceManager::m_amount_of_sprites_in_hurt_animation{};
+std::unordered_map<UnitType, int>
+    ResourceManager::m_amount_of_sprites_in_move_animation{};
 
 void ResourceManager::load_resources() {
     static bool is_initialised = false;
@@ -61,7 +63,7 @@ void ResourceManager::load_resources() {
         interface::source_dir + "units/unit_type2.png"
     );
     ResourceManager::m_unit_textures[UnitType::Type3].loadFromFile(
-        interface::source_dir + "units/unit_attack_type3.png"
+        interface::source_dir + "units/unit_type3.png"
     );
     ResourceManager::m_unit_textures[UnitType::Type4].loadFromFile(
         interface::source_dir + "units/unit_type4.png"
@@ -71,20 +73,42 @@ void ResourceManager::load_resources() {
     );
 
     ResourceManager::m_selected_unit_textures[UnitType::Type1].loadFromFile(
-        interface::source_dir + "units_move/unit_type1_move.png"
+        interface::source_dir + "units_selected/unit_selected_type1.png"
     );
     ResourceManager::m_selected_unit_textures[UnitType::Type2].loadFromFile(
-        interface::source_dir + "units_move/unit_type2_move.png"
+        interface::source_dir + "units_selected/unit_selected_type2.png"
     );
     ResourceManager::m_selected_unit_textures[UnitType::Type3].loadFromFile(
-        interface::source_dir + "units_move/unit_type3_move.png"
+        interface::source_dir + "units_selected/unit_selected_type3.png"
     );
     ResourceManager::m_selected_unit_textures[UnitType::Type4].loadFromFile(
-        interface::source_dir + "units_move/unit_type4_move.png"
+        interface::source_dir + "units_selected/unit_selected_type4.png"
     );
     ResourceManager::m_selected_unit_textures[UnitType::Type5].loadFromFile(
-        interface::source_dir + "units_move/unit_type5_move.png"
+        interface::source_dir + "units_selected/unit_selected_type5.png"
     );
+
+    ResourceManager::m_move_animation[UnitType::Type1].loadFromFile(
+        interface::source_dir + "units_move/unit_move_type1.png"
+    );
+    ResourceManager::m_move_animation[UnitType::Type2].loadFromFile(
+        interface::source_dir + "units_move/unit_move_type2.png"
+    );
+    ResourceManager::m_move_animation[UnitType::Type3].loadFromFile(
+        interface::source_dir + "units_move/unit_move_type3.png"
+    );
+    ResourceManager::m_move_animation[UnitType::Type4].loadFromFile(
+        interface::source_dir + "units_move/unit_move_type4.png"
+    );
+    ResourceManager::m_move_animation[UnitType::Type5].loadFromFile(
+        interface::source_dir + "units_move/unit_move_type5.png"
+    );
+
+    m_amount_of_sprites_in_move_animation[UnitType::Type1] = 6;
+    m_amount_of_sprites_in_move_animation[UnitType::Type2] = 6;
+    m_amount_of_sprites_in_move_animation[UnitType::Type3] = 6;
+    m_amount_of_sprites_in_move_animation[UnitType::Type4] = 6;
+    m_amount_of_sprites_in_move_animation[UnitType::Type5] = 6;
 
     ResourceManager::m_attack_animation[UnitType::Type1].loadFromFile(
         interface::source_dir + "units_attack/unit_attack_type1.png"
@@ -102,12 +126,17 @@ void ResourceManager::load_resources() {
         interface::source_dir + "units_attack/unit_attack_type5.png"
     );
 
-    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type1] = 4;
-    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type2] = 4;
-    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type3] = 4;
-    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type4] = 4;
-    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type5] = 4;
-    
+    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type1] =
+        4;
+    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type2] =
+        4;
+    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type3] =
+        4;
+    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type4] =
+        4;
+    ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type5] =
+        4;
+
     ResourceManager::m_hurt_animation[UnitType::Type1].loadFromFile(
         interface::source_dir + "units_hurt/unit_hurt_type1.png"
     );
@@ -123,12 +152,12 @@ void ResourceManager::load_resources() {
     ResourceManager::m_hurt_animation[UnitType::Type5].loadFromFile(
         interface::source_dir + "units_hurt/unit_hurt_type5.png"
     );
-    
+
     ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type1] = 2;
     ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type2] = 3;
     ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type3] = 2;
     ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type4] = 2;
-    ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type5];
+    ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type5] = 2;
 
     ResourceManager::m_textures[TextureType::MenuBackground].loadFromFile(
         interface::source_dir + "backgrounds/menu_background.jpg"
@@ -148,43 +177,34 @@ void ResourceManager::load_resources() {
     is_initialised = true;
 }
 
-const sf::Texture &ResourceManager::load_cell_texture(
-    CellType texture
-) {
+const sf::Texture &ResourceManager::load_cell_texture(CellType texture) {
     load_resources();
     return m_cell_textures[texture];
 }
 
-const sf::Texture &ResourceManager::load_cell_property_texture(
-    CellType texture
+const sf::Texture &ResourceManager::load_cell_property_texture(CellType texture
 ) {
     load_resources();
     return m_cell_property_textures[texture];
 }
 
-const sf::Texture &ResourceManager::load_unit_texture(
-    UnitType texture
-) {
+const sf::Texture &ResourceManager::load_unit_texture(UnitType texture) {
     load_resources();
     return m_unit_textures[texture];
 }
 
-const sf::Texture &ResourceManager::load_selected_unit_texture(
-    UnitType texture
+const sf::Texture &ResourceManager::load_selected_unit_texture(UnitType texture
 ) {
     load_resources();
     return m_selected_unit_textures[texture];
 }
 
-const sf::Font &ResourceManager::load_font(interface::Fonts font
-) {
+const sf::Font &ResourceManager::load_font(interface::Fonts font) {
     load_resources();
     return m_fonts[font];
 }
 
-const sf::Texture &ResourceManager::load_texture(
-    TextureType texture
-) {
+const sf::Texture &ResourceManager::load_texture(TextureType texture) {
     load_resources();
     return m_textures[texture];
 }
@@ -194,16 +214,25 @@ const sf::Image &ResourceManager::load_cursor(CursorType cursor) {
     return m_cursors[cursor];
 }
 
-const sf::Texture &ResourceManager::load_attack_animation_sprite_sheet(UnitType texture
+const sf::Texture &ResourceManager::load_attack_animation_sprite_sheet(
+    UnitType texture
 ) {
     load_resources();
     return m_attack_animation[texture];
 }
 
-const sf::Texture &ResourceManager::load_hurt_animation_sprite_sheet(UnitType texture
+const sf::Texture &ResourceManager::load_hurt_animation_sprite_sheet(
+    UnitType texture
 ) {
     load_resources();
     return m_hurt_animation[texture];
+}
+
+const sf::Texture &ResourceManager::load_move_animation_sprite_sheet(
+    UnitType texture
+) {
+    load_resources();
+    return m_move_animation[texture];
 }
 
 int ResourceManager::amount_of_frames_in_attack_animation(UnitType type) {
@@ -214,5 +243,10 @@ int ResourceManager::amount_of_frames_in_attack_animation(UnitType type) {
 int ResourceManager::amount_of_frames_in_hurt_animation(UnitType type) {
     load_resources();
     return m_amount_of_sprites_in_hurt_animation[type];
+}
+
+int ResourceManager::amount_of_frames_in_move_animation(UnitType type) {
+    load_resources();
+    return m_amount_of_sprites_in_move_animation[type];
 }
 }  // namespace game_interface
