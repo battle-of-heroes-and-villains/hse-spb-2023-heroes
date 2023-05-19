@@ -55,7 +55,7 @@ public:
 
     void create() {
         char *command =
-            "CREATE TABLE users (\n"
+            "CREATE TABLE IF NOT EXISTS users (\n"
             "\tname TEXT PRIMARY KEY UNIQUE,\n"
             "\tpassword TEXT NOT NULL,\n"
             "\trating INTEGER DEFAULT 0\n"
@@ -143,10 +143,16 @@ public:
         return count;
     }
 
+    bool has_table(){
+        const char* name = "users";
+        int rc = sqlite3_open(name, &db);
+        return rc == SQLITE_OK;
+    }
+
     void close() {
         sqlite3_close(db);
         fprintf(stdout, "closed database\n");
     }
 };
 
-#endif  // DB_INTERFACE_HPP
+#endif  // DB_INTERFACE_HPP_
