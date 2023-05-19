@@ -16,7 +16,8 @@ set(SOURCES
         interactors/src/attack_interactor.cpp
         interactors/src/attack_select_interactor.cpp
         interactors/src/spell_interactor.cpp
-        interactors/src/spell_select_interactor.cpp)
+        interactors/src/spell_select_interactor.cpp
+        game_bot/game_bot.cpp)
 
 add_executable(server ${SOURCES})
 

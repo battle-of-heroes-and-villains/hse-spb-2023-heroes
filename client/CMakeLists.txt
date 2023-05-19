@@ -1,10 +1,10 @@
-cmake_minimum_required (VERSION 3.17)
+cmake_minimum_required(VERSION 3.17)
 
-set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
-find_package (SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 
-set (SOURCES
+set(SOURCES
         src/animation.cpp
         src/board.cpp
         src/button.cpp
@@ -26,27 +26,27 @@ set (SOURCES
         src/window.cpp
         )
 
-add_executable (client ${SOURCES})
+add_executable(client ${SOURCES})
 
 
-target_include_directories (client PRIVATE
+target_include_directories(client PRIVATE
         "${PROJECT_BINARY_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-set_target_properties (client
+set_target_properties(client
         PROPERTIES
         INSTALL_RPATH
         "${CMAKE_INSTALL_PREFIX}/lib"
         )
 
-target_link_libraries (client
+target_link_libraries(client
         all_protos sfml-system sfml-window sfml-graphics sfml-audio sfml-network
         )
 
-install (TARGETS client DESTINATION bin)
+install(TARGETS client DESTINATION bin)
 
-install (DIRECTORY content
+install(DIRECTORY content
         DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME}"
         )
 
-source_group (TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
