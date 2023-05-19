@@ -1,11 +1,11 @@
 #ifndef GAME_SESSION_HPP
 #define GAME_SESSION_HPP
 
+#include "../../game_bot/game_bot.hpp"
 #include "TSqueue.hpp"
 #include "attack_interactor.hpp"
 #include "attack_select_interactor.hpp"
 #include "game.hpp"
-#include "game_bot.hpp"
 #include "move_interactor.hpp"
 #include "move_select_interactor.hpp"
 #include "proto/all_protos/demo.grpc.pb.h"
@@ -20,17 +20,21 @@ class Player final {
     ::grpc::ServerContext *context;
 
 public:
-    Player(int hero_id) : id(-1), hero_id(hero_id) {
+    Player(int hero_id) : id(-2), hero_id(hero_id), name("bot") {
     }
 
     Player(
         int id,
         int hero_id,
-        const std::string & name,
+        const std::string &name,
         ::grpc::ServerWriter<namespace_proto::GameState> *stream,
         ::grpc::ServerContext *context
     )
-        : id(id), hero_id(hero_id), stream(stream), name(name), context(context) {
+        : id(id),
+          hero_id(hero_id),
+          stream(stream),
+          name(name),
+          context(context) {
     }
 
     [[nodiscard]] int get_id() const {

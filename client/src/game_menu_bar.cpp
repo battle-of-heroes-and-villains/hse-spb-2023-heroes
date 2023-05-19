@@ -16,27 +16,13 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_username.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
-    m_username.setString("username");
+    m_username.setString(get_client_state()->m_hero.name());
     m_username.setFillColor(sf::Color::White);
     m_username.setCharacterSize(24);
     m_username.setPosition({static_cast<float>(134.0f), 30.0f});
 
-    m_opponent_username.setFont(game_interface::ResourceManager::load_font(
-        interface::Fonts::CaptionFont
-    ));
-    m_opponent_username.setString("opponent username");
-    m_opponent_username.setFillColor(sf::Color::White);
-    m_opponent_username.setCharacterSize(24);
-    m_opponent_username.setPosition(
-        {static_cast<float>(wind_size.x - 134.0f), 30.0f}
-    );
-
     sf::FloatRect data_bounds = m_username.getLocalBounds();
     m_username.setOrigin(data_bounds.left, data_bounds.top);
-    data_bounds = m_opponent_username.getLocalBounds();
-    m_opponent_username.setOrigin(
-        data_bounds.left + data_bounds.width, data_bounds.top
-    );
 
     m_mana.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
@@ -46,15 +32,6 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_mana.setPosition({static_cast<float>(67.0f), 100.0f});
     m_mana.setString("");
     align_text_origin(m_mana);
-
-    m_opponent_mana.setFont(game_interface::ResourceManager::load_font(
-        interface::Fonts::CaptionFont
-    ));
-    m_opponent_mana.setFillColor(sf::Color::White);
-    m_opponent_mana.setCharacterSize(24);
-    m_opponent_mana.setPosition({wind_size.x - 67.0f, 100.0f});
-    m_opponent_mana.setString("");
-    align_text_origin(m_opponent_mana);
 
     m_data.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
@@ -159,6 +136,31 @@ void GameMenuBar::update(sf::Event event, Window *window) {
     if (get_client_state()->m_opponent.type() == -1 &&
         get_client_state()->m_game_state.move_turn() != 0) {
         Client::get_opponent();
+        m_opponent_username.setFont(
+            game_interface::ResourceManager::load_font(
+                interface::Fonts::CaptionFont
+            )
+        );
+        m_opponent_username.setString(get_client_state()->m_opponent.name());
+        m_opponent_username.setFillColor(sf::Color::White);
+        m_opponent_username.setCharacterSize(24);
+        auto win_size_x = m_turn_label.getPosition().x * 2;
+        m_opponent_username.setPosition(
+            {static_cast<float>( win_size_x - 134.0f),
+             30.0f}
+        );
+        sf::FloatRect data_bounds = m_opponent_username.getLocalBounds();
+        m_opponent_username.setOrigin(
+            data_bounds.left + data_bounds.width, data_bounds.top
+        );
+        m_opponent_mana.setFont(game_interface::ResourceManager::load_font(
+            interface::Fonts::CaptionFont
+        ));
+        m_opponent_mana.setFillColor(sf::Color::White);
+        m_opponent_mana.setCharacterSize(24);
+        m_opponent_mana.setPosition({win_size_x - 67.0f, 100.0f});
+        m_opponent_mana.setString("");
+        align_text_origin(m_opponent_mana);
         m_opponents_spells_amount =
             get_client_state()->m_opponent.spells_size();
         sf::Vector2f spell_size{130, 80};

@@ -21,7 +21,15 @@ enum class CursorType { Attack };
 }  // namespace game_interface
 
 namespace menu_interface {
-enum class PageType { Game, Exit, Entry, SignUp, Registration, GameChoose };
+enum class PageType {
+    SinglePlayer,
+    MultiPlayer,
+    Exit,
+    Entry,
+    SignUp,
+    Registration,
+    GameChoose
+};
 }  // namespace menu_interface
 
 namespace interface {

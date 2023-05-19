@@ -12,7 +12,7 @@ unit::unit(int type) : m_type(type) {
 
     ptree tree;
 
-    read_json("model/const_game_info/units.json", tree);
+    read_json("../../server/model/const_game_info/units.json", tree);
 
     ptree units = tree.get_child("units");
     auto it = units.begin();
