@@ -16,6 +16,7 @@ public:
     bool is_have_unit() const;
     bool is_available_for_moving() const;
     [[nodiscard]] Unit *get_unit();
+    [[nodiscard]] sf::Vector2f get_cell_position();
 
     void set_unit(Unit *unit);
 

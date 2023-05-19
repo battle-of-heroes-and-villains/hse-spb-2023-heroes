@@ -15,7 +15,7 @@ TextBox::TextBox(
 
     m_button = interface::Button(position, size);
 
-    m_label.setFont(game_interface::resource_manager()->load_font(font));
+    m_label.setFont(game_interface::ResourceManager::load_font(font));
     m_label.setFillColor(sf::Color::Black);
     m_label.setCharacterSize(character_size);
 

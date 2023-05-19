@@ -2,6 +2,7 @@
 #define BATTLE_OF_HEROES_UNIT_HPP
 
 #include <SFML/Graphics.hpp>
+#include "animation.hpp"
 #include "client.hpp"
 #include "coordinates.hpp"
 #include "popup_window.hpp"
@@ -33,6 +34,7 @@ public:
     );
     [[nodiscard]] std::string get_unit_info() const;
     void update_statistic(EventType event_type, const sf::Window *window);
+    void play_animation(AnimationType type, Coords destination_cell = {-1, -1});
     void render(sf::RenderWindow *window);
     void render_statistic(sf::RenderWindow *window);
 
@@ -54,6 +56,7 @@ private:
     sf::RectangleShape m_table;
     sf::Text m_label;
     interface::PopUpWindow m_statistic;
+    Animation m_animation;
 };
 }  // namespace game_interface
 

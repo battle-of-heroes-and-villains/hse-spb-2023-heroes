@@ -2,6 +2,7 @@
 #define BATTLE_OF_HEROES_GAME_HPP
 
 #include "game_menu_bar.hpp"
+#include "resource_manager.hpp"
 
 namespace game_interface {
 class Game {

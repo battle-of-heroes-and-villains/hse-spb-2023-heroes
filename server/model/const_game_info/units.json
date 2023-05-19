@@ -17,6 +17,33 @@
       "m_attack_range": 2,
       "m_movement_range": 1,
       "m_weight": 5
+    },
+    {
+      "m_type": 3,
+      "m_number": 1,
+      "m_max_health": 10,
+      "m_damage": 10,
+      "m_attack_range": 10,
+      "m_movement_range": 3,
+      "m_weight": 5
+    },
+    {
+      "m_type": 4,
+      "m_number": 1,
+      "m_max_health": 10,
+      "m_damage": 10,
+      "m_attack_range": 10,
+      "m_movement_range": 3,
+      "m_weight": 5
+    },
+    {
+      "m_type": 5,
+      "m_number": 1,
+      "m_max_health": 10,
+      "m_damage": 10,
+      "m_attack_range": 10,
+      "m_movement_range": 3,
+      "m_weight": 5
     }
   ]
 }
