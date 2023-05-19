@@ -53,9 +53,9 @@ void Board::play_animation(Coords source_cell, Coords destination_cell) {
             .get_unit()
             ->play_animation(AnimationType::GetAttacked);
     } else {
-        m_board[source_cell.get_row()][source_cell.get_column()]
-            .get_unit()
-            ->play_animation(AnimationType::Move);
+//        m_board[source_cell.get_row()][source_cell.get_column()]
+//            .get_unit()
+//            ->play_animation(AnimationType::Move);
     }
 }
 

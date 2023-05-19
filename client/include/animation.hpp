@@ -16,6 +16,7 @@ public:
     update_animation(sf::Vector2f size, sf::Vector2f position, UnitType type);
     void update_position(sf::Vector2f position);
     void update_texture();
+    void reverse();
 
     void play_animation(AnimationType type, Coords destination_cell = {-1, -1});
     bool is_playing() const;

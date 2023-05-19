@@ -6,11 +6,6 @@ void Animation::update_animation(
     sf::Vector2f position,
     UnitType type
 ) {
-//    m_animation_sheet =
-//        ResourceManager::load_attack_animation_sprite_sheet(type);
-//    m_amount_of_frames =
-//        ResourceManager::amount_of_frames_in_attack_animation(type);
-
     m_frame_width = m_animation_sheet.getSize().x / m_amount_of_frames;
     m_current_frame =
         sf::IntRect(0, 0, m_frame_width, m_animation_sheet.getSize().y);
@@ -18,15 +13,17 @@ void Animation::update_animation(
     m_animation.setTexture(m_animation_sheet);
     m_animation.setTextureRect(m_current_frame);
     m_animation.setScale(
-        0.9f * size.y / m_animation_sheet.getSize().y,
-        0.9f * size.y / m_animation_sheet.getSize().y
+        size.y / m_animation_sheet.getSize().y,
+        size.y / m_animation_sheet.getSize().y
     );
 
     m_animation.setPosition(position);
-    m_animation.move(
-        -m_animation.getGlobalBounds().width / 2,
-        -3 * m_animation.getGlobalBounds().height / 4
-    );
+    m_animation.setOrigin(m_animation.getTextureRect().width / 2,
+                          m_animation.getTextureRect().height / 2);
+//    m_animation.move(
+//        -m_animation.getGlobalBounds().width / 2,
+//        -3 * m_animation.getGlobalBounds().height / 4
+//    );
 
     m_unit_type = type;
     m_size = size;
@@ -34,6 +31,10 @@ void Animation::update_animation(
 
 void Animation::update_position(sf::Vector2f position) {
     m_animation.setPosition(position);
+//    m_animation.move(
+//        -m_animation.getGlobalBounds().width / 2,
+//        -3 * m_animation.getGlobalBounds().height / 4
+//    );
 }
 
 void Animation::update() {
@@ -66,9 +67,15 @@ void Animation::update_texture() {
     m_animation.setTexture(m_animation_sheet);
     m_animation.setTextureRect(m_current_frame);
     m_animation.setScale(
-        0.9f * m_size.y / m_animation_sheet.getSize().y,
-        0.9f * m_size.y / m_animation_sheet.getSize().y
+        m_size.y / m_animation_sheet.getSize().y,
+        m_size.y / m_animation_sheet.getSize().y
     );
+    m_animation.setOrigin(m_animation.getTextureRect().width / 2,
+                          m_animation.getTextureRect().height / 2);
+}
+
+void Animation::reverse() {
+    m_animation.scale(-1, 1);
 }
 
 void Animation::play_animation(AnimationType type, Coords destination_cell) {

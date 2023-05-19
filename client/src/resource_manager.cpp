@@ -52,7 +52,7 @@ void ResourceManager::load_resources() {
         interface::source_dir + "cells/spell.png"
     );
     ResourceManager::m_cell_property_textures[CellType::AttackSpell]
-        .loadFromFile(interface::source_dir + "attack.png");
+        .loadFromFile(interface::source_dir + "cells/attack.png");
 
     ResourceManager::m_unit_textures[UnitType::Type1].loadFromFile(
         interface::source_dir + "units/unit_type1.png"
@@ -61,7 +61,7 @@ void ResourceManager::load_resources() {
         interface::source_dir + "units/unit_type2.png"
     );
     ResourceManager::m_unit_textures[UnitType::Type3].loadFromFile(
-        interface::source_dir + "units/unit_type3.png"
+        interface::source_dir + "units/unit_attack_type3.png"
     );
     ResourceManager::m_unit_textures[UnitType::Type4].loadFromFile(
         interface::source_dir + "units/unit_type4.png"
@@ -96,10 +96,10 @@ void ResourceManager::load_resources() {
         interface::source_dir + "units_attack/unit_attack_type3.png"
     );
     ResourceManager::m_attack_animation[UnitType::Type4].loadFromFile(
-        interface::source_dir + "units_attack/unit_attack_type2.png"
+        interface::source_dir + "units_attack/unit_attack_type4.png"
     );
     ResourceManager::m_attack_animation[UnitType::Type5].loadFromFile(
-        interface::source_dir + "units_attack/unit_attack_type3.png"
+        interface::source_dir + "units_attack/unit_attack_type5.png"
     );
 
     ResourceManager::m_amount_of_sprites_in_attack_animation[UnitType::Type1] = 4;
