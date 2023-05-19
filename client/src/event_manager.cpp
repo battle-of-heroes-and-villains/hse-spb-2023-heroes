@@ -51,7 +51,8 @@ void EventManager::update_cell(
         }
         get_game_state()->get_board()->play_animation(
             {(*selected_unit)->get_coords().get_row(),
-             (*selected_unit)->get_coords().get_column()}
+             (*selected_unit)->get_coords().get_column()},
+            clicked_position
         );
         Client::move_unit(from, to);
 

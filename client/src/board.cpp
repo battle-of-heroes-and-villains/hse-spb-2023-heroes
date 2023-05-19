@@ -40,16 +40,22 @@ Board::Board(sf::Vector2i window_size) {
         )};
 }
 
-sf::Vector2i Board::get_boarder_size() const {
-    return m_boarder_size;
-}
-
-void Board::play_animation(Coords cell_coords) {
-    if (m_board[cell_coords.get_row()][cell_coords.get_column()].is_have_unit(
-        )) {
-        m_board[cell_coords.get_row()][cell_coords.get_column()]
+void Board::play_animation(Coords source_cell, Coords destination_cell) {
+    if (m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .is_have_unit() &&
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->get_hero_id() != get_client_state()->m_user.user().id()) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
-            ->play_animation();
+            ->play_animation(AnimationType::Attack);
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::GetAttacked);
+    } else {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Move);
     }
 }
 

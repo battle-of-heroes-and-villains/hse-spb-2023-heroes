@@ -34,7 +34,7 @@ public:
     );
     [[nodiscard]] std::string get_unit_info() const;
     void update_statistic(EventType event_type, const sf::Window *window);
-    void play_animation();
+    void play_animation(AnimationType type, Coords destination_cell = {-1, -1});
     void render(sf::RenderWindow *window);
     void render_statistic(sf::RenderWindow *window);
 

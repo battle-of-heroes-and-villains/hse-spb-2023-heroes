@@ -145,7 +145,7 @@ void Unit::update_statistic(EventType event_type, const sf::Window *window) {
     m_statistic.update(get_unit_info(), event_type, window);
 }
 
-void Unit::play_animation() {
-    m_animation.play_animation();
+void Unit::play_animation(AnimationType type, Coords destination_cell) {
+    m_animation.play_animation(type, destination_cell);
 }
 }  // namespace game_interface
