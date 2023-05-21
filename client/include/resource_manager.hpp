@@ -32,12 +32,18 @@ public:
         UnitType texture
     );
 
+    [[nodiscard]] const static sf::Texture &load_dead_animation_sprite_sheet(
+        UnitType texture
+    );
+
     [[nodiscard]] static int amount_of_frames_in_attack_animation(UnitType type
     );
 
     [[nodiscard]] static int amount_of_frames_in_hurt_animation(UnitType type);
 
     [[nodiscard]] static int amount_of_frames_in_move_animation(UnitType type);
+
+    [[nodiscard]] static int amount_of_frames_in_dead_animation(UnitType type);
 
     [[nodiscard]] const static sf::Texture &load_texture(TextureType texture);
 
@@ -61,6 +67,7 @@ private:
     static std::unordered_map<UnitType, sf::Texture> m_attack_animation;
     static std::unordered_map<UnitType, sf::Texture> m_hurt_animation;
     static std::unordered_map<UnitType, sf::Texture> m_move_animation;
+    static std::unordered_map<UnitType, sf::Texture> m_dead_animation;
 
     static std::unordered_map<UnitType, int>
         m_amount_of_sprites_in_attack_animation;
@@ -68,6 +75,8 @@ private:
         m_amount_of_sprites_in_hurt_animation;
     static std::unordered_map<UnitType, int>
         m_amount_of_sprites_in_move_animation;
+    static std::unordered_map<UnitType, int>
+        m_amount_of_sprites_in_dead_animation;
 };
 }  // namespace game_interface
 

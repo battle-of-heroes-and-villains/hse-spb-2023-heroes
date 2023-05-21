@@ -9,14 +9,29 @@ int Unit::get_hero_id() const {
     return m_hero_id;
 }
 
+int Unit::get_health() const {
+    return m_max_health * m_amount_of_units;
+}
+
+int Unit::get_damage() const {
+    return m_damage;
+}
+
 void Unit::render(sf::RenderWindow *window) {
     if (!m_animation.is_playing()) {
         window->draw(m_unit);
     }
-    m_animation.update();
-    m_animation.render(window);
+    render_animation(window);
     window->draw(m_table);
     window->draw(m_label);
+}
+
+void Unit::render_animation(sf::RenderWindow *window) {
+    m_animation.update();
+    if (m_hero_id != get_client_state()->m_user.user().id()) {
+        m_animation.reverse();
+    }
+    m_animation.render(window);
 }
 
 void Unit::render_statistic(sf::RenderWindow *window) {

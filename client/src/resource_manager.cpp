@@ -17,6 +17,7 @@ std::unordered_map<UnitType, sf::Texture>
 std::unordered_map<UnitType, sf::Texture> ResourceManager::m_attack_animation{};
 std::unordered_map<UnitType, sf::Texture> ResourceManager::m_hurt_animation{};
 std::unordered_map<UnitType, sf::Texture> ResourceManager::m_move_animation{};
+std::unordered_map<UnitType, sf::Texture> ResourceManager::m_dead_animation{};
 
 std::unordered_map<UnitType, int>
     ResourceManager::m_amount_of_sprites_in_attack_animation{};
@@ -24,6 +25,8 @@ std::unordered_map<UnitType, int>
     ResourceManager::m_amount_of_sprites_in_hurt_animation{};
 std::unordered_map<UnitType, int>
     ResourceManager::m_amount_of_sprites_in_move_animation{};
+std::unordered_map<UnitType, int>
+    ResourceManager::m_amount_of_sprites_in_dead_animation{};
 
 void ResourceManager::load_resources() {
     static bool is_initialised = false;
@@ -159,6 +162,28 @@ void ResourceManager::load_resources() {
     ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type4] = 2;
     ResourceManager::m_amount_of_sprites_in_hurt_animation[UnitType::Type5] = 2;
 
+    ResourceManager::m_dead_animation[UnitType::Type1].loadFromFile(
+        interface::source_dir + "units_dead/unit_dead_type1.png"
+    );
+    ResourceManager::m_dead_animation[UnitType::Type2].loadFromFile(
+        interface::source_dir + "units_dead/unit_dead_type2.png"
+    );
+    ResourceManager::m_dead_animation[UnitType::Type3].loadFromFile(
+        interface::source_dir + "units_dead/unit_dead_type3.png"
+    );
+    ResourceManager::m_dead_animation[UnitType::Type4].loadFromFile(
+        interface::source_dir + "units_dead/unit_dead_type4.png"
+    );
+    ResourceManager::m_dead_animation[UnitType::Type5].loadFromFile(
+        interface::source_dir + "units_dead/unit_dead_type5.png"
+    );
+
+    ResourceManager::m_amount_of_sprites_in_dead_animation[UnitType::Type1] = 4;
+    ResourceManager::m_amount_of_sprites_in_dead_animation[UnitType::Type2] = 4;
+    ResourceManager::m_amount_of_sprites_in_dead_animation[UnitType::Type3] = 4;
+    ResourceManager::m_amount_of_sprites_in_dead_animation[UnitType::Type4] = 4;
+    ResourceManager::m_amount_of_sprites_in_dead_animation[UnitType::Type5] = 4;
+
     ResourceManager::m_textures[TextureType::MenuBackground].loadFromFile(
         interface::source_dir + "backgrounds/menu_background.jpg"
     );
@@ -235,6 +260,13 @@ const sf::Texture &ResourceManager::load_move_animation_sprite_sheet(
     return m_move_animation[texture];
 }
 
+const sf::Texture &ResourceManager::load_dead_animation_sprite_sheet(
+    UnitType texture
+) {
+    load_resources();
+    return m_dead_animation[texture];
+}
+
 int ResourceManager::amount_of_frames_in_attack_animation(UnitType type) {
     load_resources();
     return m_amount_of_sprites_in_attack_animation[type];
@@ -248,5 +280,10 @@ int ResourceManager::amount_of_frames_in_hurt_animation(UnitType type) {
 int ResourceManager::amount_of_frames_in_move_animation(UnitType type) {
     load_resources();
     return m_amount_of_sprites_in_move_animation[type];
+}
+
+int ResourceManager::amount_of_frames_in_dead_animation(UnitType type) {
+    load_resources();
+    return m_amount_of_sprites_in_dead_animation[type];
 }
 }  // namespace game_interface

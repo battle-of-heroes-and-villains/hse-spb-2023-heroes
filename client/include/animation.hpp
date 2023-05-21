@@ -34,6 +34,7 @@ private:
     sf::IntRect m_current_frame;
     int m_frame_width;
     int m_amount_of_frames;
+    bool m_is_reversed;
     sf::Texture m_animation_sheet;
     sf::Sprite m_animation;
     sf::Clock m_clock;

@@ -23,6 +23,8 @@ public:
 
     [[nodiscard]] Coords get_coords() const;
     [[nodiscard]] int get_hero_id() const;
+    [[nodiscard]] int get_health() const;
+    [[nodiscard]] int get_damage() const;
     void set_selection();
     void disable_selection();
     void update_characteristics(const namespace_proto::Unit &unit);
@@ -36,6 +38,7 @@ public:
     void update_statistic(EventType event_type, const sf::Window *window);
     void play_animation(AnimationType type, Coords destination_cell = {-1, -1});
     void render(sf::RenderWindow *window);
+    void render_animation(sf::RenderWindow *window);
     void render_statistic(sf::RenderWindow *window);
 
 private:

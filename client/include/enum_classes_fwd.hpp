@@ -11,7 +11,7 @@ enum class CellType { Type1, Broken, Move, Enemy, Attack, Spell, AttackSpell };
 
 enum class TextureType { MenuBackground };
 
-enum class AnimationType { Move, Attack, GetAttacked };
+enum class AnimationType { Move, Attack, GetAttacked, Dead };
 
 enum class EventType { FirstPress, SecondPress, Move, Targeting, Nothing };
 

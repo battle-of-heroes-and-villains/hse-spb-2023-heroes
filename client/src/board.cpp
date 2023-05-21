@@ -49,9 +49,19 @@ void Board::play_animation(Coords source_cell, Coords destination_cell) {
         m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
             ->play_animation(AnimationType::Attack);
-        m_board[destination_cell.get_row()][destination_cell.get_column()]
-            .get_unit()
-            ->play_animation(AnimationType::GetAttacked);
+        if (m_board[destination_cell.get_row()][destination_cell.get_column()].get_unit()->get_health() <=
+            m_board[source_cell.get_row()][source_cell.get_column()]
+                .get_unit()
+                ->get_damage()) {
+            m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->play_animation(AnimationType::Dead);
+        } else {
+            m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->play_animation(AnimationType::GetAttacked);
+        }
+
     } else {
         m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
@@ -149,6 +159,8 @@ void Board::render(sf::RenderWindow *window) {
     for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
         if (m_unit_is_alive[unit_id]) {
             m_units[unit_id].render(window);
+        } else {
+            m_units[unit_id].render_animation(window);
         }
     }
 

@@ -29,6 +29,7 @@ void Animation::update_animation(
     m_unit_type = type;
     m_unit_size = unit_size;
     m_cell_size = cell_size;
+    m_is_reversed = false;
 }
 
 void Animation::update() {
@@ -78,7 +79,10 @@ void Animation::update_texture() {
 }
 
 void Animation::reverse() {
-    m_animation.scale(-1, 1);
+    if (!m_is_reversed) {
+        m_animation.scale(-1, 1);
+        m_is_reversed = true;
+    }
 }
 
 void Animation::play_animation(
@@ -100,7 +104,6 @@ void Animation::play_animation(
             ResourceManager::load_hurt_animation_sprite_sheet(m_unit_type);
         m_amount_of_frames =
             ResourceManager::amount_of_frames_in_hurt_animation(m_unit_type);
-        // TODO: if there is zero of health ?
         m_repeats = 6;
         m_delta = {0.0f, 0.0f};
     } else if (type == AnimationType::Move) {
@@ -115,10 +118,19 @@ void Animation::play_animation(
                 (destination_cell.get_column() - source_cell.get_column()),
             m_cell_size.y *
                 (destination_cell.get_row() - source_cell.get_row())};
-        m_delta = {shift.x / (m_repeats + 1), shift.y / (m_repeats + 1)};
+        m_delta = {shift.x / m_repeats, shift.y / m_repeats};
+    } else if (type == AnimationType::Dead) {
+        m_is_playing = true;
+        m_animation_sheet =
+            ResourceManager::load_dead_animation_sprite_sheet(m_unit_type);
+        m_amount_of_frames =
+            ResourceManager::amount_of_frames_in_dead_animation(m_unit_type);
+        m_repeats = m_amount_of_frames;
+        m_delta = {0.0f, 0.0f};
     }
     m_delta_time = 1.5f / m_repeats;
     update_texture();
+    m_is_reversed = false;
 }
 
 bool Animation::is_playing() const {
