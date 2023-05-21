@@ -55,11 +55,11 @@ void Board::play_animation(Coords source_cell, Coords destination_cell) {
                 ->get_damage()) {
             m_board[destination_cell.get_row()][destination_cell.get_column()]
                 .get_unit()
-                ->play_animation(AnimationType::Dead);
+                ->play_animation(AnimationType::Dead, source_cell);
         } else {
             m_board[destination_cell.get_row()][destination_cell.get_column()]
                 .get_unit()
-                ->play_animation(AnimationType::GetAttacked);
+                ->play_animation(AnimationType::GetAttacked, source_cell);
         }
 
     } else {
