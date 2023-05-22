@@ -325,18 +325,31 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         namespace_proto::Cell *cell_to = game_state_ref->mutable_game_cells(
             request->finish().row() * 10 + request->finish().column()
         );
+        namespace_proto::OpponentMove *move =
+            game_state_ref->mutable_opponent_move();
+        move->set_opponent_id(request->user().user().id());
+
         if (game_session_ref->get_model_game()->get_cell(to).get_unit_index() ==
             -1) {
             (*game_session_ref->get_mover())(from, to);
             swapUnits(cell_from, cell_to);
+            move->set_enum_(namespace_proto::move);
+            move->set_allocated_from(cell_from);
+            move->set_allocated_to(cell_to);
         } else {
             (*game_session_ref->get_attacker())(from, to);
             if (game_session_ref->get_model_game()->get_cell(to).get_unit_index(
                 ) == -1) {
                 cell_to->set_allocated_unit(nullptr);
                 cell_to->set_is_unit(false);
+                move->set_enum_(namespace_proto::kill);
+                move->set_allocated_from(cell_from);
+                move->set_allocated_to(cell_to);
             } else {
                 update_unit(cell_to->mutable_unit(), to, game_session_ref);
+                move->set_enum_(namespace_proto::attack);
+                move->set_allocated_from(cell_from);
+                move->set_allocated_to(cell_to);
             }
             if (game_session_ref->get_model_game()
                     ->get_cell(from)
@@ -415,6 +428,11 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         namespace_proto::Cell *cell =
             game_session_ref->get_game_state()->mutable_game_cells(index);
         namespace_proto::Unit *unit = cell->mutable_unit();
+        namespace_proto::OpponentMove *move =
+            game_session_ref->get_game_state()->mutable_opponent_move();
+        move->set_opponent_id(request->user().user().id());
+        move->set_enum_(namespace_proto::spell);
+        move->set_allocated_from(cell);
         update_cell(cell, game_model::coordinates{*cell}, game_session_ref);
         update_unit(unit, game_model::coordinates{*cell}, game_session_ref);
         update_mana(game_session_ref);

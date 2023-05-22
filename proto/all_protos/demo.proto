@@ -71,6 +71,21 @@ message GameState{
   int32 second_user_mana = 7;
   int32 move_turn = 5;
   repeated Cell game_cells = 4;
+  OpponentMove opponent_move = 8;
+}
+
+enum Enum {
+  move = 0;
+  attack = 1;
+  kill = 2;
+  spell = 3;
+}
+
+message OpponentMove{
+  int32 opponent_id = 4;
+  Enum enum = 1;
+  Cell from = 2;
+  Cell to = 3;
 }
 
 message EnableCells{
