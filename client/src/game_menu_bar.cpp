@@ -136,18 +136,15 @@ void GameMenuBar::update(sf::Event event, Window *window) {
     if (get_client_state()->m_opponent.type() == -1 &&
         get_client_state()->m_game_state.move_turn() != 0) {
         Client::get_opponent();
-        m_opponent_username.setFont(
-            game_interface::ResourceManager::load_font(
-                interface::Fonts::CaptionFont
-            )
-        );
+        m_opponent_username.setFont(game_interface::ResourceManager::load_font(
+            interface::Fonts::CaptionFont
+        ));
         m_opponent_username.setString(get_client_state()->m_opponent.name());
         m_opponent_username.setFillColor(sf::Color::White);
         m_opponent_username.setCharacterSize(24);
         auto win_size_x = m_turn_label.getPosition().x * 2;
         m_opponent_username.setPosition(
-            {static_cast<float>( win_size_x - 134.0f),
-             30.0f}
+            {static_cast<float>(win_size_x - 134.0f), 30.0f}
         );
         sf::FloatRect data_bounds = m_opponent_username.getLocalBounds();
         m_opponent_username.setOrigin(

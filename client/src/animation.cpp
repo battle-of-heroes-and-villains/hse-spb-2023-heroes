@@ -1,5 +1,4 @@
 #include "animation.hpp"
-#include <iostream>
 
 namespace game_interface {
 void Animation::update_animation(
@@ -30,7 +29,6 @@ void Animation::update_animation(
     m_unit_type = type;
     m_unit_size = unit_size;
     m_cell_size = cell_size;
-//    m_is_reversed = false;
 }
 
 void Animation::update() {
@@ -59,7 +57,6 @@ void Animation::update() {
 void Animation::render(sf::RenderWindow *window) {
     if (m_is_playing) {
         window->draw(m_animation);
-        std::cout << m_animation.getScale().x << '\n';
     }
 }
 
@@ -71,7 +68,8 @@ void Animation::update_texture() {
     m_animation.setTexture(m_animation_sheet);
     m_animation.setTextureRect(m_current_frame);
     m_animation.setScale(
-        (m_is_reversed ? -1 : 1) * m_unit_size.y / m_animation_sheet.getSize().y,
+        (m_is_reversed ? -1 : 1) * m_unit_size.y /
+            m_animation_sheet.getSize().y,
         m_unit_size.y / m_animation_sheet.getSize().y
     );
     m_animation.setOrigin(
@@ -81,7 +79,7 @@ void Animation::update_texture() {
 }
 
 void Animation::reverse() {
-    //m_animation.scale(-1, 1);
+    // m_animation.scale(-1, 1);
 }
 
 void Animation::play_animation(
@@ -126,8 +124,8 @@ void Animation::play_animation(
     }
     m_delta_time = 1.5f / m_repeats;
     m_is_reversed = destination_cell.get_column() < source_cell.get_column() ||
-                        destination_cell.get_column() == source_cell.get_column() &&
-                            destination_cell.get_row() > source_cell.get_row();
+                    destination_cell.get_column() == source_cell.get_column() &&
+                        destination_cell.get_row() > source_cell.get_row();
     if (m_is_reversed) {
         reverse();
     }

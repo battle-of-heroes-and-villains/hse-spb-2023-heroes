@@ -49,7 +49,9 @@ void Board::play_animation(Coords source_cell, Coords destination_cell) {
         m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
             ->play_animation(AnimationType::Attack);
-        if (m_board[destination_cell.get_row()][destination_cell.get_column()].get_unit()->get_health() <=
+        if (m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->get_health() <=
             m_board[source_cell.get_row()][source_cell.get_column()]
                 .get_unit()
                 ->get_damage()) {
@@ -67,6 +69,50 @@ void Board::play_animation(Coords source_cell, Coords destination_cell) {
             .get_unit()
             ->play_animation(AnimationType::Move, destination_cell);
     }
+}
+
+void Board::play_animation() {
+    static bool is_initialized = false;
+    bool is_second =
+        (get_client_state()->m_game_state.second_user() ==
+         get_client_state()->m_user.user().id());
+    Coords source_cell = {
+        get_client_state()->m_game_state.opponent_move().from().row(),
+        (is_second
+             ? 9 - get_client_state()
+                       ->m_game_state.opponent_move()
+                       .from()
+                       .column()
+             : get_client_state()->m_game_state.opponent_move().from().column()
+        )};
+    Coords destination_cell = {
+        get_client_state()->m_game_state.opponent_move().to().row(),
+        (is_second
+             ? 9 - get_client_state()->m_game_state.opponent_move().to().column(
+                   )
+             : get_client_state()->m_game_state.opponent_move().to().column())};
+    if (is_initialized &&
+        get_client_state()->m_game_state.opponent_move().enum_() ==
+            namespace_proto::move) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Move, destination_cell);
+    } else if (get_client_state()->m_game_state.opponent_move().enum_() == namespace_proto::attack) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Attack);
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::GetAttacked, source_cell);
+    } else if (get_client_state()->m_game_state.opponent_move().enum_() == namespace_proto::kill) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Attack);
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Dead, source_cell);
+    }
+    is_initialized = true;
 }
 
 void Board::add_available_for_moving_cells(
@@ -175,6 +221,10 @@ void Board::update_board(const namespace_proto::GameState &game_state) {
     bool is_second =
         (game_state.second_user() == get_client_state()->m_user.user().id());
     std::fill(m_unit_is_updated.begin(), m_unit_is_updated.end(), false);
+    if (get_client_state()->m_game_state.opponent_move().opponent_id() !=
+        get_client_state()->m_user.user().id()) {
+        play_animation();
+    }
     for (int cell_index = 0; cell_index < 100; cell_index++) {
         namespace_proto::Cell server_cell = game_state.game_cells(cell_index);
         int row = server_cell.row();

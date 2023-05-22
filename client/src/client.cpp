@@ -15,7 +15,7 @@ namespace_proto::UserState *dump_user_state(
     return request_user;
 }
 
-bool Client::is_need_log_in(){
+bool Client::is_need_log_in() {
     return get_client_state()->m_user.user().id() == -1;
 }
 
@@ -59,7 +59,6 @@ void Client::run_receiver() {
             get_client_state()->m_game_state.game_id()
         );
     }
-
 }
 
 void Client::move_unit(namespace_proto::Cell from, namespace_proto::Cell to) {

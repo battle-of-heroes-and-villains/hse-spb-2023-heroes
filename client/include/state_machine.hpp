@@ -1,9 +1,8 @@
 #ifndef STATE_MACHINE_HPP_
 #define STATE_MACHINE_HPP_
 
-#include "menu.hpp"
 #include "game.hpp"
-
+#include "menu.hpp"
 
 class State {
 public:

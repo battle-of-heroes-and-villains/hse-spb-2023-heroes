@@ -95,9 +95,9 @@ void Unit::update_unit(
         {m_unit.getGlobalBounds().width, m_unit.getGlobalBounds().height}, size,
         new_position, m_type
     );
-//    if (unit.id_hero() != get_client_state()->m_user.user().id()) {
-//        m_animation.reverse();
-//    }
+    //    if (unit.id_hero() != get_client_state()->m_user.user().id()) {
+    //        m_animation.reverse();
+    //    }
 
     m_table.setSize(sf::Vector2f(size.x / 4, size.y / 4));
     m_table.setFillColor(sf::Color(71, 78, 50));
