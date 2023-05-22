@@ -65,6 +65,21 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         return grpc::Status::OK;
     }
 
+    static void set_move(
+        namespace_proto::OpponentMove *move,
+        namespace_proto::Enum enum_,
+        namespace_proto::Cell *from,
+        namespace_proto::Cell *to = nullptr
+    ) {
+        move->set_enum_(enum_);
+        auto cell_from = new namespace_proto::Cell(*from);
+        move->set_allocated_from(cell_from);
+        if (to != nullptr) {
+            auto cell_to = new namespace_proto::Cell(*to);
+            move->set_allocated_to(cell_to);
+        }
+    }
+
     static namespace_proto::GameState *handle_diff(
         GameSession *game_session_ref,
         const namespace_proto::User &user
@@ -333,23 +348,17 @@ class ServerServices final : public ::namespace_proto::Server::Service {
             -1) {
             (*game_session_ref->get_mover())(from, to);
             swapUnits(cell_from, cell_to);
-            move->set_enum_(namespace_proto::move);
-            move->set_allocated_from(cell_from);
-            move->set_allocated_to(cell_to);
+            set_move(move, namespace_proto::move, cell_from, cell_to);
         } else {
             (*game_session_ref->get_attacker())(from, to);
             if (game_session_ref->get_model_game()->get_cell(to).get_unit_index(
                 ) == -1) {
                 cell_to->set_allocated_unit(nullptr);
                 cell_to->set_is_unit(false);
-                move->set_enum_(namespace_proto::kill);
-                move->set_allocated_from(cell_from);
-                move->set_allocated_to(cell_to);
+                set_move(move, namespace_proto::kill, cell_from, cell_to);
             } else {
                 update_unit(cell_to->mutable_unit(), to, game_session_ref);
-                move->set_enum_(namespace_proto::attack);
-                move->set_allocated_from(cell_from);
-                move->set_allocated_to(cell_to);
+                set_move(move, namespace_proto::attack, cell_from, cell_to);
             }
             if (game_session_ref->get_model_game()
                     ->get_cell(from)
@@ -431,8 +440,7 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         namespace_proto::OpponentMove *move =
             game_session_ref->get_game_state()->mutable_opponent_move();
         move->set_opponent_id(request->user().user().id());
-        move->set_enum_(namespace_proto::spell);
-        move->set_allocated_from(cell);
+        set_move(move, namespace_proto::spell, cell);
         update_cell(cell, game_model::coordinates{*cell}, game_session_ref);
         update_unit(unit, game_model::coordinates{*cell}, game_session_ref);
         update_mana(game_session_ref);
