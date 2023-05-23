@@ -21,6 +21,7 @@ public:
             menu_interface::get_menu_state()->update();
             menu_interface::get_menu_state()->render();
         }
+        menu_interface::get_menu_state()->music_stop();
     }
 
     void set_game_state(GameState *game_);

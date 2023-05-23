@@ -1,5 +1,6 @@
 #include "menu.hpp"
 #include "caption.hpp"
+#include "resource_manager.hpp"
 
 namespace menu_interface {
 MenuButton::MenuButton(
@@ -66,10 +67,10 @@ void MenuButton::render(sf::RenderWindow *window) {
 }
 
 Menu::Menu()
-    : m_window(
-          "Menu: Battle of Heroes and Villains",
-          sf::Vector2u(1920, 1080)
-      ) {
+    : m_window("Menu: Battle of Heroes and Villains", sf::Vector2u(1920, 1080)),
+      m_soundtrack(game_interface::ResourceManager::load_sound(
+          interface::Sounds::MenuBackgroundSound
+      )) {
     m_current_page = PageType::Entry;
 
     m_buttons.resize(10);
@@ -282,6 +283,11 @@ void Menu::print_error() {
 void Menu::render() {
     m_window.begin_draw();
 
+    if (m_soundtrack.getStatus() == sf::SoundSource::Paused ||
+        m_soundtrack.getStatus() == sf::SoundSource::Stopped) {
+        m_soundtrack.play();
+    }
+
     m_window.get_render_window()->draw(m_background);
 
     print_error();
@@ -412,6 +418,10 @@ void Menu::update() {
             }
         }
     }
+}
+
+void Menu::music_stop() {
+    m_soundtrack.pause();
 }
 
 [[nodiscard]] Menu *get_menu_state() {

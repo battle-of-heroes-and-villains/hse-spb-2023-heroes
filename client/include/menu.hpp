@@ -43,6 +43,8 @@ class Menu {
 public:
     Menu();
 
+    void music_stop();
+
     game_interface::Window *get_window();
     void change_page(PageType new_page);
     void print_error();
@@ -64,6 +66,7 @@ private:
     TextBox m_registration_password_checker;
     MenuButton m_show_registration_password;
     Caption m_registration_error;
+    sf::Sound m_soundtrack;
 };
 
 [[nodiscard]] Menu *get_menu_state();

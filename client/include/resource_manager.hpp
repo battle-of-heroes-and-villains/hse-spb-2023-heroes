@@ -50,7 +50,9 @@ public:
 
     [[nodiscard]] const static sf::Font &load_font(interface::Fonts font);
 
-    [[nodiscard]] const static sf::SoundBuffer &load_sound(interface::Sounds sound);
+    [[nodiscard]] const static sf::SoundBuffer &load_sound(
+        interface::Sounds sound
+    );
 
     [[nodiscard]] const static sf::Image &load_cursor(CursorType cursor);
 

@@ -6,7 +6,8 @@ namespace game_interface {
 std::unordered_map<TextureType, sf::Texture> ResourceManager::m_textures{};
 std::unordered_map<interface::Fonts, sf::Font> ResourceManager::m_fonts{};
 std::unordered_map<CursorType, sf::Image> ResourceManager::m_cursors{};
-std::unordered_map<interface::Sounds, sf::SoundBuffer> ResourceManager::m_sounds{};
+std::unordered_map<interface::Sounds, sf::SoundBuffer>
+    ResourceManager::m_sounds{};
 
 std::unordered_map<CellType, sf::Texture> ResourceManager::m_cell_textures{};
 std::unordered_map<CellType, sf::Texture>
@@ -196,9 +197,10 @@ void ResourceManager::load_resources() {
         interface::source_dir + "fonts/tittle_font.otf"
     );
 
-    ResourceManager::m_sounds[interface::Sounds::GameBackgroundSound].loadFromFile(
-        interface::source_dir + "sounds/game_background.wav"
-    );
+    ResourceManager::m_sounds[interface::Sounds::MenuBackgroundSound]
+        .loadFromFile(interface::source_dir + "sounds/menu_background.wav");
+    ResourceManager::m_sounds[interface::Sounds::GameBackgroundSound]
+        .loadFromFile(interface::source_dir + "sounds/game_background.wav");
 
     ResourceManager::m_cursors[CursorType::Attack].loadFromFile(
         interface::source_dir + "cursors/sword.png"
@@ -292,9 +294,7 @@ int ResourceManager::amount_of_frames_in_dead_animation(UnitType type) {
     return m_amount_of_sprites_in_dead_animation[type];
 }
 
-const sf::SoundBuffer &ResourceManager::load_sound(
-    interface::Sounds sound
-) {
+const sf::SoundBuffer &ResourceManager::load_sound(interface::Sounds sound) {
     load_resources();
     return m_sounds[sound];
 }
