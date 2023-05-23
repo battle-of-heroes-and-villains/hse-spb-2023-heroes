@@ -1,5 +1,4 @@
 #include "button.hpp"
-#include <iostream>
 
 namespace interface {
 Button::Button(sf::Vector2f position, sf::Vector2f size) {

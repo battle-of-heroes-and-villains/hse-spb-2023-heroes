@@ -36,6 +36,8 @@ namespace interface {
 static std::string source_dir = RESOURCE_PATH;
 
 enum class Fonts { TittleFont, CaptionFont };
+
+enum class Sounds { GameBackgroundSound };
 }  // namespace interface
 
 #endif  // BATTLE_OF_HEROES_ENUM_CLASSES_FWD_HPP

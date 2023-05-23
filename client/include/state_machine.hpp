@@ -43,6 +43,7 @@ public:
             }
             game_interface::get_game_state()->render();
         }
+        game_interface::get_game_state()->music_stop();
         receiver.join();
     }
 

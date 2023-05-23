@@ -1,6 +1,7 @@
 #ifndef BATTLE_OF_HEROES_MANAGER_HPP
 #define BATTLE_OF_HEROES_MANAGER_HPP
 
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include "enum_classes_fwd.hpp"
@@ -49,11 +50,15 @@ public:
 
     [[nodiscard]] const static sf::Font &load_font(interface::Fonts font);
 
+    [[nodiscard]] const static sf::SoundBuffer &load_sound(interface::Sounds sound);
+
     [[nodiscard]] const static sf::Image &load_cursor(CursorType cursor);
 
     static void load_resources();
 
 private:
+    static std::unordered_map<interface::Sounds, sf::SoundBuffer> m_sounds;
+
     static std::unordered_map<TextureType, sf::Texture> m_textures;
     static std::unordered_map<interface::Fonts, sf::Font> m_fonts;
     static std::unordered_map<CursorType, sf::Image> m_cursors;
