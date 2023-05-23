@@ -48,6 +48,18 @@ public:
     [[nodiscard]] const int get_spell_id() const {
         return spell_id;
     }
+
+    void set_type(bot_response_type type_){
+        type = type_;
+    }
+
+    void set_from_cell(game_model::cell cell){
+        from = cell;
+    }
+
+    void set_to_cell(game_model::cell cell){
+        to = cell;
+    }
 };
 
 class game_bot {

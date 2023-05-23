@@ -70,6 +70,7 @@ void start_game_session(int game_id) {
     });
 
     if (second_player.get_id() == -2) {
+        game_session->set_type(true);
         first_writer.join();
         return;
     }

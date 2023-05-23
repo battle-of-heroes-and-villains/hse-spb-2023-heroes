@@ -103,8 +103,12 @@ public:
         return second_player;
     }
 
-    bool *get_type() {
-        return &is_single;
+    bool get_type() {
+        return is_single;
+    }
+
+    void set_type(bool type_){
+        is_single = type_;
     }
 
     int get_game_result() const {

@@ -6,9 +6,23 @@ bot_response game_bot::position_evaluation() const {
     int optimal_unit_id = -1;
     int score = -1;
     bot_response response;
-    for (auto unit : m_game.get_player(-2)->get_units()) {
-        // todo - get optimal move (greedy)
-    }
+//    for (auto unit : m_game.get_player(-2)->get_units()) {
+//        // todo - get optimal move (greedy)
+//    }
+    response.set_type(bot_response_type::PAIR_OF_CELLS);
+    game_model::cell from;
+
+    from.set_coordinates(game_model::coordinates{0, 9});
+
+    response.set_from_cell(from);
+
+    game_model::cell to;
+
+    to.set_coordinates(game_model::coordinates{0, 8});
+
+    response.set_to_cell(to);
+
+
     return response;
 }
 
