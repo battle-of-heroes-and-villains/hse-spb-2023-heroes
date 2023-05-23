@@ -51,6 +51,8 @@ public:
     void render();
     void update();
 
+    [[nodiscard]] bool is_exit() const;
+
 private:
     game_interface::Window m_window;
     std::vector<MenuButton> m_buttons;

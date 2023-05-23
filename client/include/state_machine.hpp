@@ -8,6 +8,7 @@ class State {
 public:
     virtual void display_state() = 0;
     virtual State *switcher() = 0;
+    virtual bool is_exit() = 0;
 };
 
 class GameState;
@@ -25,6 +26,10 @@ public:
     }
 
     void set_game_state(GameState *game_);
+
+    bool is_exit() override {
+        return menu_interface::get_menu_state()->is_exit();
+    }
 
     State *switcher() override;
 };
@@ -52,6 +57,10 @@ public:
         menu = menu_;
     }
 
+    bool is_exit() override {
+        return false;
+    }
+
     State *switcher() override {
         return menu;
     }
@@ -67,6 +76,7 @@ void MenuState::set_game_state(GameState *game_) {
 
 class Context {
     State *window_state;
+    bool game_is_over{false};
 
 public:
     explicit Context(State *state) : window_state(state) {
@@ -78,6 +88,10 @@ public:
 
     void display() {
         window_state->display_state();
+    }
+
+    [[nodiscard]] bool is_exit() const {
+        return window_state->is_exit();
     }
 };
 

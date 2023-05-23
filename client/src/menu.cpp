@@ -26,6 +26,7 @@ MenuButton::MenuButton(
 
     m_data.setFont(game_interface::ResourceManager::load_font(font));
     m_data.setFillColor(font_color);
+    m_table.setOutlineColor(sf::Color(164, 177, 123));
     m_data.setString(sf::String(tittle));
     m_data.setCharacterSize(character_size);
 
@@ -54,9 +55,14 @@ void MenuButton::update_tittle(std::string new_tittle) {
 }
 
 bool MenuButton::update(sf::Event event, game_interface::Window *window) {
-    if (m_button.handling_event(event, window->get_render_window()) ==
-        game_interface::EventType::FirstPress) {
+    auto result = m_button.handling_event(event, window->get_render_window());
+    m_table.setOutlineThickness(0);
+    m_table.setFillColor(sf::Color(71, 78, 50));
+    if (result == game_interface::EventType::FirstPress) {
         return true;
+    } else if (result == game_interface::EventType::Targeting) {
+        m_table.setOutlineThickness(5);
+        m_table.setFillColor(sf::Color(78, 101, 61));
     }
     return false;
 }
@@ -79,7 +85,7 @@ Menu::Menu()
     sf::Vector2f window_size =
         static_cast<sf::Vector2f>(m_window.get_render_window()->getSize());
     sf::Vector2f button_size = sf::Vector2f(200.0f, 60.0f);
-    sf::Color button_color = sf::Color(71, 78, 50);
+    sf::Color button_color = sf::Color(53, 76, 43);
 
     m_background.setTexture(game_interface::ResourceManager::load_texture(
         game_interface::TextureType::MenuBackground
@@ -370,6 +376,9 @@ void Menu::update() {
         for (auto &m_button : m_buttons) {
             if (m_current_page == m_button.get_current_page()) {
                 if (m_button.update(event, &m_window)) {
+                    if (m_button.get_next_page() == PageType::Exit) {
+                        m_window.set_is_done();
+                    }
                     if (m_current_page == PageType::SignUp &&
                         m_button.get_next_page() == PageType::GameChoose) {
                         Client::log_in(
@@ -422,6 +431,10 @@ void Menu::update() {
 
 void Menu::music_stop() {
     m_soundtrack.pause();
+}
+
+bool Menu::is_exit() const {
+    return m_current_page == PageType::Exit;
 }
 
 [[nodiscard]] Menu *get_menu_state() {
