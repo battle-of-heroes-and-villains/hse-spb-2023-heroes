@@ -65,6 +65,7 @@ public:
 class game_bot {
 private:
     game_model::game &m_game;
+    // GameSession game;
 
 public:
     explicit game_bot(game_model::game &current_game_state)

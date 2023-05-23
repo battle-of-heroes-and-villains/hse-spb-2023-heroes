@@ -1,4 +1,5 @@
 #include "game_bot.hpp"
+#include <random>
 
 namespace bot {
 
@@ -6,22 +7,64 @@ bot_response game_bot::position_evaluation() const {
     int optimal_unit_id = -1;
     int score = -1;
     bot_response response;
-//    for (auto unit : m_game.get_player(-2)->get_units()) {
-//        // todo - get optimal move (greedy)
-//    }
     response.set_type(bot_response_type::PAIR_OF_CELLS);
-    game_model::cell from;
+    bool can_attack = false;
+    bot_response attack;
+    bot_response move;
+    std::vector<std::reference_wrapper<game_model::cell>> attack_response;
+    std::vector<std::reference_wrapper<game_model::cell>> move_response;
+    std::vector<std::pair<game_model::coordinates, game_model::cell>> random_move;
+    for(int row = 0; row < 10; row++){
+        for (int column = 0; column < 10; column++){
+            game_model::coordinates coord{row, column};
+            if (column == 9){
+                std::cout << "catch\n";
+            }
+            if (m_game.get_cell(coord).get_unit_index() != -1 && m_game.get_cell(coord).is_unit_movable(1)){
+                attack_response = m_game.get_attackable_cells(coord, -2);
+                move_response = m_game.get_reachable_cells(coord, -2);
+            }
 
-    from.set_coordinates(game_model::coordinates{0, 9});
+            if (move_response.size() > 0){
+                int sz = move_response.size();
+                if (sz == 1){
+                    random_move.emplace_back(coord, move_response[0]);
+                }
+                else{
+                    random_move.emplace_back(coord, move_response[rand() % sz]);
+                }
+            }
 
-    response.set_from_cell(from);
-
-    game_model::cell to;
-
-    to.set_coordinates(game_model::coordinates{0, 8});
-
-    response.set_to_cell(to);
-
+            if (attack_response.size() > 0){
+                attack.set_type(bot_response_type::PAIR_OF_CELLS);
+                game_model::cell cell_from;
+                cell_from.set_coordinates(coord);
+                attack.set_from_cell(cell_from);
+                attack.set_to_cell(attack_response[0]);
+                response = attack;
+                can_attack = true;
+                goto out;
+            }
+        }
+    }
+out:
+    if (!can_attack) {
+        int random_move_size = random_move.size();
+        if (random_move_size == 0) {
+            // todo give up
+        } else if (random_move_size == 1) {
+            response.set_to_cell(random_move[0].second);
+            game_model::cell cell_from;
+            cell_from.set_coordinates(random_move[0].first);
+            response.set_from_cell(cell_from);
+        } else {
+            int pos = rand() % random_move_size;
+            response.set_to_cell(random_move[pos].second);
+            game_model::cell cell_from;
+            cell_from.set_coordinates(random_move[pos].first);
+            response.set_from_cell(cell_from);
+        }
+    }
 
     return response;
 }
