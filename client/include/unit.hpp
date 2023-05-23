@@ -62,7 +62,7 @@ private:
     sf::RectangleShape m_table;
     sf::Text m_label;
     interface::PopUpWindow m_statistic;
-    Animation m_animation;
+    Animation m_animation{};
 };
 }  // namespace game_interface
 

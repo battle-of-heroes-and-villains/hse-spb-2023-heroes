@@ -13,7 +13,6 @@ public:
     ~Animation() = default;
 
     sf::Vector2f get_position() const;
-    float get_width() const;
 
     void update_animation(
         sf::Vector2f unit_size,
@@ -38,7 +37,7 @@ private:
     int m_frame_width;
     int m_amount_of_frames;
     bool m_is_reversed;
-    AnimationType m_animation_type;
+    AnimationType m_animation_type{AnimationType::Nothing};
     sf::Texture m_animation_sheet;
     sf::Sprite m_animation;
     sf::Clock m_clock;

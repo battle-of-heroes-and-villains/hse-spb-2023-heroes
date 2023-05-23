@@ -9,10 +9,6 @@ sf::Vector2f Animation::get_position() const {
             m_animation.getGlobalBounds().height};
 }
 
-float Animation::get_width() const {
-    return m_animation.getGlobalBounds().width;
-}
-
 void Animation::update_animation(
     sf::Vector2f unit_size,
     sf::Vector2f cell_size,

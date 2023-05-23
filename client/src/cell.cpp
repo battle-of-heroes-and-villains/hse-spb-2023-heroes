@@ -34,6 +34,10 @@ Cell::Cell(Coords coords, sf::Vector2f position, sf::Vector2f size) {
     m_button = interface::Button(
         {position.x + m_cell_size.x / 2, position.y + m_cell_size.y / 2}, size
     );
+
+    m_label.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont));
+    m_label.setString(std::to_string(m_durability));
+    m_label.setCharacterSize(24);
 }
 
 bool Cell::is_have_unit() const {
@@ -55,7 +59,6 @@ void Cell::update_cell_durability() {
         get_client_state()
             ->m_game_state.game_cells(m_coords.get_row() * 10 + column)
             .durability();
-    m_label.setString(std::to_string(m_durability));
 }
 
 void Cell::update_cell_texture(CellType type) {
@@ -78,10 +81,32 @@ void Cell::update_cell_texture(CellType type) {
         m_cell_type = CellType::Type1;
     }
 
-    m_cell.setTexture(ResourceManager::load_cell_texture(m_cell_type));
     m_cell_property.setTexture(
         ResourceManager::load_cell_property_texture(m_cell_property_type)
     );
+}
+
+void Cell::change_cell_durability() {
+    if (m_unit == nullptr || m_unit != nullptr && !m_unit->is_moving()) {
+        m_cell.setTexture(ResourceManager::load_cell_texture(m_cell_type));
+
+        m_label.setString(std::to_string(m_durability));
+
+        sf::FloatRect label_bounds = m_label.getLocalBounds();
+        sf::FloatRect cell_bounds = m_cell.getGlobalBounds();
+        m_label.setPosition(
+            cell_bounds.left + label_bounds.width / 2.0f,
+            cell_bounds.top + label_bounds.height / 2.0f
+        );
+        m_label.setOrigin(
+            (label_bounds.left + label_bounds.width) / 2.0f,
+            (label_bounds.top + label_bounds.height) / 2.0f
+        );
+        m_label.setPosition(
+            cell_bounds.left + label_bounds.width / 2.0f,
+            cell_bounds.top + label_bounds.height / 2.0f
+        );
+    }
 }
 
 void Cell::set_unit(Unit *unit) {
@@ -102,21 +127,6 @@ void Cell::remove_spell() {
 void Cell::update_cell() {
     update_cell_durability();
     m_unit = nullptr;
-
-    m_label.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont));
-    m_label.setString(std::to_string(m_durability));
-    m_label.setCharacterSize(24);
-
-    sf::FloatRect label_bounds = m_label.getLocalBounds();
-    sf::FloatRect cell_bounds = m_cell.getGlobalBounds();
-    m_label.setPosition(
-        cell_bounds.left + label_bounds.width / 2.0f,
-        cell_bounds.top + label_bounds.height / 2.0f
-    );
-    m_label.setOrigin(
-        (label_bounds.left + label_bounds.width) / 2.0f,
-        (label_bounds.top + label_bounds.height) / 2.0f
-    );
 
     if (is_have_unit()) {
         update_cell_texture(CellType::Type1);
@@ -164,6 +174,7 @@ void Cell::handling_event(sf::Event event, Unit **selected_unit) {
 }
 
 void Cell::render(sf::RenderWindow *window) {
+    change_cell_durability();
     window->draw(m_cell);
     window->draw(m_cell_property);
     window->draw(m_label);

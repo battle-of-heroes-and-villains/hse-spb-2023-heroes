@@ -22,6 +22,7 @@ public:
 
     void update_cell_durability();
     void update_cell_texture(CellType type);
+    void change_cell_durability();
 
     void add_selection();
     void remove_selection();
