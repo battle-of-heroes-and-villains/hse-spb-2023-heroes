@@ -48,7 +48,7 @@ void Board::play_animation(Coords source_cell, Coords destination_cell) {
                 ->get_hero_id() != get_client_state()->m_user.user().id()) {
         m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
-            ->play_animation(AnimationType::Attack);
+            ->play_animation(AnimationType::Attack, destination_cell);
         if (m_board[destination_cell.get_row()][destination_cell.get_column()]
                 .get_unit()
                 ->get_health() <=
@@ -100,14 +100,14 @@ void Board::play_animation() {
     } else if (get_client_state()->m_game_state.opponent_move().enum_() == namespace_proto::attack) {
         m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
-            ->play_animation(AnimationType::Attack);
+            ->play_animation(AnimationType::Attack, destination_cell);
         m_board[destination_cell.get_row()][destination_cell.get_column()]
             .get_unit()
             ->play_animation(AnimationType::GetAttacked, source_cell);
     } else if (get_client_state()->m_game_state.opponent_move().enum_() == namespace_proto::kill) {
         m_board[source_cell.get_row()][source_cell.get_column()]
             .get_unit()
-            ->play_animation(AnimationType::Attack);
+            ->play_animation(AnimationType::Attack, destination_cell);
         m_board[destination_cell.get_row()][destination_cell.get_column()]
             .get_unit()
             ->play_animation(AnimationType::Dead, source_cell);

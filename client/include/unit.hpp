@@ -25,6 +25,7 @@ public:
     [[nodiscard]] int get_hero_id() const;
     [[nodiscard]] int get_health() const;
     [[nodiscard]] int get_damage() const;
+    bool is_moving();
     void set_selection();
     void disable_selection();
     void update_characteristics(const namespace_proto::Unit &unit);
@@ -42,6 +43,8 @@ public:
     void render_statistic(sf::RenderWindow *window);
 
 private:
+    void update_table_position(sf::Vector2f new_position);
+
     UnitType m_type;
     Coords m_coords;
     int m_amount_of_units;
