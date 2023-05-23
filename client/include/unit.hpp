@@ -2,6 +2,7 @@
 #define BATTLE_OF_HEROES_UNIT_HPP
 
 #include <SFML/Graphics.hpp>
+#include "animation.hpp"
 #include "client.hpp"
 #include "coordinates.hpp"
 #include "popup_window.hpp"
@@ -22,9 +23,9 @@ public:
 
     [[nodiscard]] Coords get_coords() const;
     [[nodiscard]] int get_hero_id() const;
-    [[nodiscard]] int get_unit_id() const;
-    void
-    set_coords(Coords new_position, sf::Vector2f position, sf::Vector2f size);
+    [[nodiscard]] int get_health() const;
+    [[nodiscard]] int get_damage() const;
+    bool is_moving();
     void set_selection();
     void disable_selection();
     void update_characteristics(const namespace_proto::Unit &unit);
@@ -36,10 +37,14 @@ public:
     );
     [[nodiscard]] std::string get_unit_info() const;
     void update_statistic(EventType event_type, const sf::Window *window);
+    void play_animation(AnimationType type, Coords destination_cell = {-1, -1});
     void render(sf::RenderWindow *window);
+    void render_animation(sf::RenderWindow *window);
     void render_statistic(sf::RenderWindow *window);
 
 private:
+    void update_table_position(sf::Vector2f new_position);
+
     UnitType m_type;
     Coords m_coords;
     int m_amount_of_units;
@@ -57,6 +62,7 @@ private:
     sf::RectangleShape m_table;
     sf::Text m_label;
     interface::PopUpWindow m_statistic;
+    Animation m_animation{};
 };
 }  // namespace game_interface
 

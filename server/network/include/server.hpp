@@ -65,6 +65,21 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         return grpc::Status::OK;
     }
 
+    static void set_move(
+        namespace_proto::OpponentMove *move,
+        namespace_proto::Enum enum_,
+        namespace_proto::Cell *from,
+        namespace_proto::Cell *to = nullptr
+    ) {
+        move->set_enum_(enum_);
+        auto cell_from = new namespace_proto::Cell(*from);
+        move->set_allocated_from(cell_from);
+        if (to != nullptr) {
+            auto cell_to = new namespace_proto::Cell(*to);
+            move->set_allocated_to(cell_to);
+        }
+    }
+
     static namespace_proto::GameState *handle_diff(
         GameSession *game_session_ref,
         const namespace_proto::User &user
@@ -83,58 +98,65 @@ class ServerServices final : public ::namespace_proto::Server::Service {
             (*(game_session_ref->get_response_queues())
             )[game_session_ref->get_first_player().get_id()]
                 .push(*(game_session_ref->get_game_state()));
-//            auto diff = (*game_session_ref->get_game_bot())();
-//            for (auto item : diff) {
-//                if (item.get().get_type() ==
-//                    bot::bot_response_type::SINGLE_CELL) {
-//                    game_model::cell cell = item.get().get_from_cell();
-//                    int index = cell.get_coordinates().get_row() * 10 +
-//                                cell.get_coordinates().get_column();
-//                    namespace_proto::Cell *proto_cell =
-//                        game_session_ref->get_game_state()->mutable_game_cells(
-//                            index
-//                        );
-//                    update_cell(
-//                        proto_cell, cell.get_coordinates(), game_session_ref
-//                    );
-//                    if (proto_cell->is_unit()) {
-//                        namespace_proto::Unit *unit =
-//                            proto_cell->mutable_unit();
-//                        update_unit(
-//                            unit, cell.get_coordinates(), game_session_ref
-//                        );
-//                    }
-//                } else {
-//                    game_model::cell cell_from = item.get().get_from_cell();
-//                    int index_from =
-//                        cell_from.get_coordinates().get_row() * 10 +
-//                        cell_from.get_coordinates().get_column();
-//                    namespace_proto::Cell *proto_cell_from =
-//                        game_session_ref->get_game_state()->mutable_game_cells(
-//                            index_from
-//                        );
-//                    game_model::cell cell_to = item.get().get_from_cell();
-//                    int index_to = cell_to.get_coordinates().get_row() * 10 +
-//                                   cell_to.get_coordinates().get_column();
-//                    namespace_proto::Cell *proto_cell_to =
-//                        game_session_ref->get_game_state()->mutable_game_cells(
-//                            index_to
-//                        );
-//                    swapUnits(proto_cell_from, proto_cell_to);
-//                    update_cell(
-//                        proto_cell_to, cell_to.get_coordinates(),
-//                        game_session_ref
-//                    );
-//                    namespace_proto::Unit *unit = proto_cell_to->mutable_unit();
-//                    update_unit(
-//                        unit, cell_to.get_coordinates(), game_session_ref
-//                    );
-//                    update_cell(
-//                        proto_cell_from, cell_from.get_coordinates(),
-//                        game_session_ref
-//                    );
-//                }
-//            }
+            //            auto diff = (*game_session_ref->get_game_bot())();
+            //            for (auto item : diff) {
+            //                if (item.get().get_type() ==
+            //                    bot::bot_response_type::SINGLE_CELL) {
+            //                    game_model::cell cell =
+            //                    item.get().get_from_cell(); int index =
+            //                    cell.get_coordinates().get_row() * 10 +
+            //                                cell.get_coordinates().get_column();
+            //                    namespace_proto::Cell *proto_cell =
+            //                        game_session_ref->get_game_state()->mutable_game_cells(
+            //                            index
+            //                        );
+            //                    update_cell(
+            //                        proto_cell, cell.get_coordinates(),
+            //                        game_session_ref
+            //                    );
+            //                    if (proto_cell->is_unit()) {
+            //                        namespace_proto::Unit *unit =
+            //                            proto_cell->mutable_unit();
+            //                        update_unit(
+            //                            unit, cell.get_coordinates(),
+            //                            game_session_ref
+            //                        );
+            //                    }
+            //                } else {
+            //                    game_model::cell cell_from =
+            //                    item.get().get_from_cell(); int index_from =
+            //                        cell_from.get_coordinates().get_row() * 10
+            //                        +
+            //                        cell_from.get_coordinates().get_column();
+            //                    namespace_proto::Cell *proto_cell_from =
+            //                        game_session_ref->get_game_state()->mutable_game_cells(
+            //                            index_from
+            //                        );
+            //                    game_model::cell cell_to =
+            //                    item.get().get_from_cell(); int index_to =
+            //                    cell_to.get_coordinates().get_row() * 10 +
+            //                                   cell_to.get_coordinates().get_column();
+            //                    namespace_proto::Cell *proto_cell_to =
+            //                        game_session_ref->get_game_state()->mutable_game_cells(
+            //                            index_to
+            //                        );
+            //                    swapUnits(proto_cell_from, proto_cell_to);
+            //                    update_cell(
+            //                        proto_cell_to, cell_to.get_coordinates(),
+            //                        game_session_ref
+            //                    );
+            //                    namespace_proto::Unit *unit =
+            //                    proto_cell_to->mutable_unit(); update_unit(
+            //                        unit, cell_to.get_coordinates(),
+            //                        game_session_ref
+            //                    );
+            //                    update_cell(
+            //                        proto_cell_from,
+            //                        cell_from.get_coordinates(),
+            //                        game_session_ref
+            //                    );
+            //                }
+            //            }
         }
         return game_session_ref->get_game_state();
     }
@@ -177,10 +199,13 @@ class ServerServices final : public ::namespace_proto::Server::Service {
             dump_hero(
                 game_session_ref->get_second_player().get_hero_id(), response
             );
+            response->set_name(game_session_ref->get_second_player().get_name()
+            );
         } else {
             dump_hero(
                 game_session_ref->get_first_player().get_hero_id(), response
             );
+            response->set_name(game_session_ref->get_first_player().get_name());
         }
         return grpc::Status::OK;
     }
@@ -216,10 +241,12 @@ class ServerServices final : public ::namespace_proto::Server::Service {
     ) override {
         if (!(request->is_single())) {
             get_server_state()->pairing_wait_list.push(Player{
-                request->user().id(), request->hero_id(), response, context});
+                request->user().id(), request->hero_id(),
+                request->user().name(), response, context});
         } else {
             get_server_state()->wait_list.push(Player{
-                request->user().id(), request->hero_id(), response, context});
+                request->user().id(), request->hero_id(),
+                request->user().name(), response, context});
         }
         while (!context->IsCancelled()) {
         }
@@ -313,18 +340,25 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         namespace_proto::Cell *cell_to = game_state_ref->mutable_game_cells(
             request->finish().row() * 10 + request->finish().column()
         );
+        namespace_proto::OpponentMove *move =
+            game_state_ref->mutable_opponent_move();
+        move->set_opponent_id(request->user().user().id());
+
         if (game_session_ref->get_model_game()->get_cell(to).get_unit_index() ==
             -1) {
             (*game_session_ref->get_mover())(from, to);
             swapUnits(cell_from, cell_to);
+            set_move(move, namespace_proto::move, cell_from, cell_to);
         } else {
             (*game_session_ref->get_attacker())(from, to);
             if (game_session_ref->get_model_game()->get_cell(to).get_unit_index(
                 ) == -1) {
                 cell_to->set_allocated_unit(nullptr);
                 cell_to->set_is_unit(false);
+                set_move(move, namespace_proto::kill, cell_from, cell_to);
             } else {
                 update_unit(cell_to->mutable_unit(), to, game_session_ref);
+                set_move(move, namespace_proto::attack, cell_from, cell_to);
             }
             if (game_session_ref->get_model_game()
                     ->get_cell(from)
@@ -403,6 +437,10 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         namespace_proto::Cell *cell =
             game_session_ref->get_game_state()->mutable_game_cells(index);
         namespace_proto::Unit *unit = cell->mutable_unit();
+        namespace_proto::OpponentMove *move =
+            game_session_ref->get_game_state()->mutable_opponent_move();
+        move->set_opponent_id(request->user().user().id());
+        set_move(move, namespace_proto::spell, cell);
         update_cell(cell, game_model::coordinates{*cell}, game_session_ref);
         update_unit(unit, game_model::coordinates{*cell}, game_session_ref);
         update_mana(game_session_ref);

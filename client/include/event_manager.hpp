@@ -11,8 +11,7 @@ public:
         EventType event_type,
         Unit **selected_unit,
         Unit **unit,
-        Coords clicked_position = {-1, -1},
-        Board *board = nullptr
+        Coords clicked_position = {-1, -1}
     );
     static void update_game_menu(ButtonType event_type, Window *window);
     static void apply_spell(int spell_id, int row, int column);

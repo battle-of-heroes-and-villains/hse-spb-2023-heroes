@@ -23,7 +23,7 @@ MenuButton::MenuButton(
     m_current_page = current_page;
     m_next_page = next_page;
 
-    m_data.setFont(game_interface::resource_manager()->load_font(font));
+    m_data.setFont(game_interface::ResourceManager::load_font(font));
     m_data.setFillColor(font_color);
     m_data.setString(sf::String(tittle));
     m_data.setCharacterSize(character_size);
@@ -80,7 +80,7 @@ Menu::Menu()
     sf::Vector2f button_size = sf::Vector2f(200.0f, 60.0f);
     sf::Color button_color = sf::Color(71, 78, 50);
 
-    m_background.setTexture(game_interface::resource_manager()->load_texture(
+    m_background.setTexture(game_interface::ResourceManager::load_texture(
         game_interface::TextureType::MenuBackground
     ));
     m_background.setPosition(0, 0);
@@ -233,12 +233,12 @@ Menu::Menu()
             window_size.x / 2, window_size.y / 2 - 1.5 * button_size.y
         ),
         button_size, button_color, interface::Fonts::CaptionFont, 24,
-        "single player", PageType::GameChoose, PageType::Game
+        "single player", PageType::GameChoose, PageType::SinglePlayer
     );
     m_buttons[8] = MenuButton(
         sf::Vector2f(window_size.x / 2, window_size.y / 2), button_size,
         button_color, interface::Fonts::CaptionFont, 24, "multi player",
-        PageType::GameChoose, PageType::Game
+        PageType::GameChoose, PageType::MultiPlayer
     );
     m_buttons[9] = MenuButton(
         sf::Vector2f(
@@ -255,7 +255,10 @@ game_interface::Window *Menu::get_window() {
 
 void Menu::change_page(PageType next_page) {
     m_current_page = next_page;
-    if (m_current_page == PageType::Game) {
+    if (m_current_page == PageType::SinglePlayer) {
+        get_client_state()->m_user.set_is_single(true);
+        m_window.set_is_done();
+    } else if (m_current_page == PageType::MultiPlayer) {
         m_window.set_is_done();
     }
 }
@@ -372,6 +375,10 @@ void Menu::update() {
                             m_signup_password.clear();
                             m_signup_error.update_text("Wrong data from user");
                             break;
+                        } else {
+                            get_client_state()->m_hero.set_name(
+                                m_signup_login.get_data()
+                            );
                         }
                     } else if (m_current_page == PageType::Registration && m_button.get_next_page() == PageType::GameChoose) {
                         if (m_registration_password.get_data() !=
@@ -393,6 +400,10 @@ void Menu::update() {
                                 "Wrong data from user"
                             );
                             break;
+                        } else {
+                            get_client_state()->m_hero.set_name(
+                                m_registration_login.get_data()
+                            );
                         }
                     }
                     change_page(m_button.get_next_page());
@@ -401,5 +412,10 @@ void Menu::update() {
             }
         }
     }
+}
+
+[[nodiscard]] Menu *get_menu_state() {
+    static Menu menu{};
+    return &menu;
 }
 }  // namespace menu_interface

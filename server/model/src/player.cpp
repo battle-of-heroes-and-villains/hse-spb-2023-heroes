@@ -18,6 +18,10 @@ void player::set_start_units(int player_index, const board &game_board, const st
     }
 }
 
+const std::vector<unit> & player::get_units() const{
+    return m_units_list;
+}
+
 void player::decrease_mana(int cost) {
     m_mana = std::max(0, m_mana - cost);
 }

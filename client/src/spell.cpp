@@ -19,8 +19,7 @@ Spell::Spell(
     m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
     m_table.setPosition(position);
 
-    m_data.setFont(resource_manager()->load_font(interface::Fonts::CaptionFont)
-    );
+    m_data.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont));
     m_is_name_showed = false;
     update_data();
     m_data.setPosition(position);
@@ -29,13 +28,17 @@ Spell::Spell(
 void Spell::update(sf::Event event, Window *window) {
     EventType event_type =
         m_button.handling_event(event, window->get_render_window());
-    if (event_type == EventType::FirstPress || event_type == EventType::SecondPress) {
+    if (event_type == EventType::FirstPress ||
+        event_type == EventType::SecondPress) {
         update_data();
         if (m_is_name_showed) {
             get_game_state()->get_board()->remove_enable_for_spelling_cells();
         } else {
-            std::vector<std::pair<int, int>> enable_cells = Client::select_spell(m_id);
-            get_game_state()->get_board()->add_enable_for_spelling_cells(enable_cells, m_id);
+            std::vector<std::pair<int, int>> enable_cells =
+                Client::select_spell(m_id);
+            get_game_state()->get_board()->add_enable_for_spelling_cells(
+                enable_cells, m_id
+            );
         }
     }
 }

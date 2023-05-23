@@ -21,6 +21,7 @@ public:
     void set_start_units(int player_index, const board &game_board, const std::vector<int> &troop);
     [[nodiscard]] int get_id() const;
     [[nodiscard]] unit &get_unit(int index);
+    [[nodiscard]] const std::vector<unit> & get_units() const;
     void decrease_mana(int cost);
     [[nodiscard]] int get_mana() const;
 };

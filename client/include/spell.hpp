@@ -20,8 +20,8 @@ public:
     void set_name();
     void update(sf::Event event, Window *window);
     void render(sf::RenderWindow *window);
-private:
 
+private:
     sf::RectangleShape m_table;
     sf::Text m_data;
     interface::Button m_button;

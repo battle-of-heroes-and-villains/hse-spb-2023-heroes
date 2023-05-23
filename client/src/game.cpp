@@ -5,13 +5,10 @@ namespace game_interface {
 Game::Game()
     : m_window("Battle of Heroes and Villains", sf::Vector2u(1920, 1080)),
       m_game_menu_bar(sf::Vector2f(1920, 1080), 100),
-      m_board(sf::Vector2i(1920, 980))
-{
-    m_background.setTexture(
-        game_interface::resource_manager()->load_cell_texture(
-            game_interface::CellType::Default
-        )
-    );
+      m_board(sf::Vector2i(1920, 980)) {
+    m_background.setTexture(game_interface::ResourceManager::load_cell_texture(
+        game_interface::CellType::Type1
+    ));
     m_background.setPosition(0, 0);
 }
 
@@ -47,5 +44,10 @@ void Game::render() {
 [[nodiscard]] Game *get_game_state() {
     static Game game_state;
     return &game_state;
+}
+
+[[nodiscard]] sf::Cursor &get_cursor() {
+    static sf::Cursor cursor;
+    return cursor;
 }
 }  // namespace game_interface

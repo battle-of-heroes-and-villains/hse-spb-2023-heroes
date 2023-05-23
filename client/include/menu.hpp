@@ -65,6 +65,9 @@ private:
     MenuButton m_show_registration_password;
     Caption m_registration_error;
 };
+
+[[nodiscard]] Menu *get_menu_state();
+
 }  // namespace menu_interface
 
 #endif  // BATTLE_OF_HEROES_HEROES_MENU_HPP

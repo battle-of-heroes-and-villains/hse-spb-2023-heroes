@@ -5,19 +5,31 @@
 #include "config.hpp"
 
 namespace game_interface {
-enum class UnitType { Empty, UnitType1, UnitType2 };
+enum class UnitType { Empty, Type1, Type2, Type3, Type4, Type5 };
 
-enum class CellType { Default, Broken, Selected, Enemy, Attack, EnableForSpellbinding };
+enum class CellType { Type1, Broken, Move, Enemy, Attack, Spell, AttackSpell };
 
 enum class TextureType { MenuBackground };
+
+enum class AnimationType { Move, Attack, GetAttacked, Dead, Nothing };
 
 enum class EventType { FirstPress, SecondPress, Move, Targeting, Nothing };
 
 enum class ButtonType { None, Play, Pass, Menu, Exit, Skip, GiveUp, Spell };
+
+enum class CursorType { Attack };
 }  // namespace game_interface
 
 namespace menu_interface {
-enum class PageType { Game, Exit, Entry, SignUp, Registration, GameChoose };
+enum class PageType {
+    SinglePlayer,
+    MultiPlayer,
+    Exit,
+    Entry,
+    SignUp,
+    Registration,
+    GameChoose
+};
 }  // namespace menu_interface
 
 namespace interface {

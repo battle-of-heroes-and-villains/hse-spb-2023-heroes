@@ -1,6 +1,6 @@
 #include "board.hpp"
-#include "game.hpp"
 #include <utility>
+#include "game.hpp"
 #include "resource_manager.hpp"
 
 namespace game_interface {
@@ -19,10 +19,9 @@ Board::Board(sf::Vector2i window_size) {
     for (int row = 0; row < m_cell_amount; row++) {
         for (int column = 0; column < m_cell_amount; column++) {
             m_board[row][column] = Cell(
-                Coords(row, column), CellType::Default,
+                Coords(row, column),
                 sf::Vector2f(
-                    m_boarder_size.x +
-                        m_cell_size.x * column,
+                    m_boarder_size.x + m_cell_size.x * column,
                     m_boarder_size.y + m_cell_size.y * row
                 ),
                 sf::Vector2f(m_cell_size)
@@ -34,13 +33,86 @@ Board::Board(sf::Vector2i window_size) {
 [[nodiscard]] sf::Vector2f Board::get_cell_position(Coords coords) const {
     return {
         static_cast<float>(
-            m_boarder_size.x + m_cell_size.x / 2 +
-            m_cell_size.x * coords.get_column()
+            m_boarder_size.x + m_cell_size.x * coords.get_column()
         ),
         static_cast<float>(
-            m_boarder_size.y + m_cell_size.y / 2 +
-            m_cell_size.y * coords.get_row()
+            m_boarder_size.y + m_cell_size.y * coords.get_row()
         )};
+}
+
+void Board::play_animation(Coords source_cell, Coords destination_cell) {
+    if (m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .is_have_unit() &&
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->get_hero_id() != get_client_state()->m_user.user().id()) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Attack, destination_cell);
+        if (m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->get_health() <=
+            m_board[source_cell.get_row()][source_cell.get_column()]
+                .get_unit()
+                ->get_damage()) {
+            m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->play_animation(AnimationType::Dead, source_cell);
+        } else {
+            m_board[destination_cell.get_row()][destination_cell.get_column()]
+                .get_unit()
+                ->play_animation(AnimationType::GetAttacked, source_cell);
+        }
+
+    } else {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Move, destination_cell);
+    }
+}
+
+void Board::play_animation() {
+    static bool is_initialized = false;
+    bool is_second =
+        (get_client_state()->m_game_state.second_user() ==
+         get_client_state()->m_user.user().id());
+    Coords source_cell = {
+        get_client_state()->m_game_state.opponent_move().from().row(),
+        (is_second
+             ? 9 - get_client_state()
+                       ->m_game_state.opponent_move()
+                       .from()
+                       .column()
+             : get_client_state()->m_game_state.opponent_move().from().column()
+        )};
+    Coords destination_cell = {
+        get_client_state()->m_game_state.opponent_move().to().row(),
+        (is_second
+             ? 9 - get_client_state()->m_game_state.opponent_move().to().column(
+                   )
+             : get_client_state()->m_game_state.opponent_move().to().column())};
+    if (is_initialized &&
+        get_client_state()->m_game_state.opponent_move().enum_() ==
+            namespace_proto::move) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Move, destination_cell);
+    } else if (get_client_state()->m_game_state.opponent_move().enum_() == namespace_proto::attack) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Attack, destination_cell);
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::GetAttacked, source_cell);
+    } else if (get_client_state()->m_game_state.opponent_move().enum_() == namespace_proto::kill) {
+        m_board[source_cell.get_row()][source_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Attack, destination_cell);
+        m_board[destination_cell.get_row()][destination_cell.get_column()]
+            .get_unit()
+            ->play_animation(AnimationType::Dead, source_cell);
+    }
+    is_initialized = true;
 }
 
 void Board::add_available_for_moving_cells(
@@ -73,7 +145,8 @@ void Board::remove_available_for_moving_cells() {
 }
 
 void Board::add_enable_for_spelling_cells(
-    std::vector<std::pair<int, int>> enable_cells, int spell_id
+    std::vector<std::pair<int, int>> enable_cells,
+    int spell_id
 ) {
     remove_enable_for_spelling_cells();
     m_enable_for_spelling_cells = std::move(enable_cells);
@@ -84,7 +157,7 @@ void Board::add_enable_for_spelling_cells(
         if (is_second) {
             column = 9 - column;
         }
-        m_board[row][column].add_spelling(spell_id);
+        m_board[row][column].add_spell(spell_id);
     }
 }
 
@@ -96,10 +169,9 @@ void Board::remove_enable_for_spelling_cells() {
         if (is_second) {
             column = 9 - column;
         }
-        m_board[row][column].remove_spelling();
+        m_board[row][column].remove_spell();
     }
     m_enable_for_spelling_cells.clear();
-
 }
 
 void Board::handling_event(sf::Event event, sf::Window *window) {
@@ -109,13 +181,12 @@ void Board::handling_event(sf::Event event, sf::Window *window) {
         (sf::Mouse::getPosition(*window).x - m_boarder_size.x) / m_cell_size.x;
     if (column >= 0 && row >= 0 && row < m_cell_amount &&
         column < m_cell_amount) {
-        m_board[row][column].handling_event(
-            &selected_unit, this, event, window
-        );
+        m_board[row][column].handling_event(event, &selected_unit);
     }
 }
 
 void Board::render(sf::RenderWindow *window) {
+    bool is_cursor_changed = false;
     for (auto &row : m_board) {
         for (auto &cell : row) {
             if (cell.is_have_unit()) {
@@ -123,12 +194,19 @@ void Board::render(sf::RenderWindow *window) {
                     cell.is_mouse_target(window), window
                 );
             }
+            is_cursor_changed = is_cursor_changed || cell.change_cursor(window);
             cell.render(window);
         }
+    }
+    if (!is_cursor_changed) {
+        get_cursor().loadFromSystem(sf::Cursor::Arrow);
+        window->setMouseCursor(get_cursor());
     }
     for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
         if (m_unit_is_alive[unit_id]) {
             m_units[unit_id].render(window);
+        } else {
+            m_units[unit_id].render_animation(window);
         }
     }
 
@@ -143,6 +221,10 @@ void Board::update_board(const namespace_proto::GameState &game_state) {
     bool is_second =
         (game_state.second_user() == get_client_state()->m_user.user().id());
     std::fill(m_unit_is_updated.begin(), m_unit_is_updated.end(), false);
+    if (get_client_state()->m_game_state.opponent_move().opponent_id() !=
+        get_client_state()->m_user.user().id()) {
+        play_animation();
+    }
     for (int cell_index = 0; cell_index < 100; cell_index++) {
         namespace_proto::Cell server_cell = game_state.game_cells(cell_index);
         int row = server_cell.row();
@@ -151,12 +233,13 @@ void Board::update_board(const namespace_proto::GameState &game_state) {
             column = 9 - column;
             server_cell = reverse_cell(server_cell);
         }
-        m_board[row][column].update_cell(server_cell);
+        m_board[row][column].update_cell();
         if (server_cell.is_unit()) {
             int unit_id = server_cell.unit().id_unit();
             auto server_unit = game_state.game_cells(cell_index).unit();
             m_units[unit_id].update_unit(
-                server_cell, server_unit, get_cell_position({row, column}),
+                server_cell, server_unit,
+                m_board[row][column].get_cell_position(),
                 static_cast<sf::Vector2f>(m_cell_size)
             );
             m_board[row][column].set_unit(&m_units[unit_id]);

@@ -1,6 +1,7 @@
 #ifndef GAME_SESSION_HPP
 #define GAME_SESSION_HPP
 
+#include "../../game_bot/game_bot.hpp"
 #include "TSqueue.hpp"
 #include "attack_interactor.hpp"
 #include "attack_select_interactor.hpp"
@@ -10,7 +11,6 @@
 #include "proto/all_protos/demo.grpc.pb.h"
 #include "spell_interactor.hpp"
 #include "spell_select_interactor.hpp"
-#include "game_bot.hpp"
 
 class Player final {
     int id;
@@ -20,16 +20,21 @@ class Player final {
     ::grpc::ServerContext *context;
 
 public:
-    Player(int hero_id) : id(-2), hero_id(hero_id) {
+    Player(int hero_id) : id(-2), hero_id(hero_id), name("bot") {
     }
 
     Player(
         int id,
         int hero_id,
+        const std::string &name,
         ::grpc::ServerWriter<namespace_proto::GameState> *stream,
         ::grpc::ServerContext *context
     )
-        : id(id), hero_id(hero_id), stream(stream), context(context) {
+        : id(id),
+          hero_id(hero_id),
+          stream(stream),
+          name(name),
+          context(context) {
     }
 
     [[nodiscard]] int get_id() const {
@@ -48,6 +53,10 @@ public:
     [[nodiscard]] ::grpc::ServerContext *get_context() {
         return context;
     };
+
+    std::string get_name() const {
+        return name;
+    }
 };
 
 class GameSession {
@@ -71,7 +80,12 @@ public:
     GameSession(Player first_player_, Player second_player_)
         : first_player(first_player_),
           second_player(second_player_),
-          model_game(first_player_.get_id(), game_model::game::get_troop(), second_player_.get_id(), game_model::game::get_troop()),
+          model_game(
+              first_player_.get_id(),
+              game_model::game::get_troop(),
+              second_player_.get_id(),
+              game_model::game::get_troop()
+          ),
           mover(model_game),
           move_selecter(model_game),
           attacker(model_game),
@@ -93,7 +107,7 @@ public:
         return &is_single;
     }
 
-    int get_game_result() const{
+    int get_game_result() const {
         return game_result;
     }
 
@@ -138,7 +152,7 @@ public:
         return &speller;
     }
 
-    bot::game_bot *get_game_bot(){
+    bot::game_bot *get_game_bot() {
         return &game_bot;
     }
 };

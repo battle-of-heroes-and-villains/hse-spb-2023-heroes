@@ -19,7 +19,7 @@ MenuButton::MenuButton(
 
     m_button_type = button_type;
 
-    m_label.setFont(resource_manager()->load_font(font));
+    m_label.setFont(ResourceManager::load_font(font));
     m_label.setString(sf::String(label));
     m_label.setCharacterSize(character_size);
 
