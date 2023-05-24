@@ -433,6 +433,10 @@ void Menu::music_stop() {
     m_soundtrack.pause();
 }
 
+void Menu::music_play() {
+    m_soundtrack.pause();
+}
+
 bool Menu::is_exit() const {
     return m_current_page == PageType::Exit;
 }

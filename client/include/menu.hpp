@@ -44,6 +44,7 @@ public:
     Menu();
 
     void music_stop();
+    void music_play();
 
     game_interface::Window *get_window();
     void change_page(PageType new_page);
