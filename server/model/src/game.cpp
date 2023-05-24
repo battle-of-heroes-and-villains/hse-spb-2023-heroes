@@ -5,15 +5,13 @@
 
 namespace game_model {
 
-std::vector<std::vector<int>> game::troops = {
-    {1, 2, 3, 4, 5, 1, 2, 3, 4, 5}
-};
+std::vector<std::vector<int>> game::troops = {{1, 2, 3, 4, 5, 1, 2, 3, 4, 5}};
 
 cell &game::get_cell(const coordinates &cell_coordinates) {
     return m_board.get_cell(cell_coordinates);
 }
 
-int game::get_troop(){
+int game::get_troop() {
     int items = static_cast<int>(troops.size());
     return 0;
 }
@@ -77,7 +75,7 @@ void game::move(
     clear_cell(current_cell);
     new_cell.set_player_index(player_index);
     new_cell.set_unit_index(unit_index);
-    new_cell.decrease_cell_durability(
+    current_cell.decrease_cell_durability(
         get_player(player_index)->get_unit(unit_index).get_weight()
     );
 }
