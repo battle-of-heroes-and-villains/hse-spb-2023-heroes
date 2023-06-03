@@ -7,7 +7,11 @@
 namespace game_interface {
 enum class UnitType { Empty, Type1, Type2, Type3, Type4, Type5 };
 
-enum class CellType { Type1, Broken, Move, Enemy, Attack, Spell, AttackSpell };
+enum class CellType { Type1, Type2, Type3, Type4, Type5 };
+
+enum class CellPropertyType { Empty, Move, Enemy, Attack, Spell, AttackSpell };
+
+enum class CracksStage { Stage0, Stage1, Stage2, Stage3, Stage4, Stage5 };
 
 enum class TextureType { MenuBackground };
 
@@ -28,7 +32,8 @@ enum class PageType {
     Entry,
     SignUp,
     Registration,
-    GameChoose
+    GameChoose,
+    GameOver
 };
 }  // namespace menu_interface
 

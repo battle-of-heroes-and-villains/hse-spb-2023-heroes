@@ -10,23 +10,23 @@ void UnitInfo::update_characteristics(const namespace_proto::Unit &unit) {
     m_weight = unit.weight();
 }
 
-Coords Unit::get_coords() const {
+[[nodiscard]] Coords Unit::get_coords() const {
     return m_coords;
 }
 
-int Unit::get_hero_id() const {
+[[nodiscard]] int Unit::get_hero_id() const {
     return m_unit_info.m_hero_id;
 }
 
-int Unit::get_health() const {
+[[nodiscard]] int Unit::get_health() const {
     return m_unit_info.m_max_health * m_unit_info.m_amount_of_units;
 }
 
-int Unit::get_damage() const {
+[[nodiscard]] int Unit::get_damage() const {
     return m_unit_info.m_damage;
 }
 
-bool Unit::is_moving() {
+[[nodiscard]] bool Unit::is_moving() const {
     return m_animation.is_moving();
 }
 

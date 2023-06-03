@@ -25,9 +25,10 @@ public:
         sf::Color font_color
     );
 
-    PageType get_current_page() const;
-    PageType get_next_page() const;
-    void update_tittle(std::string new_tittle);
+    [[nodiscard]] PageType get_current_page() const;
+    [[nodiscard]] PageType get_next_page() const;
+
+    void update_tittle(const std::string &new_tittle);
     bool update(sf::Event event, game_interface::Window *window);
     void render(sf::RenderWindow *window);
 

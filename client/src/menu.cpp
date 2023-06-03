@@ -38,15 +38,15 @@ MenuButton::MenuButton(
     m_data.setPosition(position);
 }
 
-PageType MenuButton::get_current_page() const {
+[[nodiscard]] PageType MenuButton::get_current_page() const {
     return m_current_page;
 }
 
-PageType MenuButton::get_next_page() const {
+[[nodiscard]] PageType MenuButton::get_next_page() const {
     return m_next_page;
 }
 
-void MenuButton::update_tittle(std::string new_tittle) {
+void MenuButton::update_tittle(const std::string &new_tittle) {
     m_data.setString(sf::String(new_tittle));
     sf::FloatRect rect = m_data.getLocalBounds();
     m_data.setOrigin(
@@ -79,8 +79,8 @@ Menu::Menu()
       )) {
     m_current_page = PageType::Entry;
 
-    m_buttons.resize(10);
-    m_captions.resize(5);
+    m_buttons.resize(11);
+    m_captions.resize(7);
 
     sf::Vector2f window_size =
         static_cast<sf::Vector2f>(m_window.get_render_window()->getSize());
@@ -116,7 +116,7 @@ Menu::Menu()
             window_size.x / 2, window_size.y / 2 + 1.5 * button_size.y
         ),
         button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
-        PageType::Entry, PageType::Exit
+        PageType::Entry, PageType::GameOver
     );
 
     // sign up page
@@ -253,6 +253,25 @@ Menu::Menu()
         ),
         button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
         PageType::GameChoose, PageType::Exit
+    );
+
+    // game over page
+    m_captions[5] = Caption(
+        sf::Vector2f(window_size.x / 2, window_size.y / 2 - 4 * button_size.y),
+        {0, 0}, interface::Fonts::TittleFont, 48, "GAME OVER",
+        PageType::GameOver
+    );
+    m_captions[6] = Caption(
+        sf::Vector2f(window_size.x / 2, window_size.y / 2 - 2 * button_size.y),
+        {0, 0}, interface::Fonts::CaptionFont, 24, "you win\nyour enemy lose",
+        PageType::GameOver
+    );
+    m_buttons[9] = MenuButton(
+        sf::Vector2f(
+            window_size.x / 2, window_size.y / 2 + 1.5 * button_size.y
+        ),
+        button_size, button_color, interface::Fonts::CaptionFont, 24, "menu",
+        PageType::GameOver, PageType::GameChoose
     );
 }
 

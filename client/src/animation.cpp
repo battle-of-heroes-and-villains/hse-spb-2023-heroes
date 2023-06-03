@@ -144,7 +144,7 @@ bool Animation::is_playing() const {
     return m_is_playing;
 }
 
-bool Animation::is_moving() {
+bool Animation::is_moving() const {
     return m_animation_type == AnimationType::Move && m_is_playing;
 }
 }  // namespace game_interface

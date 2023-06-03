@@ -27,8 +27,8 @@ public:
         Coords source_cell,
         Coords destination_cell = {-1, -1}
     );
-    bool is_playing() const;
-    bool is_moving();
+    [[nodiscard]] bool is_playing() const;
+    [[nodiscard]] bool is_moving() const;
     void update();
     void render(sf::RenderWindow *window);
 

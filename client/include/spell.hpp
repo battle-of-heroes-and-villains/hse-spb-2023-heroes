@@ -28,7 +28,6 @@ private:
     int m_id;
     std::string m_name;
     std::string m_description;
-    int m_mana;
     bool m_is_name_showed;
 
     void update_data();

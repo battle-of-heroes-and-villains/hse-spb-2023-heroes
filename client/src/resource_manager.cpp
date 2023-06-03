@@ -10,8 +10,10 @@ std::unordered_map<interface::Sounds, sf::SoundBuffer>
     ResourceManager::m_sounds{};
 
 std::unordered_map<CellType, sf::Texture> ResourceManager::m_cell_textures{};
-std::unordered_map<CellType, sf::Texture>
+std::unordered_map<CellPropertyType, sf::Texture>
     ResourceManager::m_cell_property_textures{};
+std::unordered_map<CracksStage, sf::Texture>
+    ResourceManager::m_cracks_textures{};
 std::unordered_map<UnitType, sf::Texture> ResourceManager::m_unit_textures{};
 std::unordered_map<UnitType, sf::Texture>
     ResourceManager::m_selected_unit_textures{};
@@ -37,29 +39,52 @@ void ResourceManager::load_resources() {
     }
 
     ResourceManager::m_cell_textures[CellType::Type1].loadFromFile(
-        interface::source_dir + "cells/grass.jpg"
+        interface::source_dir + "cells/backgrounds/cell_type1.png"
     );
-    ResourceManager::m_cell_textures[CellType::Broken].loadFromFile(
-        interface::source_dir + "cells/grass_broken.jpg"
+    ResourceManager::m_cell_textures[CellType::Type2].loadFromFile(
+        interface::source_dir + "cells/backgrounds/cell_type2.png"
+    );
+    ResourceManager::m_cell_textures[CellType::Type3].loadFromFile(
+        interface::source_dir + "cells/backgrounds/cell_type3.png"
+    );
+    ResourceManager::m_cell_textures[CellType::Type4].loadFromFile(
+        interface::source_dir + "cells/backgrounds/cell_type4.png"
+    );
+    ResourceManager::m_cell_textures[CellType::Type5].loadFromFile(
+        interface::source_dir + "cells/backgrounds/cell_type5.png"
     );
 
-    ResourceManager::m_cell_property_textures[CellType::Type1].loadFromFile(
-        interface::source_dir + "cells/default.png"
+    ResourceManager::m_cell_property_textures[CellPropertyType::Empty]
+        .loadFromFile(interface::source_dir + "cells/properties/empty_property.png");
+    ResourceManager::m_cell_property_textures[CellPropertyType::Move]
+        .loadFromFile(interface::source_dir + "cells/properties/move_property.png");
+    ResourceManager::m_cell_property_textures[CellPropertyType::Enemy]
+        .loadFromFile(interface::source_dir + "cells/properties/enemy_property.png");
+    ResourceManager::m_cell_property_textures[CellPropertyType::Attack]
+        .loadFromFile(interface::source_dir + "cells/properties/attack_property.png");
+    ResourceManager::m_cell_property_textures[CellPropertyType::Spell]
+        .loadFromFile(interface::source_dir + "cells/properties/spell_property.png");
+    ResourceManager::m_cell_property_textures[CellPropertyType::AttackSpell]
+        .loadFromFile(interface::source_dir + "cells/properties/attack_property.png");
+
+    ResourceManager::m_cracks_textures[CracksStage::Stage0].loadFromFile(
+        interface::source_dir + "cells/cracks/cracks_stage0.png"
     );
-    ResourceManager::m_cell_property_textures[CellType::Move].loadFromFile(
-        interface::source_dir + "cells/move.png"
+    ResourceManager::m_cracks_textures[CracksStage::Stage1].loadFromFile(
+        interface::source_dir + "cells/cracks/cracks_stage1.png"
     );
-    ResourceManager::m_cell_property_textures[CellType::Enemy].loadFromFile(
-        interface::source_dir + "cells/enemy.png"
+    ResourceManager::m_cracks_textures[CracksStage::Stage2].loadFromFile(
+        interface::source_dir + "cells/cracks/cracks_stage2.png"
     );
-    ResourceManager::m_cell_property_textures[CellType::Attack].loadFromFile(
-        interface::source_dir + "cells/attack.png"
+    ResourceManager::m_cracks_textures[CracksStage::Stage3].loadFromFile(
+        interface::source_dir + "cells/cracks/cracks_stage3.png"
     );
-    ResourceManager::m_cell_property_textures[CellType::Spell].loadFromFile(
-        interface::source_dir + "cells/spell.png"
+    ResourceManager::m_cracks_textures[CracksStage::Stage4].loadFromFile(
+        interface::source_dir + "cells/cracks/cracks_stage4.png"
     );
-    ResourceManager::m_cell_property_textures[CellType::AttackSpell]
-        .loadFromFile(interface::source_dir + "cells/attack.png");
+    ResourceManager::m_cracks_textures[CracksStage::Stage5].loadFromFile(
+        interface::source_dir + "cells/cracks/cracks_stage5.png"
+    );
 
     ResourceManager::m_unit_textures[UnitType::Type1].loadFromFile(
         interface::source_dir + "units/unit_type1.png"
@@ -214,10 +239,18 @@ const sf::Texture &ResourceManager::load_cell_texture(CellType texture) {
     return m_cell_textures[texture];
 }
 
-const sf::Texture &ResourceManager::load_cell_property_texture(CellType texture
+const sf::Texture &ResourceManager::load_cell_property_texture(
+    CellPropertyType texture
 ) {
     load_resources();
     return m_cell_property_textures[texture];
+}
+
+[[nodiscard]] const sf::Texture &ResourceManager::load_cracks_texture(
+    CracksStage texture
+) {
+    load_resources();
+    return m_cracks_textures[texture];
 }
 
 const sf::Texture &ResourceManager::load_unit_texture(UnitType texture) {

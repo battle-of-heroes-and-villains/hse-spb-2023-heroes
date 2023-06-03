@@ -42,7 +42,7 @@ public:
     [[nodiscard]] int get_hero_id() const;
     [[nodiscard]] int get_health() const;
     [[nodiscard]] int get_damage() const;
-    bool is_moving();
+    bool is_moving() const;
     void set_selection();
     void disable_selection();
     void update_unit(

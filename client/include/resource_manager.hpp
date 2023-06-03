@@ -12,7 +12,11 @@ public:
     [[nodiscard]] const static sf::Texture &load_cell_texture(CellType texture);
 
     [[nodiscard]] const static sf::Texture &load_cell_property_texture(
-        CellType texture
+        CellPropertyType texture
+    );
+
+    [[nodiscard]] const static sf::Texture &load_cracks_texture(
+        CracksStage texture
     );
 
     [[nodiscard]] const static sf::Texture &load_unit_texture(UnitType texture);
@@ -66,7 +70,9 @@ private:
     static std::unordered_map<CursorType, sf::Image> m_cursors;
 
     static std::unordered_map<CellType, sf::Texture> m_cell_textures;
-    static std::unordered_map<CellType, sf::Texture> m_cell_property_textures;
+    static std::unordered_map<CellPropertyType, sf::Texture>
+        m_cell_property_textures;
+    static std::unordered_map<CracksStage, sf::Texture> m_cracks_textures;
     static std::unordered_map<UnitType, sf::Texture> m_unit_textures;
 
     static std::unordered_map<UnitType, sf::Texture> m_selected_unit_textures;

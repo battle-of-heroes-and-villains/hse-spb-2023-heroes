@@ -10,7 +10,6 @@ Spell::Spell(
     m_id = spell.id();
     m_name = spell.name();
     m_description = spell.description();
-    m_mana = spell.mana();
 
     m_button = interface::Button(position, size);
 
