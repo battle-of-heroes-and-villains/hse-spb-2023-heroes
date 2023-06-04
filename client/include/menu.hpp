@@ -33,7 +33,11 @@ public:
     void render(sf::RenderWindow *window);
 
 private:
+    void set_label_size(unsigned int character_size);
+
+    unsigned int m_character_size;
     sf::RectangleShape m_table;
+    sf::Color m_button_color;
     sf::Text m_data;
     interface::Button m_button;
     PageType m_current_page;
@@ -71,6 +75,8 @@ private:
     MenuButton m_show_registration_password;
     Caption m_registration_error;
     sf::Sound m_soundtrack;
+    MenuButton m_sound_button;
+    sf::RectangleShape m_sound_icon;
 };
 
 [[nodiscard]] Menu *get_menu_state();

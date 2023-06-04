@@ -10,6 +10,7 @@ std::unordered_map<interface::Sounds, sf::SoundBuffer>
     ResourceManager::m_sounds{};
 
 std::unordered_map<Characters, sf::Texture> ResourceManager::m_icons{};
+std::unordered_map<int, sf::Texture> ResourceManager::m_sound_icons{};
 
 std::unordered_map<CellType, sf::Texture> ResourceManager::m_cell_textures{};
 std::unordered_map<CellPropertyType, sf::Texture>
@@ -69,6 +70,13 @@ void ResourceManager::load_resources() {
     );
     ResourceManager::m_icons[Characters::Wolf].loadFromFile(
         interface::source_dir + "icons/wolf.png"
+    );
+
+    ResourceManager::m_sound_icons[0].loadFromFile(
+        interface::source_dir + "menu_icons/sound_off.png"
+    );
+    ResourceManager::m_sound_icons[1].loadFromFile(
+        interface::source_dir + "menu_icons/sound_on.png"
     );
 
     ResourceManager::m_cell_textures[CellType::Type1].loadFromFile(
@@ -264,7 +272,7 @@ void ResourceManager::load_resources() {
         interface::source_dir + "fonts/caption_font.otf"
     );
     ResourceManager::m_fonts[interface::Fonts::TittleFont].loadFromFile(
-        interface::source_dir + "fonts/tittle_font.otf"
+        interface::source_dir + "fonts/tittle_font.ttf"
     );
 
     ResourceManager::m_sounds[interface::Sounds::MenuBackgroundSound]
@@ -380,5 +388,10 @@ int ResourceManager::amount_of_frames_in_dead_animation(UnitType type) {
 const sf::SoundBuffer &ResourceManager::load_sound(interface::Sounds sound) {
     load_resources();
     return m_sounds[sound];
+}
+
+const sf::Texture &ResourceManager::load_sound_icon(int texture) {
+    load_resources();
+    return m_sound_icons[texture];
 }
 }  // namespace game_interface

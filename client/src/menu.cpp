@@ -21,14 +21,18 @@ MenuButton::MenuButton(
 
     m_button = interface::Button(position, size);
 
+    m_button_color = color;
+
     m_current_page = current_page;
     m_next_page = next_page;
 
     m_data.setFont(game_interface::ResourceManager::load_font(font));
     m_data.setFillColor(font_color);
-    m_table.setOutlineColor(sf::Color(164, 177, 123));
+    m_table.setOutlineColor(sf::Color(78, 87, 56));
     m_data.setString(sf::String(tittle));
-    m_data.setCharacterSize(character_size);
+
+    m_character_size = character_size;
+    m_data.setCharacterSize(m_character_size);
 
     sf::FloatRect rect = m_data.getLocalBounds();
     m_data.setOrigin(
@@ -57,12 +61,14 @@ void MenuButton::update_tittle(const std::string &new_tittle) {
 bool MenuButton::update(sf::Event event, game_interface::Window *window) {
     auto result = m_button.handling_event(event, window->get_render_window());
     m_table.setOutlineThickness(0);
-    m_table.setFillColor(sf::Color(71, 78, 50));
+    m_table.setFillColor(m_button_color);
+    set_label_size(m_character_size);
     if (result == game_interface::EventType::FirstPress) {
         return true;
     } else if (result == game_interface::EventType::Targeting) {
+        set_label_size(m_character_size + 4);
         m_table.setOutlineThickness(5);
-        m_table.setFillColor(sf::Color(78, 101, 61));
+        m_table.setFillColor(m_table.getOutlineColor());
     }
     return false;
 }
@@ -70,6 +76,14 @@ bool MenuButton::update(sf::Event event, game_interface::Window *window) {
 void MenuButton::render(sf::RenderWindow *window) {
     window->draw(m_table);
     window->draw(m_data);
+}
+
+void MenuButton::set_label_size(unsigned int character_size) {
+    m_data.setCharacterSize(character_size);
+    m_data.setOrigin(
+        m_data.getLocalBounds().left + m_data.getLocalBounds().width / 2.0f,
+        m_data.getLocalBounds().top + m_data.getLocalBounds().height / 2.0f
+    );
 }
 
 Menu::Menu()
@@ -84,8 +98,8 @@ Menu::Menu()
 
     sf::Vector2f window_size =
         static_cast<sf::Vector2f>(m_window.get_render_window()->getSize());
-    sf::Vector2f button_size = sf::Vector2f(200.0f, 60.0f);
-    sf::Color button_color = sf::Color(53, 76, 43);
+    sf::Vector2f button_size = sf::Vector2f(210.0f, 60.0f);
+    sf::Color button_color = sf::Color(89, 100, 64);
 
     m_background.setTexture(game_interface::ResourceManager::load_texture(
         game_interface::TextureType::MenuBackground
@@ -95,7 +109,7 @@ Menu::Menu()
     // entry page
     m_captions[0] = Caption(
         sf::Vector2f(window_size.x / 2, window_size.y / 2 - 5 * button_size.y),
-        {0, 0}, interface::Fonts::TittleFont, 70,
+        {0, 0}, interface::Fonts::TittleFont, 90,
         "Battle of Heroes and Villains", PageType::Entry
     );
 
@@ -124,7 +138,7 @@ Menu::Menu()
         sf::Vector2f(
             window_size.x / 2, window_size.y / 2 - 3.25 * button_size.y
         ),
-        {0, 0}, interface::Fonts::TittleFont, 48, "Sign up", PageType::SignUp
+        {0, 0}, interface::Fonts::TittleFont, 60, "Sign up", PageType::SignUp
     );
 
     m_signup_login = TextBox(
@@ -178,7 +192,7 @@ Menu::Menu()
     // registration page
     m_captions[3] = Caption(
         sf::Vector2f(window_size.x / 2, window_size.y / 2 - 4 * button_size.y),
-        {0, 0}, interface::Fonts::TittleFont, 48, "Registration",
+        {0, 0}, interface::Fonts::TittleFont, 60, "Registration",
         PageType::Registration
     );
 
@@ -273,6 +287,17 @@ Menu::Menu()
         button_size, button_color, interface::Fonts::CaptionFont, 24, "menu",
         PageType::GameOver, PageType::GameChoose
     );
+
+    // set sound
+    m_sound_button = MenuButton(
+        sf::Vector2f(window_size.x - 50, window_size.y - 50), sf::Vector2f(60, 60), button_color,
+        interface::Fonts::CaptionFont, 20, "",
+        PageType::Any, PageType::Any
+    );
+    m_sound_icon.setSize({60.0f, 60.0f});
+    m_sound_icon.setOrigin(30.0f, 30.0f);
+    m_sound_icon.setPosition({window_size.x - 50, window_size.y - 50});
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0));
 }
 
 game_interface::Window *Menu::get_window() {
@@ -308,12 +333,10 @@ void Menu::print_error() {
 void Menu::render() {
     m_window.begin_draw();
 
-    if (m_soundtrack.getStatus() == sf::SoundSource::Paused ||
-        m_soundtrack.getStatus() == sf::SoundSource::Stopped) {
-        m_soundtrack.play();
-    }
-
     m_window.get_render_window()->draw(m_background);
+
+    m_sound_button.render(m_window.get_render_window());
+    m_window.get_render_window()->draw(m_sound_icon);
 
     print_error();
     for (const auto &m_caption : m_captions) {
@@ -322,7 +345,8 @@ void Menu::render() {
         }
     }
     for (auto &m_button : m_buttons) {
-        if (m_current_page == m_button.get_current_page()) {
+        if (m_button.get_current_page() == m_current_page ||
+            m_button.get_current_page() == PageType::Any) {
             m_button.render(m_window.get_render_window());
         }
     }
@@ -392,8 +416,16 @@ void Menu::update() {
                 m_show_registration_password.update_tittle("+");
             }
         }
+        if (m_sound_button.update(event, &m_window)) {
+            if (m_soundtrack.getStatus() == sf::SoundSource::Playing) {
+                music_stop();
+            } else {
+                music_play();
+            }
+        }
         for (auto &m_button : m_buttons) {
-            if (m_current_page == m_button.get_current_page()) {
+            if (m_current_page == m_button.get_current_page() ||
+                m_button.get_current_page() == PageType::Any) {
                 if (m_button.update(event, &m_window)) {
                     if (m_button.get_next_page() == PageType::Exit) {
                         m_window.set_is_done();
@@ -449,11 +481,13 @@ void Menu::update() {
 }
 
 void Menu::music_stop() {
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0));
     m_soundtrack.pause();
 }
 
 void Menu::music_play() {
-    m_soundtrack.pause();
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(1));
+    m_soundtrack.play();
 }
 
 bool Menu::is_exit() const {

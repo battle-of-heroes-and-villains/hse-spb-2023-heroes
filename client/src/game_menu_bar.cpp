@@ -33,17 +33,17 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
 
     m_buttons[0] = MenuButton(
         {wind_size.x * 0.07f + button_size.x / 2, button_pos.y}, button_size,
-        sf::Color(71, 78, 50), interface::Fonts::CaptionFont, 22, labels[0],
+        sf::Color(100, 112, 72), sf::Color(89, 100, 64), interface::Fonts::CaptionFont, 22, labels[0],
         button_types[0]
     );
     m_buttons[1] = MenuButton(
         {wind_size.x * 0.07f + 40 + 3 * button_size.x / 2, button_pos.y},
-        button_size, sf::Color(71, 78, 50), interface::Fonts::CaptionFont, 22,
+        button_size, sf::Color(100, 112, 72), sf::Color(89, 100, 64), interface::Fonts::CaptionFont, 22,
         labels[1], button_types[1]
     );
     m_buttons[2] = MenuButton(
         {wind_size.x - wind_size.x * 0.07f - button_size.x / 2, button_pos.y},
-        button_size, sf::Color(71, 78, 50), interface::Fonts::CaptionFont, 22,
+        button_size, sf::Color(100, 112, 72), sf::Color(89, 100, 64), interface::Fonts::CaptionFont, 22,
         labels[2], button_types[2]
     );
 
@@ -56,6 +56,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     ));
     m_user_icon.setOutlineThickness(5);
     m_user_icon.setOutlineColor(sf::Color(71, 78, 50));
+    m_user_icon.setScale(-1, 1);
 
     // set user's username
     m_username.setFont(game_interface::ResourceManager::load_font(

@@ -46,7 +46,8 @@ enum class PageType {
     SignUp,
     Registration,
     GameChoose,
-    GameOver
+    GameOver,
+    Any
 };
 }  // namespace menu_interface
 
