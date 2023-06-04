@@ -42,15 +42,19 @@ void Client::sign_up(std::string nickname, std::string password) {
 void Client::run_receiver() {
     namespace_proto::GameState response;
     grpc::ClientContext context{};
-    std::unique_ptr<grpc::ClientReader<namespace_proto::GameState>> reader(
+    get_client_state()->reader = (
         get_client_state()->m_stub->CallServer(
             &context, get_client_state()->m_user
         )
     );
-    while (reader->Read(&response)) {
+    while (get_client_state()->reader->Read(&response)) {
+        namespace_proto::GameState copy_response = response;
+        std::cout << 1 << '\n';
         {
             std::unique_lock lock{get_client_state()->m_mutex};
-            get_client_state()->m_game_state = response;
+            while(!get_client_state()->active){}
+            get_client_state()->active = false;
+            get_client_state()->m_game_state = copy_response;
             game_interface::get_game_state()->get_board()->update_board(
                 get_client_state()->m_game_state
             );

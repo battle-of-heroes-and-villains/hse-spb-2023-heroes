@@ -71,6 +71,8 @@ message GameState{
   int32 second_user_mana = 7;
   int32 move_turn = 5;
   repeated Cell game_cells = 4;
+  bool is_active = 9;
+  int32 winner = 10;
   OpponentMove opponent_move = 8;
 }
 

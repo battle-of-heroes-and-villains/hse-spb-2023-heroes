@@ -5,7 +5,7 @@
 #include "game.hpp"
 
 namespace bot {
-enum class bot_response_type { SINGLE_CELL, PAIR_OF_CELLS, SPELL, NONE };
+enum class bot_response_type { SINGLE_CELL, PAIR_OF_CELLS, SPELL, SKIP, GIVE_UP, NONE };
 
 class bot_response {
 private:
@@ -73,7 +73,7 @@ public:
     }
 
     bot_response position_evaluation() const;
-    std::vector<std::reference_wrapper<bot_response>> operator()();
+    bot_response operator()();
 };
 }  // namespace bot
 

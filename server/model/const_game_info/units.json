@@ -4,7 +4,7 @@
       "m_type": 1,
       "m_number": 5,
       "m_max_health": 10,
-      "m_damage": 20,
+      "m_damage": 1,
       "m_attack_range": 10,
       "m_movement_range": 2,
       "m_weight": 1

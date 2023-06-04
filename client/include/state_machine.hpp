@@ -42,6 +42,9 @@ public:
                 game_interface::get_game_state()->update();
             }
             game_interface::get_game_state()->render();
+            if (!get_client_state()->m_game_state.is_active()){
+                break;
+            }
         }
         receiver.join();
     }

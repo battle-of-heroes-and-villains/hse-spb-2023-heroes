@@ -2,6 +2,7 @@
 
 void dump_game(GameSession *game_session) {
     namespace_proto::GameState *game_state_ref = game_session->get_game_state();
+    game_state_ref->set_is_active(true);
     game_model::game *model_game = game_session->get_model_game();
     int unit_count = 0;
     for (int i = 0; i < 100; i++) {
