@@ -51,7 +51,9 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_user_icon.setSize({100.0f, 100.0f});
     m_user_icon.setOrigin(50.0f, 50.0f);
     m_user_icon.setPosition(wind_size.x * 0.035f, wind_size.x * 0.035f);
-    m_user_icon.setTexture(&ResourceManager::load_icon(Characters::Spider));
+    m_user_icon.setTexture(&ResourceManager::load_icon(
+        static_cast<Characters>(get_client_state()->m_hero.name().length() % 10)
+    ));
     m_user_icon.setOutlineThickness(5);
     m_user_icon.setOutlineColor(sf::Color(71, 78, 50));
 
@@ -60,11 +62,9 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
         interface::Fonts::CaptionFont
     ));
     m_username.setString(get_client_state()->m_hero.name());
-    m_username.setFillColor(sf::Color::White);
+    m_username.setFillColor(sf::Color(71, 78, 50));
     m_username.setCharacterSize(24);
     m_username.setPosition({static_cast<float>(67.0f), 140.0f});
-    m_username.setOutlineThickness(3);
-    m_username.setOutlineColor(sf::Color(71, 78, 50));
     sf::FloatRect data_bounds = m_username.getLocalBounds();
     m_username.setOrigin(
         data_bounds.left + data_bounds.width / 2.0f,
@@ -151,6 +151,7 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         get_client_state()->m_game_state.move_turn() != 0) {
         Client::get_opponent();
         auto win_size_x = m_turn_label.getPosition().x * 2;
+
         // set opponent icon
         m_opponent_icon.setSize({100.0f, 100.0f});
         m_opponent_icon.setOrigin(50.0f, 50.0f);
@@ -158,7 +159,9 @@ void GameMenuBar::update(sf::Event event, Window *window) {
             {static_cast<float>(win_size_x - 67.0f), 67.0f}
         );
         m_opponent_icon.setTexture(
-            &ResourceManager::load_icon(Characters::Spider)
+            &ResourceManager::load_icon(static_cast<Characters>(
+                get_client_state()->m_opponent.name().length() % 10
+            ))
         );
         m_opponent_icon.setOutlineThickness(5);
         m_opponent_icon.setOutlineColor(sf::Color(71, 78, 50));
@@ -168,10 +171,8 @@ void GameMenuBar::update(sf::Event event, Window *window) {
             interface::Fonts::CaptionFont
         ));
         m_opponent_username.setString(get_client_state()->m_opponent.name());
-        m_opponent_username.setFillColor(sf::Color::White);
+        m_opponent_username.setFillColor(sf::Color(71, 78, 50));
         m_opponent_username.setCharacterSize(24);
-        m_opponent_username.setOutlineThickness(3);
-        m_opponent_username.setOutlineColor(sf::Color(71, 78, 50));
         m_opponent_username.setPosition(
             {static_cast<float>(win_size_x - 67.0f), 140.0f}
         );

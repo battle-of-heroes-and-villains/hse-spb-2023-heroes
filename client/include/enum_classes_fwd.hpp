@@ -5,7 +5,18 @@
 #include "config.hpp"
 
 namespace game_interface {
-enum class Characters { Spider };
+enum class Characters {
+    Bear = 0,
+    Bee,
+    Boar,
+    Cat,
+    Raven,
+    Skull,
+    Spider,
+    Stone,
+    Turtle,
+    Wolf
+};
 
 enum class CellPropertyType { Empty, Move, Enemy, Attack, Spell, AttackSpell };
 

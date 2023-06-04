@@ -39,8 +39,36 @@ void ResourceManager::load_resources() {
     if (is_initialised) {
         return;
     }
+
+    ResourceManager::m_icons[Characters::Bear].loadFromFile(
+        interface::source_dir + "icons/bear.png"
+    );
+    ResourceManager::m_icons[Characters::Bee].loadFromFile(
+        interface::source_dir + "icons/bee.png"
+    );
+    ResourceManager::m_icons[Characters::Boar].loadFromFile(
+        interface::source_dir + "icons/boar.png"
+    );
+    ResourceManager::m_icons[Characters::Cat].loadFromFile(
+        interface::source_dir + "icons/cat.png"
+    );
+    ResourceManager::m_icons[Characters::Raven].loadFromFile(
+        interface::source_dir + "icons/raven.png"
+    );
+    ResourceManager::m_icons[Characters::Skull].loadFromFile(
+        interface::source_dir + "icons/skull.png"
+    );
     ResourceManager::m_icons[Characters::Spider].loadFromFile(
         interface::source_dir + "icons/spider.png"
+    );
+    ResourceManager::m_icons[Characters::Stone].loadFromFile(
+        interface::source_dir + "icons/stone.png"
+    );
+    ResourceManager::m_icons[Characters::Turtle].loadFromFile(
+        interface::source_dir + "icons/turtle.png"
+    );
+    ResourceManager::m_icons[Characters::Wolf].loadFromFile(
+        interface::source_dir + "icons/wolf.png"
     );
 
     ResourceManager::m_cell_textures[CellType::Type1].loadFromFile(
