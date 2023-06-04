@@ -5,11 +5,13 @@
 #include "config.hpp"
 
 namespace game_interface {
+enum class Characters { Spider };
+
+enum class CellPropertyType { Empty, Move, Enemy, Attack, Spell, AttackSpell };
+
 enum class UnitType { Empty, Type1, Type2, Type3, Type4, Type5 };
 
 enum class CellType { Type1, Type2, Type3, Type4, Type5 };
-
-enum class CellPropertyType { Empty, Move, Enemy, Attack, Spell, AttackSpell };
 
 enum class CracksStage { Stage0, Stage1, Stage2, Stage3, Stage4, Stage5 };
 

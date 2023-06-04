@@ -9,6 +9,8 @@ std::unordered_map<CursorType, sf::Image> ResourceManager::m_cursors{};
 std::unordered_map<interface::Sounds, sf::SoundBuffer>
     ResourceManager::m_sounds{};
 
+std::unordered_map<Characters, sf::Texture> ResourceManager::m_icons{};
+
 std::unordered_map<CellType, sf::Texture> ResourceManager::m_cell_textures{};
 std::unordered_map<CellPropertyType, sf::Texture>
     ResourceManager::m_cell_property_textures{};
@@ -37,6 +39,9 @@ void ResourceManager::load_resources() {
     if (is_initialised) {
         return;
     }
+    ResourceManager::m_icons[Characters::Spider].loadFromFile(
+        interface::source_dir + "icons/spider.png"
+    );
 
     ResourceManager::m_cell_textures[CellType::Type1].loadFromFile(
         interface::source_dir + "cells/backgrounds/cell_type1.png"
@@ -55,17 +60,29 @@ void ResourceManager::load_resources() {
     );
 
     ResourceManager::m_cell_property_textures[CellPropertyType::Empty]
-        .loadFromFile(interface::source_dir + "cells/properties/empty_property.png");
+        .loadFromFile(
+            interface::source_dir + "cells/properties/empty_property.png"
+        );
     ResourceManager::m_cell_property_textures[CellPropertyType::Move]
-        .loadFromFile(interface::source_dir + "cells/properties/move_property.png");
+        .loadFromFile(
+            interface::source_dir + "cells/properties/move_property.png"
+        );
     ResourceManager::m_cell_property_textures[CellPropertyType::Enemy]
-        .loadFromFile(interface::source_dir + "cells/properties/enemy_property.png");
+        .loadFromFile(
+            interface::source_dir + "cells/properties/enemy_property.png"
+        );
     ResourceManager::m_cell_property_textures[CellPropertyType::Attack]
-        .loadFromFile(interface::source_dir + "cells/properties/attack_property.png");
+        .loadFromFile(
+            interface::source_dir + "cells/properties/attack_property.png"
+        );
     ResourceManager::m_cell_property_textures[CellPropertyType::Spell]
-        .loadFromFile(interface::source_dir + "cells/properties/spell_property.png");
+        .loadFromFile(
+            interface::source_dir + "cells/properties/spell_property.png"
+        );
     ResourceManager::m_cell_property_textures[CellPropertyType::AttackSpell]
-        .loadFromFile(interface::source_dir + "cells/properties/attack_property.png");
+        .loadFromFile(
+            interface::source_dir + "cells/properties/attack_property.png"
+        );
 
     ResourceManager::m_cracks_textures[CracksStage::Stage0].loadFromFile(
         interface::source_dir + "cells/cracks/cracks_stage0.png"
@@ -232,6 +249,11 @@ void ResourceManager::load_resources() {
     );
 
     is_initialised = true;
+}
+
+const sf::Texture &ResourceManager::load_icon(Characters texture) {
+    load_resources();
+    return m_icons[texture];
 }
 
 const sf::Texture &ResourceManager::load_cell_texture(CellType texture) {
