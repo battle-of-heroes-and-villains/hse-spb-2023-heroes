@@ -1,6 +1,7 @@
 #include "board.hpp"
 #include <utility>
 #include "cursor.hpp"
+#include "game.hpp"
 #include "resource_manager.hpp"
 
 namespace game_interface {
@@ -149,6 +150,7 @@ void Board::add_enable_for_spelling_cells(
     int spell_id
 ) {
     remove_enable_for_spelling_cells();
+
     m_enable_for_spelling_cells = std::move(enable_cells);
     for (auto [row, column] : m_enable_for_spelling_cells) {
         bool is_second =

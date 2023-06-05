@@ -12,6 +12,8 @@ public:
     Spell(
         sf::Vector2f position,
         sf::Vector2f size,
+        sf::Color color,
+        sf::Color pressed_color,
         const namespace_proto::Spell &spell
     );
     ~Spell() = default;
@@ -22,8 +24,11 @@ public:
     void render(sf::RenderWindow *window);
 
 private:
+    void set_label_size(unsigned int character_size);
+
     sf::RectangleShape m_table;
     sf::Text m_data;
+    sf::Color m_button_color;
     interface::Button m_button;
     int m_id;
     std::string m_name;

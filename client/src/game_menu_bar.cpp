@@ -84,7 +84,7 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
 
     // set user's spells
     m_spells_amount = get_client_state()->m_hero.spells_size();
-    sf::Vector2f spell_size{130, 80};
+    sf::Vector2f spell_size{110, 80};
     float distance = 100.0f;
     float start_position_y = wind_size.y / 2 -
                              spell_size.y / 2 * (m_spells_amount % 2) -
@@ -94,7 +94,8 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
         auto current_spell = get_client_state()->m_hero.spells(spell_id);
         m_spells[spell_id] = Spell(
             {67.0f, start_position_y + spell_id * (spell_size.y + distance)},
-            spell_size, current_spell
+            spell_size, sf::Color(100, 112, 72), sf::Color(89, 100, 64),
+            current_spell
         );
     }
 }
@@ -192,7 +193,7 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         // set opponent's spells
         m_opponents_spells_amount =
             get_client_state()->m_opponent.spells_size();
-        sf::Vector2f spell_size{130, 80};
+        sf::Vector2f spell_size{110, 80};
         float distance = 100.0f;
         float start_position_y =
             540.0f - spell_size.y / 2 * (m_opponents_spells_amount % 2) -
@@ -205,7 +206,8 @@ void GameMenuBar::update(sf::Event event, Window *window) {
             m_opponents_spells[spell_id] = Spell(
                 {1853.0f,
                  start_position_y + spell_id * (spell_size.y + distance)},
-                spell_size, current_spell
+                spell_size, sf::Color(100, 112, 72), sf::Color(89, 100, 64),
+                current_spell
             );
         }
     }
