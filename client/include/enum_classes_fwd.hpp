@@ -34,7 +34,7 @@ enum class EventType { FirstPress, SecondPress, Move, Targeting, Nothing };
 
 enum class ButtonType { None, Play, Pass, Menu, Exit, Skip, GiveUp, Spell };
 
-enum class CursorType { Attack };
+enum class CursorType { Attack, Spell };
 }  // namespace game_interface
 
 namespace menu_interface {

@@ -56,9 +56,4 @@ void Game::music_stop() {
     static Game game_state;
     return &game_state;
 }
-
-[[nodiscard]] sf::Cursor &get_cursor() {
-    static sf::Cursor cursor;
-    return cursor;
-}
 }  // namespace game_interface

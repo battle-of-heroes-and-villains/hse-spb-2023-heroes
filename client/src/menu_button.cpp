@@ -25,7 +25,7 @@ MenuButton::MenuButton(
 
     m_label.setFont(ResourceManager::load_font(font));
     m_label.setString(sf::String(label));
-   set_label_size(character_size);
+    set_label_size(character_size);
 
     m_label.setPosition(position);
 }

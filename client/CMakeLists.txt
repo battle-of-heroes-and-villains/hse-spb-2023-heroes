@@ -12,6 +12,7 @@ set(SOURCES
         src/cell.cpp
         src/client.cpp
         src/coordinates.cpp
+        src/cursor.cpp
         src/event_manager.cpp
         src/game.cpp
         src/game_menu_bar.cpp

@@ -1,6 +1,7 @@
 #include "cell.hpp"
 #include <string>
 #include "client.hpp"
+#include "cursor.hpp"
 #include "event_manager.hpp"
 #include "game.hpp"
 #include "resource_manager.hpp"
@@ -225,23 +226,30 @@ void Cell::remove_selection() {
     update_cell_texture(CellPropertyType::Empty);
 }
 
-bool Cell::change_cursor(sf::Window *window) {
+void Cell::change_cursor(sf::Window *window) {
     sf::Vector2i mouse_position = sf::Mouse::getPosition(*window);
     auto cell_position = m_cell.getPosition();
     mouse_position.x -= cell_position.x;
     mouse_position.y -= cell_position.y;
     if (mouse_position.x >= 0 && mouse_position.x <= m_cell_size.x &&
-        mouse_position.y >= 0 && mouse_position.y <= m_cell_size.y &&
-        m_cell_property_type == CellPropertyType::Attack) {
-        get_cursor().loadFromPixels(
-            ResourceManager::load_cursor(CursorType::Attack).getPixelsPtr(),
-            ResourceManager::load_cursor(CursorType::Attack).getSize(),
-            sf::Vector2u(0, 0)
-        );
-        window->setMouseCursor(get_cursor());
-        return true;
+        mouse_position.y >= 0 && mouse_position.y <= m_cell_size.y) {
+        if (m_cell_property_type == CellPropertyType::Attack) {
+            interface::get_cursor().loadFromPixels(
+                ResourceManager::load_cursor(CursorType::Attack).getPixelsPtr(),
+                ResourceManager::load_cursor(CursorType::Attack).getSize(),
+                sf::Vector2u(0, 0)
+            );
+            interface::get_cursor_state() = true;
+        } else if (m_cell_property_type == CellPropertyType::Spell || m_cell_property_type == CellPropertyType::AttackSpell) {
+            interface::get_cursor().loadFromPixels(
+                ResourceManager::load_cursor(CursorType::Spell).getPixelsPtr(),
+                ResourceManager::load_cursor(CursorType::Spell).getSize(),
+                sf::Vector2u(0, 0)
+            );
+            interface::get_cursor_state() = true;
+        }
+        window->setMouseCursor(interface::get_cursor());
     }
-    return false;
 }
 
 sf::Vector2f Cell::get_cell_position() {

@@ -27,8 +27,6 @@ private:
 };
 
 [[nodiscard]] Game *get_game_state();
-
-[[nodiscard]] sf::Cursor &get_cursor();
 }  // namespace game_interface
 
 #endif  // BATTLE_OF_HEROES_GAME_HPP

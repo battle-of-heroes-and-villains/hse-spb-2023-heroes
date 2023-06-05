@@ -1,5 +1,6 @@
 #include "menu.hpp"
 #include "caption.hpp"
+#include "cursor.hpp"
 #include "resource_manager.hpp"
 
 namespace menu_interface {
@@ -66,6 +67,9 @@ bool MenuButton::update(sf::Event event, game_interface::Window *window) {
     if (result == game_interface::EventType::FirstPress) {
         return true;
     } else if (result == game_interface::EventType::Targeting) {
+        interface::get_cursor().loadFromSystem(sf::Cursor::Hand);
+        window->get_render_window()->setMouseCursor(interface::get_cursor());
+        interface::get_cursor_state() = true;
         set_label_size(m_character_size + 4);
         m_table.setOutlineThickness(5);
         m_table.setFillColor(m_table.getOutlineColor());
@@ -272,7 +276,7 @@ Menu::Menu()
     // game over page
     m_captions[5] = Caption(
         sf::Vector2f(window_size.x / 2, window_size.y / 2 - 4 * button_size.y),
-        {0, 0}, interface::Fonts::TittleFont, 48, "GAME OVER",
+        {0, 0}, interface::Fonts::TittleFont, 60, "GAME OVER",
         PageType::GameOver
     );
     m_captions[6] = Caption(
@@ -280,24 +284,18 @@ Menu::Menu()
         {0, 0}, interface::Fonts::CaptionFont, 24, "you win\nyour enemy lose",
         PageType::GameOver
     );
-    m_buttons[9] = MenuButton(
-        sf::Vector2f(
-            window_size.x / 2, window_size.y / 2 + 1.5 * button_size.y
-        ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "menu",
-        PageType::GameOver, PageType::GameChoose
-    );
 
     // set sound
     m_sound_button = MenuButton(
-        sf::Vector2f(window_size.x - 50, window_size.y - 50), sf::Vector2f(60, 60), button_color,
-        interface::Fonts::CaptionFont, 20, "",
-        PageType::Any, PageType::Any
+        sf::Vector2f(window_size.x - 50, window_size.y - 50),
+        sf::Vector2f(60, 60), button_color, interface::Fonts::CaptionFont, 20,
+        "", PageType::Any, PageType::Any
     );
     m_sound_icon.setSize({60.0f, 60.0f});
     m_sound_icon.setOrigin(30.0f, 30.0f);
     m_sound_icon.setPosition({window_size.x - 50, window_size.y - 50});
-    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0));
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0)
+    );
 }
 
 game_interface::Window *Menu::get_window() {
@@ -367,6 +365,7 @@ void Menu::render() {
 void Menu::update() {
     sf::Event event{};
     while (m_window.get_render_window()->pollEvent(event)) {
+        interface::get_cursor_state() = false;
         if (m_current_page == PageType::SignUp) {
             bool is_login_chosen = m_signup_login.update(event, &m_window);
             bool is_password_chosen =
@@ -477,16 +476,23 @@ void Menu::update() {
                 }
             }
         }
+        if (!interface::get_cursor_state()) {
+            interface::get_cursor().loadFromSystem(sf::Cursor::Arrow);
+            m_window.get_render_window()->setMouseCursor(interface::get_cursor()
+            );
+        }
     }
 }
 
 void Menu::music_stop() {
-    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0));
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0)
+    );
     m_soundtrack.pause();
 }
 
 void Menu::music_play() {
-    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(1));
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(1)
+    );
     m_soundtrack.play();
 }
 

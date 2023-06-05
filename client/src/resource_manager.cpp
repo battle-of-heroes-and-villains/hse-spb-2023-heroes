@@ -281,7 +281,10 @@ void ResourceManager::load_resources() {
         .loadFromFile(interface::source_dir + "sounds/game_background.wav");
 
     ResourceManager::m_cursors[CursorType::Attack].loadFromFile(
-        interface::source_dir + "cursors/sword.png"
+        interface::source_dir + "cursors/cursor_sword.png"
+    );
+    ResourceManager::m_cursors[CursorType::Spell].loadFromFile(
+        interface::source_dir + "cursors/cursor_magic.png"
     );
 
     is_initialised = true;

@@ -31,7 +31,7 @@ public:
 
     void handling_event(sf::Event event, Unit **selected_unit);
     EventType is_mouse_target(sf::Window *window);
-    bool change_cursor(sf::Window *window);
+    void change_cursor(sf::Window *window);
 
     void update_cell();
     void render(sf::RenderWindow *window);
