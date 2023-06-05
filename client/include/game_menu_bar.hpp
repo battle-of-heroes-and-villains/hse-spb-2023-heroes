@@ -15,6 +15,8 @@ public:
     void render(sf::RenderWindow *window);
 
 private:
+    std::string compress_name(const std::string &name);
+
     sf::RectangleShape m_turn_label;
     sf::Text m_data;
     sf::Text m_mana;

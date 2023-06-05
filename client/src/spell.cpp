@@ -41,10 +41,13 @@ void Spell::update(sf::Event event, Window *window) {
     m_table.setFillColor(m_button_color);
     if (event_type == EventType::FirstPress ||
         event_type == EventType::SecondPress) {
-        update_data();
-        if (m_is_name_showed) {
+        if (!m_is_name_showed) {
+            get_game_state()->get_game_menu_bar()->apply_spell();
+            update_data();
             get_game_state()->get_board()->remove_enable_for_spelling_cells();
         } else {
+            get_game_state()->get_game_menu_bar()->apply_spell();
+            update_data();
             std::vector<std::pair<int, int>> enable_cells =
                 Client::select_spell(m_id);
             get_game_state()->get_board()->add_enable_for_spelling_cells(

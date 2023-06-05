@@ -62,14 +62,13 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     m_username.setFont(game_interface::ResourceManager::load_font(
         interface::Fonts::CaptionFont
     ));
-    m_username.setString(get_client_state()->m_hero.name());
+    m_username.setString(compress_name(get_client_state()->m_hero.name()));
     m_username.setFillColor(sf::Color(71, 78, 50));
     m_username.setCharacterSize(24);
-    m_username.setPosition({static_cast<float>(67.0f), 140.0f});
+    m_username.setPosition({static_cast<float>(67.0f), 130.0f});
     sf::FloatRect data_bounds = m_username.getLocalBounds();
     m_username.setOrigin(
-        data_bounds.left + data_bounds.width / 2.0f,
-        data_bounds.top + data_bounds.height / 2.0f
+        data_bounds.left + data_bounds.width / 2.0f, data_bounds.top
     );
 
     // set user's mana
@@ -78,7 +77,11 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
     ));
     m_mana.setFillColor(sf::Color::White);
     m_mana.setCharacterSize(22);
-    m_mana.setPosition({static_cast<float>(67.0f), 166.0f});
+    m_mana.setPosition(
+        {static_cast<float>(67.0f), 170.0f +
+                                        m_username.getLocalBounds().height -
+                                        m_username.getCharacterSize()}
+    );
     m_mana.setString("");
     align_text_origin(m_mana);
 
@@ -172,13 +175,18 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         m_opponent_username.setFont(game_interface::ResourceManager::load_font(
             interface::Fonts::CaptionFont
         ));
-        m_opponent_username.setString(get_client_state()->m_opponent.name());
+        m_opponent_username.setString(
+            compress_name(get_client_state()->m_opponent.name())
+        );
         m_opponent_username.setFillColor(sf::Color(71, 78, 50));
         m_opponent_username.setCharacterSize(24);
         m_opponent_username.setPosition(
-            {static_cast<float>(win_size_x - 67.0f), 140.0f}
+            {static_cast<float>(win_size_x - 67.0f), 130.0f}
         );
-        align_text_origin(m_opponent_username);
+        sf::FloatRect data_bounds = m_opponent_username.getLocalBounds();
+        m_opponent_username.setOrigin(
+            data_bounds.left + data_bounds.width / 2.0f, data_bounds.top
+        );
 
         // set opponent's mana
         m_opponent_mana.setFont(game_interface::ResourceManager::load_font(
@@ -186,7 +194,11 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         ));
         m_opponent_mana.setFillColor(sf::Color::White);
         m_opponent_mana.setCharacterSize(22);
-        m_opponent_mana.setPosition({win_size_x - 67.0f, 166.0f});
+        m_opponent_mana.setPosition(
+            {win_size_x - 67.0f,
+             170.0f + m_opponent_username.getLocalBounds().height -
+                 m_opponent_username.getCharacterSize()}
+        );
         m_opponent_mana.setString("");
         align_text_origin(m_opponent_mana);
 
@@ -238,5 +250,18 @@ void GameMenuBar::apply_spell() {
         spell.set_name();
     }
     update_mana();
+}
+
+std::string GameMenuBar::compress_name(const std::string &name) {
+    char compressed_name[name.size() + 1 + name.size() / 7];
+    int pos = 0;
+    for (int position = 0; position < name.size(); position++) {
+        compressed_name[pos++] = name[position];
+        if (position % 7 == 6 && position != 0) {
+            compressed_name[pos++] = '\n';
+        }
+    }
+    compressed_name[pos] = '\0';
+    return {compressed_name};
 }
 }  // namespace game_interface
