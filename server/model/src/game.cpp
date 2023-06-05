@@ -39,8 +39,6 @@ int game::score_attack_cell(const cell &attacking, cell &attacked) const {
     );
     int current_score = attacking_unit.get_value() - attacked_unit.get_value();
     attacked_unit.decrease_health(attacking_unit.get_damage());
-    if (attacked_unit.is_dead())
-        clear_cell(attacked);
     int new_score = attacking_unit.get_value() - attacked_unit.get_value();
     return new_score - current_score;
 }
