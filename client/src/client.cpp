@@ -48,13 +48,12 @@ void Client::run_receiver() {
         )
     );
     while (get_client_state()->reader->Read(&response)) {
-        namespace_proto::GameState copy_response = response;
         std::cout << 1 << '\n';
         {
             std::unique_lock lock{get_client_state()->m_mutex};
             while(!get_client_state()->active){}
             get_client_state()->active = false;
-            get_client_state()->m_game_state = copy_response;
+            get_client_state()->m_game_state = response;
             game_interface::get_game_state()->get_board()->update_board(
                 get_client_state()->m_game_state
             );

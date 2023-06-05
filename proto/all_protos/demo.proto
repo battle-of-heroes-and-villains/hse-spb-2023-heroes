@@ -82,6 +82,7 @@ enum Enum {
   attack = 1;
   kill = 2;
   spell = 3;
+  none = 4;
 }
 
 message OpponentMove{
