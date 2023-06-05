@@ -7,7 +7,11 @@
       "m_damage": 1,
       "m_attack_range": 10,
       "m_movement_range": 2,
-      "m_weight": 1
+      "m_weight": 1,
+      "m_unit_base_value": 31,
+      "m_number_base_value": 5,
+      "m_position_base_value": 1,
+      "m_health_base_value": 2
     },
     {
       "m_type": 2,
@@ -16,7 +20,11 @@
       "m_damage": 10,
       "m_attack_range": 10,
       "m_movement_range": 1,
-      "m_weight": 5
+      "m_weight": 5,
+      "m_unit_base_value": 32,
+      "m_number_base_value": 31,
+      "m_position_base_value": 1,
+      "m_health_base_value": 2
     },
     {
       "m_type": 3,
@@ -25,7 +33,11 @@
       "m_damage": 10,
       "m_attack_range": 10,
       "m_movement_range": 3,
-      "m_weight": 5
+      "m_weight": 5,
+      "m_unit_base_value": 32,
+      "m_number_base_value": 31,
+      "m_position_base_value": 1,
+      "m_health_base_value": 2
     },
     {
       "m_type": 4,
@@ -34,7 +46,11 @@
       "m_damage": 10,
       "m_attack_range": 10,
       "m_movement_range": 3,
-      "m_weight": 5
+      "m_weight": 5,
+      "m_unit_base_value": 32,
+      "m_number_base_value": 31,
+      "m_position_base_value": 1,
+      "m_health_base_value": 2
     },
     {
       "m_type": 5,
@@ -43,7 +59,11 @@
       "m_damage": 10,
       "m_attack_range": 10,
       "m_movement_range": 3,
-      "m_weight": 5
+      "m_weight": 5,
+      "m_unit_base_value": 32,
+      "m_number_base_value": 31,
+      "m_position_base_value": 1,
+      "m_health_base_value": 2
     }
   ]
 }

@@ -43,6 +43,7 @@ public:
 
     [[nodiscard]] const coordinates &get_size() const;
     [[nodiscard]] cell &get_cell(const coordinates &cell_coordinates);
+    [[nodiscard]] cell get_cell_copy(const coordinates &cell_coordinates) const;
     [[nodiscard]] std::vector<std::reference_wrapper<cell>>
     get_reachable_cells(coordinates cell_coordinates, int max_distance);
     [[nodiscard]] std::vector<std::reference_wrapper<cell>>
