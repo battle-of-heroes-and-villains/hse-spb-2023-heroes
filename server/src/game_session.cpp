@@ -15,6 +15,7 @@ void dump_game(GameSession *game_session) {
         game_model::coordinates cell_coordinates{row, column};
         game_model::cell cell = model_game->get_cell(cell_coordinates);
         new_cell->set_durability(cell.get_durability());
+        new_cell->set_max_durability(cell.get_durability());
         if (cell.get_unit_index() != -1) {
             game_model::unit model_unit =
                 model_game->get_player(cell.get_player_index())
