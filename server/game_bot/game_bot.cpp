@@ -68,7 +68,7 @@ bot_response game_bot::position_evaluation() const {
                     random_move.clear();
                     random_attack.clear();
                     random_move.emplace_back(coord, cell);
-                } else if (  score == current_score  &&
+                } else if (score == current_score  &&
                            !(cell.get().get_coordinates().get_row() == row &&
                              cell.get().get_coordinates().get_column() == column
                            )) {
