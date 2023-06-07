@@ -60,11 +60,9 @@ bot_response game_bot::position_evaluation() const {
                 bot_response current_move{
                     bot_response_type::PAIR_OF_CELLS, current_cell, cell};
                 int current_score = get_score(current_move);
-                if (!is_score_exist ||
-                    score < current_score &&
-                        !(cell.get().get_coordinates().get_row() == row &&
-                          cell.get().get_coordinates().get_column() == column
-                        )) {
+                if ((!is_score_exist || score < current_score) &&
+                    !(cell.get().get_coordinates().get_row() == row &&
+                      cell.get().get_coordinates().get_column() == column)) {
                     is_score_exist = true;
                     score = current_score;
                     random_move.clear();
@@ -94,13 +92,18 @@ bot_response game_bot::position_evaluation() const {
                 bot_response current_move{
                     bot_response_type::PAIR_OF_CELLS, current_cell, cell};
                 int current_score = get_score(current_move);
-                if (!is_score_exist || score < current_score) {
+                if ((!is_score_exist || score < current_score) &&
+                    !(cell.get().get_coordinates().get_row() == row &&
+                      cell.get().get_coordinates().get_column() == column)) {
                     is_score_exist = true;
                     score = current_score;
                     random_move.clear();
                     random_attack.clear();
                     random_attack.emplace_back(coord, cell);
-                } else if (score == current_score) {
+                } else if (score == current_score &&
+                           !(cell.get().get_coordinates().get_row() == row &&
+                             cell.get().get_coordinates().get_column() == column
+                           )) {
                     random_attack.emplace_back(coord, cell);
                 }
             }
@@ -134,7 +137,8 @@ bot_response game_bot::position_evaluation() const {
          attack.set_to_cell(random_attack[id].second);
          response = attack;
      }*/
-    int random_size = random_move.size() + random_attack.size();
+    int random_size = static_cast<int>(random_move.size()) +
+                      static_cast<int>(random_attack.size());
     if (random_size == 0) {
         response.set_type(bot_response_type::GIVE_UP);
     } else {
@@ -145,7 +149,7 @@ bot_response game_bot::position_evaluation() const {
             cell_from.set_coordinates(random_move[pos].first);
             response.set_from_cell(cell_from);
         } else {
-            pos -= random_move.size();
+            pos -= static_cast<int>(random_move.size());
             response.set_to_cell(random_attack[pos].second);
             game_model::cell cell_from;
             cell_from.set_coordinates(random_attack[pos].first);
