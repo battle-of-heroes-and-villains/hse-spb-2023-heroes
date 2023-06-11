@@ -10,6 +10,7 @@ std::unordered_map<interface::Sounds, sf::SoundBuffer>
     ResourceManager::m_sounds{};
 
 std::unordered_map<Characters, sf::Texture> ResourceManager::m_icons{};
+std::unordered_map<SpellId, sf::Texture> ResourceManager::m_spell_icons;
 std::unordered_map<int, sf::Texture> ResourceManager::m_sound_icons{};
 
 std::unordered_map<CellType, sf::Texture> ResourceManager::m_cell_textures{};
@@ -70,6 +71,26 @@ void ResourceManager::load_resources() {
     );
     ResourceManager::m_icons[Characters::Wolf].loadFromFile(
         interface::source_dir + "icons/wolf.png"
+    );
+
+    ResourceManager::m_spell_icons[SpellId::Id1].loadFromFile(
+        interface::source_dir + "spell_icons/spell_id1.png"
+    );
+
+    ResourceManager::m_spell_icons[SpellId::Id2].loadFromFile(
+        interface::source_dir + "spell_icons/spell_id2.png"
+    );
+
+    ResourceManager::m_spell_icons[SpellId::Id3].loadFromFile(
+        interface::source_dir + "spell_icons/spell_id3.png"
+    );
+
+    ResourceManager::m_spell_icons[SpellId::Id4].loadFromFile(
+        interface::source_dir + "spell_icons/spell_id4.png"
+    );
+
+    ResourceManager::m_spell_icons[SpellId::Id5].loadFromFile(
+        interface::source_dir + "spell_icons/spell_id5.png"
     );
 
     ResourceManager::m_sound_icons[0].loadFromFile(
@@ -295,6 +316,11 @@ const sf::Texture &ResourceManager::load_icon(Characters texture) {
     return m_icons[texture];
 }
 
+const sf::Texture &ResourceManager::load_spell_icon(SpellId texture) {
+    load_resources();
+    return m_spell_icons[texture];
+}
+
 const sf::Texture &ResourceManager::load_cell_texture(CellType texture) {
     load_resources();
     return m_cell_textures[texture];
@@ -307,9 +333,7 @@ const sf::Texture &ResourceManager::load_cell_property_texture(
     return m_cell_property_textures[texture];
 }
 
-[[nodiscard]] const sf::Texture &ResourceManager::load_cracks_texture(
-    CracksStage texture
-) {
+const sf::Texture &ResourceManager::load_cracks_texture(CracksStage texture) {
     load_resources();
     return m_cracks_textures[texture];
 }

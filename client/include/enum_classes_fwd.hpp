@@ -18,6 +18,8 @@ enum class Characters {
     Wolf
 };
 
+enum class SpellId { Id1, Id2, Id3, Id4, Id5 };
+
 enum class CellPropertyType { Empty, Move, Enemy, Attack, Spell, AttackSpell };
 
 enum class UnitType { Empty, Type1, Type2, Type3, Type4, Type5 };

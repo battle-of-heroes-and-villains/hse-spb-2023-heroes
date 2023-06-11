@@ -11,6 +11,8 @@ class ResourceManager {
 public:
     [[nodiscard]] const static sf::Texture &load_icon(Characters texture);
 
+    [[nodiscard]] const static sf::Texture &load_spell_icon(SpellId texture);
+
     [[nodiscard]] const static sf::Texture &load_sound_icon(int texture);
 
     [[nodiscard]] const static sf::Texture &load_cell_texture(CellType texture);
@@ -74,6 +76,7 @@ private:
     static std::unordered_map<CursorType, sf::Image> m_cursors;
 
     static std::unordered_map<Characters, sf::Texture> m_icons;
+    static std::unordered_map<SpellId, sf::Texture> m_spell_icons;
     static std::unordered_map<int, sf::Texture> m_sound_icons;
 
     static std::unordered_map<CellType, sf::Texture> m_cell_textures;

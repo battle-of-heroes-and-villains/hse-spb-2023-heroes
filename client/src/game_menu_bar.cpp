@@ -247,7 +247,7 @@ void GameMenuBar::render(sf::RenderWindow *window) {
 
 void GameMenuBar::apply_spell() {
     for (auto &spell : m_spells) {
-        spell.set_name();
+        spell.set_default_state();
     }
     update_mana();
 }
