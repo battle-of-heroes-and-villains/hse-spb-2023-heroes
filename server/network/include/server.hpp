@@ -84,7 +84,6 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         GameSession *game_session_ref,
         const namespace_proto::User &user
     ) {
-        namespace_proto::GameState *copy_state = new namespace_proto::GameState;
         if (!(game_session_ref->get_type())) {
             if (user.id() != game_session_ref->get_first_player().get_id()) {
                 (*(game_session_ref->get_response_queues())
@@ -250,6 +249,25 @@ class ServerServices final : public ::namespace_proto::Server::Service {
                 game_session_ref->get_first_player().get_id()
             );
         }
+        (*(game_session_ref->get_response_queues())
+        )[game_session_ref->get_first_player().get_id()]
+            .push(*(game_session_ref->get_game_state()));
+        (*(game_session_ref->get_response_queues())
+        )[game_session_ref->get_second_player().get_id()]
+            .push(*(game_session_ref->get_game_state()));
+        while ((*(game_session_ref->get_response_queues())
+               )[game_session_ref->get_first_player().get_id()]
+                   .size() > 0) {
+        }
+        if (!(game_session_ref->get_type())) {
+            while ((*(game_session_ref->get_response_queues())
+                   )[game_session_ref->get_second_player().get_id()]
+                       .size() > 0) {
+            }
+        }
+        auto move = std::make_unique<namespace_proto::OpponentMove>();
+        move->set_enum_(namespace_proto::none);
+        game_state_ref->set_allocated_opponent_move(move.get());
         game_session_ref->get_first_player().get_context()->TryCancel();
         game_session_ref->get_second_player().get_context()->TryCancel();
         return grpc::Status::OK;

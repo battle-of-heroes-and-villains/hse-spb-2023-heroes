@@ -35,6 +35,7 @@ public:
     void display_state() override {
         Client::get_hero();
         get_client_state()->m_opponent.set_type(-1);
+        get_client_state()->active_game = true;
         std::thread receiver(&Client::run_receiver);
         while (!game_interface::get_game_state()->get_window()->is_done()) {
             {
@@ -42,11 +43,11 @@ public:
                 game_interface::get_game_state()->update();
             }
             game_interface::get_game_state()->render();
-            if (!get_client_state()->m_game_state.is_active()){
+            if (!(get_client_state()->active_game)) {
                 break;
             }
         }
-        receiver.join();
+        receiver.detach();
     }
 
     void set_menu_state(MenuState *menu_) {

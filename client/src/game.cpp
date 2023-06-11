@@ -19,7 +19,7 @@ void Game::update() {
         m_game_menu_bar.update(event, &m_window);
         m_board.handling_event(event, m_window.get_render_window());
     }
-    get_client_state()->active = true;
+    get_client_state()->active_animation = true;
 }
 
 void Game::render() {
