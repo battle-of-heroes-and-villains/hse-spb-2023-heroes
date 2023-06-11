@@ -59,7 +59,6 @@ void start_game_session(int game_id) {
 
     game_state_ref->set_game_id(game_id);
     (*response_queues_ref)[first_player.get_id()].push(*game_state_ref);
-    (*response_queues_ref)[second_player.get_id()].push(*game_state_ref);
 
     std::thread first_writer([response_queues_ref, &first_player]() {
         while (true) {
@@ -76,6 +75,8 @@ void start_game_session(int game_id) {
         first_writer.join();
         return;
     }
+
+    (*response_queues_ref)[second_player.get_id()].push(*game_state_ref);
 
     std::thread second_writer([response_queues_ref, &second_player]() {
         while (true) {

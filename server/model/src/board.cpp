@@ -5,6 +5,13 @@
 #include "spell_list.hpp"
 
 namespace game_model {
+
+cell board::get_cell_copy(const coordinates &cell_coordinates) const {
+    int row = cell_coordinates.get_row();
+    int column = cell_coordinates.get_column();
+    return m_cells_matrix[row][column];
+}
+
 cell &board::get_cell(const coordinates &cell_coordinates) {
     int row = cell_coordinates.get_row();
     int column = cell_coordinates.get_column();

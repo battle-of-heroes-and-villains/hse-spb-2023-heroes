@@ -15,7 +15,8 @@ public:
     namespace_proto::Hero m_opponent;
     namespace_proto::GameState m_game_state;
     std::unique_ptr<grpc::ClientReader<namespace_proto::GameState>> reader;
-    std::atomic<bool> active{true};
+    std::atomic<bool> active_animation{true};
+    std::atomic<bool> active_game{true};
     std::condition_variable variable;
     mutable std::mutex m_mutex;
 };

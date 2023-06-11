@@ -18,6 +18,8 @@ private:
 
     static void clear_cell(cell &current_cell);
     void attack_cell(const cell &attacking, cell &attacked);
+    [[nodiscard]] int score_attack_cell(const cell &attacking, cell &attacked)
+        const;
 
     static std::vector<std::vector<int>> troops;
 
@@ -38,6 +40,7 @@ public:
     static int get_troop();
 
     [[nodiscard]] cell &get_cell(const coordinates &cell_coordinates);
+    [[nodiscard]] cell get_cell_copy(const coordinates &cell_coordinates) const;
     [[nodiscard]] std::vector<std::reference_wrapper<cell>>
     get_reachable_cells(const coordinates &cell_coordinates, int user_id);
     [[nodiscard]] std::vector<std::reference_wrapper<cell>>
@@ -53,6 +56,15 @@ public:
     );
     void attack(const coordinates &attacking, const coordinates &attacked);
     void spell(const coordinates &cell_coordinates, int user_id, int spell_id);
+    [[nodiscard]] int score_move(
+        const coordinates &current_cell_coordinates,
+        const coordinates &new_cell_coordinates
+    ) const;
+    [[nodiscard]] int score_attack(
+        const coordinates &attacking,
+        const coordinates &attacked
+    ) const;
+    [[nodiscard]] unit get_unit(int player_index, int unit_index) const;
 };
 
 }  // namespace game_model

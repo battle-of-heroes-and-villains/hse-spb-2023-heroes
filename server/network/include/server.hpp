@@ -255,8 +255,10 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         (*(game_session_ref->get_response_queues())
         )[game_session_ref->get_second_player().get_id()]
             .push(*(game_session_ref->get_game_state()));
-        while((*(game_session_ref->get_response_queues())
-                )[game_session_ref->get_first_player().get_id()].size() > 0) {}
+        while ((*(game_session_ref->get_response_queues())
+               )[game_session_ref->get_first_player().get_id()]
+                   .size() > 0) {
+        }
         if (!(game_session_ref->get_type())) {
             while ((*(game_session_ref->get_response_queues())
                    )[game_session_ref->get_second_player().get_id()]

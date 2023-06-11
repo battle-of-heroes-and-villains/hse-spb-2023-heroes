@@ -7,6 +7,11 @@
 
 namespace game_model {
 
+void unit::set_position_value(coordinates coord, coordinates board_size) {
+    m_position_cur_value = m_position_base_value *
+                           (board_size.get_column() - coord.get_column() - 1);
+}
+
 unit::unit(int type) : m_type(type) {
     using namespace boost::property_tree;
 
@@ -26,6 +31,10 @@ unit::unit(int type) : m_type(type) {
     m_attack_range = it->second.get<int>("m_attack_range");
     m_movement_range = it->second.get<int>("m_movement_range");
     m_weight = it->second.get<int>("m_weight");
+    m_unit_base_value = it->second.get<int>("m_unit_base_value");
+    m_number_base_value = it->second.get<int>("m_number_base_value");
+    m_position_base_value = it->second.get<int>("m_position_base_value");
+    m_health_base_value = it->second.get<int>("m_health_base_value");
     m_health = m_max_health;
 }
 
@@ -39,6 +48,14 @@ unit::unit(int type) : m_type(type) {
 
 [[nodiscard]] int unit::get_health() const {
     return m_health;
+}
+
+int unit::get_value() const {
+    if (is_dead()) {
+        return 0;
+    }
+    return m_unit_base_value + m_health_base_value * m_health +
+           (m_number_base_value + m_position_cur_value) * m_number;
 }
 
 int unit::get_movement_range() const {
