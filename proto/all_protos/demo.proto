@@ -32,6 +32,7 @@ message Cell{
   int32 column = 2;
   Unit unit = 3;
   int32 durability = 4;
+  int32 max_durability = 7;
   bool is_unit = 5;
   bool is_attack = 6;
 }
@@ -71,6 +72,8 @@ message GameState{
   int32 second_user_mana = 7;
   int32 move_turn = 5;
   repeated Cell game_cells = 4;
+  bool is_active = 9;
+  int32 winner = 10;
   OpponentMove opponent_move = 8;
 }
 
@@ -79,6 +82,7 @@ enum Enum {
   attack = 1;
   kill = 2;
   spell = 3;
+  none = 4;
 }
 
 message OpponentMove{

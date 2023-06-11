@@ -5,7 +5,14 @@
 #include "game.hpp"
 
 namespace bot {
-enum class bot_response_type { SINGLE_CELL, PAIR_OF_CELLS, SPELL, NONE };
+enum class bot_response_type {
+    SINGLE_CELL,
+    PAIR_OF_CELLS,
+    SPELL,
+    SKIP,
+    GIVE_UP,
+    NONE
+};
 
 class bot_response {
 private:
@@ -48,19 +55,33 @@ public:
     [[nodiscard]] const int get_spell_id() const {
         return spell_id;
     }
+
+    void set_type(bot_response_type type_) {
+        type = type_;
+    }
+
+    void set_from_cell(game_model::cell cell) {
+        from = cell;
+    }
+
+    void set_to_cell(game_model::cell cell) {
+        to = cell;
+    }
 };
 
 class game_bot {
 private:
     game_model::game &m_game;
+    // GameSession game;
+    [[nodiscard]] int get_score(const bot_response &move) const;
 
 public:
     explicit game_bot(game_model::game &current_game_state)
         : m_game(current_game_state) {
     }
 
-    bot_response position_evaluation() const;
-    std::vector<std::reference_wrapper<bot_response>> operator()();
+    [[nodiscard]] bot_response position_evaluation() const;
+    bot_response operator()();
 };
 }  // namespace bot
 

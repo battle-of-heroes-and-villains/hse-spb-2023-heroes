@@ -84,7 +84,7 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         GameSession *game_session_ref,
         const namespace_proto::User &user
     ) {
-        if ((game_session_ref->get_type())) {
+        if (!(game_session_ref->get_type())) {
             if (user.id() != game_session_ref->get_first_player().get_id()) {
                 (*(game_session_ref->get_response_queues())
                 )[game_session_ref->get_first_player().get_id()]
@@ -95,69 +95,76 @@ class ServerServices final : public ::namespace_proto::Server::Service {
                     .push(*(game_session_ref->get_game_state()));
             }
         } else {
-            (*(game_session_ref->get_response_queues())
-            )[game_session_ref->get_first_player().get_id()]
-                .push(*(game_session_ref->get_game_state()));
-            //            auto diff = (*game_session_ref->get_game_bot())();
-            //            for (auto item : diff) {
-            //                if (item.get().get_type() ==
-            //                    bot::bot_response_type::SINGLE_CELL) {
-            //                    game_model::cell cell =
-            //                    item.get().get_from_cell(); int index =
-            //                    cell.get_coordinates().get_row() * 10 +
-            //                                cell.get_coordinates().get_column();
-            //                    namespace_proto::Cell *proto_cell =
-            //                        game_session_ref->get_game_state()->mutable_game_cells(
-            //                            index
-            //                        );
-            //                    update_cell(
-            //                        proto_cell, cell.get_coordinates(),
-            //                        game_session_ref
-            //                    );
-            //                    if (proto_cell->is_unit()) {
-            //                        namespace_proto::Unit *unit =
-            //                            proto_cell->mutable_unit();
-            //                        update_unit(
-            //                            unit, cell.get_coordinates(),
-            //                            game_session_ref
-            //                        );
-            //                    }
-            //                } else {
-            //                    game_model::cell cell_from =
-            //                    item.get().get_from_cell(); int index_from =
-            //                        cell_from.get_coordinates().get_row() * 10
-            //                        +
-            //                        cell_from.get_coordinates().get_column();
-            //                    namespace_proto::Cell *proto_cell_from =
-            //                        game_session_ref->get_game_state()->mutable_game_cells(
-            //                            index_from
-            //                        );
-            //                    game_model::cell cell_to =
-            //                    item.get().get_from_cell(); int index_to =
-            //                    cell_to.get_coordinates().get_row() * 10 +
-            //                                   cell_to.get_coordinates().get_column();
-            //                    namespace_proto::Cell *proto_cell_to =
-            //                        game_session_ref->get_game_state()->mutable_game_cells(
-            //                            index_to
-            //                        );
-            //                    swapUnits(proto_cell_from, proto_cell_to);
-            //                    update_cell(
-            //                        proto_cell_to, cell_to.get_coordinates(),
-            //                        game_session_ref
-            //                    );
-            //                    namespace_proto::Unit *unit =
-            //                    proto_cell_to->mutable_unit(); update_unit(
-            //                        unit, cell_to.get_coordinates(),
-            //                        game_session_ref
-            //                    );
-            //                    update_cell(
-            //                        proto_cell_from,
-            //                        cell_from.get_coordinates(),
-            //                        game_session_ref
-            //                    );
-            //                }
-            //            }
+            switch_turn(game_session_ref);
+            auto item = (*game_session_ref->get_game_bot())();
+            namespace_proto::GameState *game_state_ref =
+                game_session_ref->get_game_state();
+            namespace_proto::OpponentMove *move =
+                game_state_ref->mutable_opponent_move();
+            move->set_opponent_id(-2);
+            if (item.get_type() == bot::bot_response_type::SINGLE_CELL) {
+                game_model::cell cell = item.get_from_cell();
+                int index = cell.get_coordinates().get_row() * 10 +
+                            cell.get_coordinates().get_column();
+                namespace_proto::Cell *proto_cell =
+                    game_session_ref->get_game_state()->mutable_game_cells(index
+                    );
+                update_cell(
+                    proto_cell, cell.get_coordinates(), game_session_ref
+                );
+
+                if (proto_cell->is_unit()) {
+                    namespace_proto::Unit *unit = proto_cell->mutable_unit();
+                    update_unit(unit, cell.get_coordinates(), game_session_ref);
+                    int cell_to_index =
+                        item.get_to_cell().get_coordinates().get_row() * 10 +
+                        item.get_to_cell().get_coordinates().get_column();
+                    namespace_proto::Cell *cell_to =
+                        game_state_ref->mutable_game_cells(cell_to_index);
+                    set_move(
+                        move, namespace_proto::attack, cell_to, proto_cell
+                    );
+                } else {
+                    set_move(move, namespace_proto::spell, proto_cell);
+                }
+            } else if (item.get_type() == bot::bot_response_type::PAIR_OF_CELLS) {
+                game_model::cell cell_from = item.get_from_cell();
+                int index_from = cell_from.get_coordinates().get_row() * 10 +
+                                 cell_from.get_coordinates().get_column();
+                namespace_proto::Cell *proto_cell_from =
+                    game_session_ref->get_game_state()->mutable_game_cells(
+                        index_from
+                    );
+                game_model::cell cell_to = item.get_to_cell();
+                int index_to = cell_to.get_coordinates().get_row() * 10 +
+                               cell_to.get_coordinates().get_column();
+                namespace_proto::Cell *proto_cell_to =
+                    game_session_ref->get_game_state()->mutable_game_cells(
+                        index_to
+                    );
+                swapUnits(proto_cell_from, proto_cell_to);
+                update_cell(
+                    proto_cell_to, cell_to.get_coordinates(), game_session_ref
+                );
+                namespace_proto::Unit *unit = proto_cell_to->mutable_unit();
+                update_unit(unit, cell_to.get_coordinates(), game_session_ref);
+                update_cell(
+                    proto_cell_from, cell_from.get_coordinates(),
+                    game_session_ref
+                );
+                set_move(
+                    move, namespace_proto::move, proto_cell_from, proto_cell_to
+                );
+
+            } else if (item.get_type() == bot::bot_response_type::GIVE_UP) {
+                game_session_ref->get_second_player().get_context()->TryCancel(
+                );
+            }
         }
+        (*(game_session_ref->get_response_queues())
+        )[game_session_ref->get_first_player().get_id()]
+            .push(*(game_session_ref->get_game_state()));
+
         return game_session_ref->get_game_state();
     }
 
@@ -229,6 +236,38 @@ class ServerServices final : public ::namespace_proto::Server::Service {
     ) override {
         GameSession *game_session_ref =
             &(get_server_state()->game_sessions[request->game_id()]);
+        namespace_proto::GameState *game_state_ref =
+            game_session_ref->get_game_state();
+        game_state_ref->set_is_active(false);
+        if (request->user().id() ==
+            game_session_ref->get_first_player().get_id()) {
+            game_state_ref->set_winner(
+                game_session_ref->get_second_player().get_id()
+            );
+        } else {
+            game_state_ref->set_winner(
+                game_session_ref->get_first_player().get_id()
+            );
+        }
+        (*(game_session_ref->get_response_queues())
+        )[game_session_ref->get_first_player().get_id()]
+            .push(*(game_session_ref->get_game_state()));
+        (*(game_session_ref->get_response_queues())
+        )[game_session_ref->get_second_player().get_id()]
+            .push(*(game_session_ref->get_game_state()));
+        while ((*(game_session_ref->get_response_queues())
+               )[game_session_ref->get_first_player().get_id()]
+                   .size() > 0) {
+        }
+        if (!(game_session_ref->get_type())) {
+            while ((*(game_session_ref->get_response_queues())
+                   )[game_session_ref->get_second_player().get_id()]
+                       .size() > 0) {
+            }
+        }
+        auto move = std::make_unique<namespace_proto::OpponentMove>();
+        move->set_enum_(namespace_proto::none);
+        game_state_ref->set_allocated_opponent_move(move.get());
         game_session_ref->get_first_player().get_context()->TryCancel();
         game_session_ref->get_second_player().get_context()->TryCancel();
         return grpc::Status::OK;
@@ -374,7 +413,8 @@ class ServerServices final : public ::namespace_proto::Server::Service {
 
         switch_turn(game_session_ref);
 
-        *response = *handle_diff(game_session_ref, request->user().user());
+        *response = *game_state_ref;
+        handle_diff(game_session_ref, request->user().user());
 
         return ::grpc::Status::OK;
     }

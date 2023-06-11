@@ -5,15 +5,58 @@
 
 namespace game_model {
 
-std::vector<std::vector<int>> game::troops = {
-    {1, 2, 3, 4, 5, 1, 2, 3, 4, 5}
-};
+std::vector<std::vector<int>> game::troops = {{1, 2, 3, 4, 5, 1, 2, 3, 4, 5}};
+
+cell game::get_cell_copy(const coordinates &cell_coordinates) const {
+    return m_board.get_cell_copy(cell_coordinates);
+}
+
+unit game::get_unit(int player_index, int unit_index) const {
+    return m_players_list[player_index]->get_unit(unit_index);
+}
+
+int game::score_move(
+    const coordinates &current_cell_coordinates,
+    const coordinates &new_cell_coordinates
+) const {
+    cell current_cell = get_cell_copy(current_cell_coordinates);
+    int player_index = current_cell.get_player_index();
+    int unit_index = current_cell.get_unit_index();
+    unit current_unit = get_unit(player_index, unit_index);
+    int current_score = current_unit.get_value();
+    current_unit.set_position_value(new_cell_coordinates, m_board.get_size());
+    int new_score = current_unit.get_value();
+    return new_score - current_score;
+}
+
+int game::score_attack_cell(const cell &attacking, cell &attacked) const {
+    unit attacking_unit =
+        m_players_list[attacking.get_player_index()]->get_unit(
+            attacking.get_unit_index()
+        );
+    unit attacked_unit = m_players_list[attacked.get_player_index()]->get_unit(
+        attacked.get_unit_index()
+    );
+    int current_score = attacking_unit.get_value() - attacked_unit.get_value();
+    attacked_unit.decrease_health(attacking_unit.get_damage());
+    int new_score = attacking_unit.get_value() - attacked_unit.get_value();
+    return new_score - current_score;
+}
+
+int game::score_attack(
+    const coordinates &attacking,
+    const coordinates &attacked
+) const {
+    cell attacking_cell = get_cell_copy(attacking);
+    cell attacked_cell = get_cell_copy(attacked);
+    return score_attack_cell(attacking_cell, attacked_cell);
+}
 
 cell &game::get_cell(const coordinates &cell_coordinates) {
     return m_board.get_cell(cell_coordinates);
 }
 
-int game::get_troop(){
+int game::get_troop() {
     int items = static_cast<int>(troops.size());
     return 0;
 }
@@ -80,6 +123,9 @@ void game::move(
     new_cell.decrease_cell_durability(
         get_player(player_index)->get_unit(unit_index).get_weight()
     );
+    get_player(player_index)
+        ->get_unit(unit_index)
+        .set_position_value(new_cell_coordinates, m_board.get_size());
 }
 
 void game::attack(const coordinates &attacking, const coordinates &attacked) {

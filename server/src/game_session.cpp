@@ -2,6 +2,7 @@
 
 void dump_game(GameSession *game_session) {
     namespace_proto::GameState *game_state_ref = game_session->get_game_state();
+    game_state_ref->set_is_active(true);
     game_model::game *model_game = game_session->get_model_game();
     int unit_count = 0;
     for (int i = 0; i < 100; i++) {
@@ -14,6 +15,7 @@ void dump_game(GameSession *game_session) {
         game_model::coordinates cell_coordinates{row, column};
         game_model::cell cell = model_game->get_cell(cell_coordinates);
         new_cell->set_durability(cell.get_durability());
+        new_cell->set_max_durability(cell.get_durability());
         if (cell.get_unit_index() != -1) {
             game_model::unit model_unit =
                 model_game->get_player(cell.get_player_index())
@@ -57,7 +59,6 @@ void start_game_session(int game_id) {
 
     game_state_ref->set_game_id(game_id);
     (*response_queues_ref)[first_player.get_id()].push(*game_state_ref);
-    (*response_queues_ref)[second_player.get_id()].push(*game_state_ref);
 
     std::thread first_writer([response_queues_ref, &first_player]() {
         while (true) {
@@ -70,9 +71,12 @@ void start_game_session(int game_id) {
     });
 
     if (second_player.get_id() == -2) {
+        game_session->set_type(true);
         first_writer.join();
         return;
     }
+
+    (*response_queues_ref)[second_player.get_id()].push(*game_state_ref);
 
     std::thread second_writer([response_queues_ref, &second_player]() {
         while (true) {

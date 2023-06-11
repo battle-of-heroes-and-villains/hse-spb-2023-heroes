@@ -1,20 +1,39 @@
 #ifndef MODEL_CELL_HPP
 #define MODEL_CELL_HPP
 
+#include <random>
 #include "coordinates.hpp"
 
 namespace game_model {
 
 class cell {
+    const int MAX_CELL_DURABILITY = 20;
+    const int MIN_CELL_DURABILITY = 10;
+
 private:
-    int m_durability = 10;
-    int m_max_durability = 10;
+    int m_durability;
+    int m_max_durability;
     int m_player_index = -1;
     int m_unit_index = -1;
     coordinates m_coordinates{0, 0};
 
 public:
-    cell() = default;
+    cell() {
+        int temp_durability =
+            rand() % (MAX_CELL_DURABILITY - MIN_CELL_DURABILITY) +
+            MIN_CELL_DURABILITY;
+        m_durability = temp_durability;
+        m_max_durability = temp_durability;
+    };
+
+    cell& operator=(cell other){
+        m_durability = other.m_durability;
+        m_max_durability = other.m_max_durability;
+        m_player_index = other.m_player_index;
+        m_coordinates = other.m_coordinates;
+        m_unit_index = other.m_unit_index;
+        return *this;
+    }
 
     [[nodiscard]] int get_player_index() const;
     [[nodiscard]] int get_unit_index() const;
