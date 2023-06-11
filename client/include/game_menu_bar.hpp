@@ -15,12 +15,16 @@ public:
     void render(sf::RenderWindow *window);
 
 private:
+    std::string compress_name(const std::string &name);
+
     sf::RectangleShape m_turn_label;
     sf::Text m_data;
     sf::Text m_mana;
     sf::Text m_opponent_mana;
     sf::Text m_username;
     sf::Text m_opponent_username;
+    sf::RectangleShape m_user_icon;
+    sf::RectangleShape m_opponent_icon;
     std::vector<MenuButton> m_buttons;
     int m_spells_amount;
     std::vector<Spell> m_spells;

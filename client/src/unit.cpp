@@ -1,23 +1,32 @@
 #include "unit.hpp"
 
 namespace game_interface {
-Coords Unit::get_coords() const {
+void UnitInfo::update_characteristics(const namespace_proto::Unit &unit) {
+    m_amount_of_units = unit.amount_unit();
+    m_max_health = unit.sum_of_health();
+    m_damage = unit.damage();
+    m_attack_range = unit.attack_range();
+    m_movement_range = unit.movement_range();
+    m_weight = unit.weight();
+}
+
+[[nodiscard]] Coords Unit::get_coords() const {
     return m_coords;
 }
 
-int Unit::get_hero_id() const {
-    return m_hero_id;
+[[nodiscard]] int Unit::get_hero_id() const {
+    return m_unit_info.m_hero_id;
 }
 
-int Unit::get_health() const {
-    return m_max_health * m_amount_of_units;
+[[nodiscard]] int Unit::get_health() const {
+    return m_unit_info.m_max_health * m_unit_info.m_amount_of_units;
 }
 
-int Unit::get_damage() const {
-    return m_damage;
+[[nodiscard]] int Unit::get_damage() const {
+    return m_unit_info.m_damage;
 }
 
-bool Unit::is_moving() {
+[[nodiscard]] bool Unit::is_moving() const {
     return m_animation.is_moving();
 }
 
@@ -59,15 +68,6 @@ void Unit::disable_selection() {
     m_unit.setScale(old_scale);
 }
 
-void Unit::update_characteristics(const namespace_proto::Unit &unit) {
-    m_number_of_units = unit.amount_unit();
-    m_max_health = unit.sum_of_health();
-    m_damage = unit.damage();
-    m_attack_range = unit.attack_range();
-    m_movement_range = unit.movement_range();
-    m_weight = unit.weight();
-}
-
 void Unit::update_unit(
     namespace_proto::Cell cell,
     const namespace_proto::Unit &unit,
@@ -93,11 +93,10 @@ void Unit::update_unit(
         }
     }
     m_coords = {cell.row(), cell.column()};
-    m_amount_of_units = unit.amount_unit();
-    m_unit_id = unit.id_unit();
-    m_hero_id = unit.id_hero();
-    is_selected = false;
-    update_characteristics(unit);
+    m_unit_info.m_amount_of_units = unit.amount_unit();
+    m_unit_info.m_unit_id = unit.id_unit();
+    m_unit_info.m_hero_id = unit.id_hero();
+    m_unit_info.update_characteristics(unit);
 
     m_unit.setPosition(new_position);
     m_unit.move(
@@ -115,7 +114,8 @@ void Unit::update_unit(
     m_table.setOrigin(m_table.getSize().x / 2.0f, m_table.getSize().y / 2.0f);
 
     m_label.setFont(ResourceManager::load_font(interface::Fonts::CaptionFont));
-    m_label.setString(sf::String(std::to_string(m_amount_of_units)));
+    m_label.setString(sf::String(std::to_string(m_unit_info.m_amount_of_units))
+    );
     m_label.setCharacterSize(24);
 
     sf::FloatRect rect = m_label.getLocalBounds();
@@ -130,12 +130,12 @@ void Unit::update_unit(
 
     m_statistic = interface::PopUpWindow(
         new_position, {230, 150}, interface::Fonts::CaptionFont, 20,
-        get_unit_info()
+        m_unit_info.get_unit_info()
     );
 }
 
-std::string Unit::get_unit_info() const {
-    return "number of units: " + std::to_string(m_number_of_units) +
+std::string UnitInfo::get_unit_info() const {
+    return "number of units: " + std::to_string(m_amount_of_units) +
            "\n"
            "max health: " +
            std::to_string(m_max_health) +
@@ -154,7 +154,7 @@ std::string Unit::get_unit_info() const {
 }
 
 void Unit::update_statistic(EventType event_type, const sf::Window *window) {
-    m_statistic.update(get_unit_info(), event_type, window);
+    m_statistic.update(m_unit_info.get_unit_info(), event_type, window);
 }
 
 void Unit::play_animation(AnimationType type, Coords destination_cell) {
@@ -166,7 +166,7 @@ void Unit::update_table_position(sf::Vector2f new_position) {
     m_table.setPosition(sf::Vector2f(
         new_position.x, new_position.y - m_table.getGlobalBounds().height
     ));
-    if (m_hero_id != get_client_state()->m_user.user().id()) {
+    if (m_unit_info.m_hero_id != get_client_state()->m_user.user().id()) {
         m_table.move(
             -m_table.getSize().x / 2.0f - m_unit.getGlobalBounds().width / 2.0f,
             0

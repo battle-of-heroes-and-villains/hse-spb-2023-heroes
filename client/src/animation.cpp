@@ -93,7 +93,7 @@ void Animation::play_animation(
 ) {
     m_is_playing = true;
     m_delta_distance = {0.0f, 0.0f};
-    m_delta_time = 1.0f;
+    m_delta_time = 0.7f;
     m_animation_type = type;
     if (type == AnimationType::Attack) {
         m_animation_sheet =
@@ -101,14 +101,14 @@ void Animation::play_animation(
         m_amount_of_frames =
             ResourceManager::amount_of_frames_in_attack_animation(m_unit_type);
         m_repeats = m_amount_of_frames * 2;
-        m_delta_time = 1.0f / m_repeats;
+        m_delta_time /= m_repeats;
     } else if (type == AnimationType::GetAttacked) {
         m_animation_sheet =
             ResourceManager::load_hurt_animation_sprite_sheet(m_unit_type);
         m_amount_of_frames =
             ResourceManager::amount_of_frames_in_hurt_animation(m_unit_type);
         m_repeats = m_amount_of_frames * 2;
-        m_delta_time = 1.0f / m_repeats;
+        m_delta_time /= m_repeats;
         m_delta_distance = {0.0f, 0.0f};
     } else if (type == AnimationType::Move) {
         m_animation_sheet =
@@ -124,7 +124,7 @@ void Animation::play_animation(
             abs(destination_cell.get_row() - source_cell.get_row()) +
             abs(destination_cell.get_column() - source_cell.get_column());
         m_repeats = m_amount_of_frames * 2 * cells_distance;
-        m_delta_time = 1.0f / (m_amount_of_frames * 2);
+        m_delta_time /= (m_amount_of_frames * 2);
         m_delta_distance = {shift.x / m_repeats, shift.y / m_repeats};
     } else if (type == AnimationType::Dead) {
         m_animation_sheet =
@@ -132,7 +132,7 @@ void Animation::play_animation(
         m_amount_of_frames =
             ResourceManager::amount_of_frames_in_dead_animation(m_unit_type);
         m_repeats = m_amount_of_frames;
-        m_delta_time = 1.0f / m_repeats;
+        m_delta_time /= m_repeats;
     }
     m_is_reversed = destination_cell.get_column() < source_cell.get_column() ||
                     destination_cell.get_column() == source_cell.get_column() &&
@@ -144,7 +144,7 @@ bool Animation::is_playing() const {
     return m_is_playing;
 }
 
-bool Animation::is_moving() {
+bool Animation::is_moving() const {
     return m_animation_type == AnimationType::Move && m_is_playing;
 }
 }  // namespace game_interface

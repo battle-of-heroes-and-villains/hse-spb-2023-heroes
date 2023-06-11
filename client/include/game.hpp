@@ -10,6 +10,8 @@ public:
     Game();
     ~Game() = default;
 
+    void music_stop();
+
     void update();
     void render();
     [[nodiscard]] Window *get_window();
@@ -21,11 +23,10 @@ private:
     sf::Sprite m_background;
     GameMenuBar m_game_menu_bar;
     Board m_board;
+    sf::Sound m_soundtrack;
 };
 
 [[nodiscard]] Game *get_game_state();
-
-[[nodiscard]] sf::Cursor &get_cursor();
 }  // namespace game_interface
 
 #endif  // BATTLE_OF_HEROES_GAME_HPP

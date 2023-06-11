@@ -51,7 +51,7 @@ const std::vector<game_model::spell> SPELL_LIST = {
     game_model::spell(
         3,
         game_model::spell::type::UNIT,
-        "heal unit",
+        "heal\n unit",
         "restore unit's\n health \nto maximum",
         5,
         [](game_model::cell &cell) { return; },

@@ -14,19 +14,13 @@ Caption::Caption(
     m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
     m_table.setPosition(position);
 
-    m_current_page = current_page;
-
     m_data.setFont(game_interface::ResourceManager::load_font(font));
-    m_data.setString(sf::String(text));
     m_data.setFillColor(sf::Color::White);
     m_data.setCharacterSize(character_size);
 
-    sf::FloatRect data_bounds = m_data.getLocalBounds();
-    m_data.setOrigin(
-        data_bounds.left + data_bounds.width / 2.0f,
-        data_bounds.top + data_bounds.height / 2.0f
-    );
-    m_data.setPosition(position);
+    update_text(text);
+
+    m_current_page = current_page;
 }
 
 [[nodiscard]] PageType Caption::get_current_page() const {

@@ -25,14 +25,19 @@ public:
         sf::Color font_color
     );
 
-    PageType get_current_page() const;
-    PageType get_next_page() const;
-    void update_tittle(std::string new_tittle);
+    [[nodiscard]] PageType get_current_page() const;
+    [[nodiscard]] PageType get_next_page() const;
+
+    void update_tittle(const std::string &new_tittle);
     bool update(sf::Event event, game_interface::Window *window);
     void render(sf::RenderWindow *window);
 
 private:
+    void set_label_size(unsigned int character_size);
+
+    unsigned int m_character_size;
     sf::RectangleShape m_table;
+    sf::Color m_button_color;
     sf::Text m_data;
     interface::Button m_button;
     PageType m_current_page;
@@ -43,11 +48,16 @@ class Menu {
 public:
     Menu();
 
+    void music_stop();
+    void music_play();
+
     game_interface::Window *get_window();
     void change_page(PageType new_page);
     void print_error();
     void render();
     void update();
+
+    [[nodiscard]] bool is_exit() const;
 
 private:
     game_interface::Window m_window;
@@ -64,6 +74,9 @@ private:
     TextBox m_registration_password_checker;
     MenuButton m_show_registration_password;
     Caption m_registration_error;
+    sf::Sound m_soundtrack;
+    MenuButton m_sound_button;
+    sf::RectangleShape m_sound_icon;
 };
 
 [[nodiscard]] Menu *get_menu_state();
