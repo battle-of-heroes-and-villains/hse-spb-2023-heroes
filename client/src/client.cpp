@@ -48,8 +48,8 @@ void Client::run_receiver() {
     while (get_client_state()->reader->Read(&response)) {
         {
             std::unique_lock lock{get_client_state()->m_mutex};
-//            while (!get_client_state()->active_animation) {
-//            }
+            while (!get_client_state()->active_animation) {
+            }
             get_client_state()->active_animation = false;
             get_client_state()->m_game_state = response;
             if (!(get_client_state()->m_game_state.is_active())) {

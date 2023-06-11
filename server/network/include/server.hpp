@@ -160,10 +160,11 @@ class ServerServices final : public ::namespace_proto::Server::Service {
                 game_session_ref->get_second_player().get_context()->TryCancel(
                 );
             }
+
+            (*(game_session_ref->get_response_queues())
+            )[game_session_ref->get_first_player().get_id()]
+                .push(*(game_session_ref->get_game_state()));
         }
-        (*(game_session_ref->get_response_queues())
-        )[game_session_ref->get_first_player().get_id()]
-            .push(*(game_session_ref->get_game_state()));
 
         return game_session_ref->get_game_state();
     }
@@ -371,14 +372,17 @@ class ServerServices final : public ::namespace_proto::Server::Service {
             &(get_server_state()->game_sessions[request->user().game_id()]);
         namespace_proto::GameState *game_state_ref =
             game_session_ref->get_game_state();
+
         game_model::coordinates from(request->start());
         namespace_proto::Cell *cell_from = game_state_ref->mutable_game_cells(
             request->start().row() * 10 + request->start().column()
         );
+
         game_model::coordinates to(request->finish());
         namespace_proto::Cell *cell_to = game_state_ref->mutable_game_cells(
             request->finish().row() * 10 + request->finish().column()
         );
+
         namespace_proto::OpponentMove *move =
             game_state_ref->mutable_opponent_move();
         move->set_opponent_id(request->user().user().id());
