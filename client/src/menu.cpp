@@ -103,7 +103,7 @@ Menu::Menu()
       )) {
     m_current_page = PageType::Entry;
 
-    m_buttons.resize(11);
+    m_buttons.resize(12);
     m_captions.resize(7);
 
     sf::Vector2f window_size =
@@ -140,7 +140,7 @@ Menu::Menu()
             window_size.x / 2, window_size.y / 2 + 1.5 * button_size.y
         ),
         button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
-        PageType::Entry, PageType::GameOver
+        PageType::Entry, PageType::Exit
     );
 
     // sign up page
@@ -282,7 +282,7 @@ Menu::Menu()
     // game over page
     m_captions[5] = Caption(
         sf::Vector2f(window_size.x / 2, window_size.y / 2 - 4 * button_size.y),
-        {0, 0}, interface::Fonts::TittleFont, 60, "GAME OVER",
+        {0, 0}, interface::Fonts::TittleFont, 60, "Game over",
         PageType::GameOver
     );
     if (Client::are_we_win()) {
@@ -302,6 +302,20 @@ Menu::Menu()
             "you lose\nyour enemy win", PageType::GameOver
         );
     }
+    m_buttons[10] = MenuButton(
+        sf::Vector2f(
+            window_size.x / 2, window_size.y / 2
+        ),
+        button_size, button_color, interface::Fonts::CaptionFont, 24, "menu",
+        PageType::GameOver, PageType::GameChoose
+    );
+    m_buttons[11] = MenuButton(
+        sf::Vector2f(
+            window_size.x / 2, window_size.y / 2 + 2 * button_size.y
+        ),
+        button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
+        PageType::GameOver, PageType::Exit
+    );
 
     // set sound
     m_sound_button = MenuButton(
@@ -449,7 +463,9 @@ void Menu::update() {
                 m_button.get_current_page() == PageType::Any) {
                 if (m_button.update(event, &m_window)) {
                     if (m_button.get_next_page() == PageType::Exit) {
+                        m_current_page = PageType::Exit;
                         m_window.set_is_done();
+                        return;
                     }
                     if (m_current_page == PageType::SignUp &&
                         m_button.get_next_page() == PageType::GameChoose) {

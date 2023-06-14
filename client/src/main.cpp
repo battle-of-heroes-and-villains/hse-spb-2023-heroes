@@ -20,9 +20,9 @@ int main() {
     while (true) {  // TODO: while (not interrupted)
         window_context.display();
         std::cout << "switch\n";
-//        if (window_context.is_exit()) {
-//            break;
-//        }
+        if (window_context.is_exit()) {
+            break;
+        }
         window_context.switch_state();
     }
     return 0;
