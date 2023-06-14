@@ -90,6 +90,10 @@ void MenuButton::set_label_size(unsigned int character_size) {
     );
 }
 
+void Menu::reopen() {
+    m_window.reopen();
+}
+
 Menu::Menu()
     : m_window("Menu: Battle of Heroes and Villains", sf::Vector2u(1920, 1080)),
       m_soundtrack(game_interface::ResourceManager::load_sound(

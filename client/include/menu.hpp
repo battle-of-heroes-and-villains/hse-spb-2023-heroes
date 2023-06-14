@@ -58,6 +58,7 @@ public:
     void update();
 
     [[nodiscard]] bool is_exit() const;
+    void reopen();
 
 private:
     game_interface::Window m_window;

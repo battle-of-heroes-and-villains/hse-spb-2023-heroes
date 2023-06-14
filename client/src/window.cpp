@@ -68,4 +68,8 @@ void Window::update(sf::Event event) {
 void Window::render(sf::Drawable &l_drawable) {
     m_window.draw(l_drawable);
 }
+
+void Window::reopen() {
+    create();
+}
 }  // namespace game_interface

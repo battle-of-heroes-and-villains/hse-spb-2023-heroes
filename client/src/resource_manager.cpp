@@ -73,20 +73,20 @@ void ResourceManager::load_resources() {
         interface::source_dir + "icons/wolf.png"
     );
 
-    ResourceManager::m_spell_icons[SpellId::Id1].loadFromFile(
-        interface::source_dir + "spell_icons/spell_id1.png"
+    ResourceManager::m_spell_icons[SpellId::BreakCell].loadFromFile(
+        interface::source_dir + "spell_icons/break_cell.png"
     );
 
-    ResourceManager::m_spell_icons[SpellId::Id2].loadFromFile(
-        interface::source_dir + "spell_icons/spell_id2.png"
+    ResourceManager::m_spell_icons[SpellId::HealCell].loadFromFile(
+        interface::source_dir + "spell_icons/heal_cell.png"
     );
 
-    ResourceManager::m_spell_icons[SpellId::Id3].loadFromFile(
-        interface::source_dir + "spell_icons/spell_id3.png"
+    ResourceManager::m_spell_icons[SpellId::AttackUnit].loadFromFile(
+        interface::source_dir + "spell_icons/attack_unit.png"
     );
 
-    ResourceManager::m_spell_icons[SpellId::Id4].loadFromFile(
-        interface::source_dir + "spell_icons/spell_id4.png"
+    ResourceManager::m_spell_icons[SpellId::HealUnit].loadFromFile(
+        interface::source_dir + "spell_icons/heal_unit.png"
     );
 
     ResourceManager::m_spell_icons[SpellId::Id5].loadFromFile(
