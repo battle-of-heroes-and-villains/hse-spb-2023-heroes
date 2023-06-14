@@ -91,7 +91,9 @@ void MenuButton::set_label_size(unsigned int character_size) {
 }
 
 void Menu::reopen() {
-    m_window.reopen();
+    m_window.reopen(
+        "Menu: Battle of Heroes and Villains", sf::Vector2u(1920, 1080)
+    );
 }
 
 Menu::Menu()
@@ -283,11 +285,23 @@ Menu::Menu()
         {0, 0}, interface::Fonts::TittleFont, 60, "GAME OVER",
         PageType::GameOver
     );
-    m_captions[6] = Caption(
-        sf::Vector2f(window_size.x / 2, window_size.y / 2 - 2 * button_size.y),
-        {0, 0}, interface::Fonts::CaptionFont, 24, "you win\nyour enemy lose",
-        PageType::GameOver
-    );
+    if (Client::are_we_win()) {
+        m_captions[6] = Caption(
+            sf::Vector2f(
+                window_size.x / 2, window_size.y / 2 - 2 * button_size.y
+            ),
+            {0, 0}, interface::Fonts::CaptionFont, 24,
+            "you win\nyour enemy lose", PageType::GameOver
+        );
+    } else {
+        m_captions[6] = Caption(
+            sf::Vector2f(
+                window_size.x / 2, window_size.y / 2 - 2 * button_size.y
+            ),
+            {0, 0}, interface::Fonts::CaptionFont, 24,
+            "you lose\nyour enemy win", PageType::GameOver
+        );
+    }
 
     // set sound
     m_sound_button = MenuButton(
@@ -304,6 +318,10 @@ Menu::Menu()
 
 game_interface::Window *Menu::get_window() {
     return &m_window;
+}
+
+menu_interface::PageType menu_interface::Menu::get_page() const {
+    return this->m_current_page;
 }
 
 void Menu::change_page(PageType next_page) {

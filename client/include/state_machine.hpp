@@ -18,11 +18,18 @@ class MenuState : public State {
 
 public:
     void display_state() override {
+        if (menu_interface::get_menu_state()->get_page() ==
+            menu_interface::PageType::GameOver) {
+            menu_interface::get_menu_state()->reopen();
+        }
         while (!menu_interface::get_menu_state()->get_window()->is_done()) {
             menu_interface::get_menu_state()->update();
             menu_interface::get_menu_state()->render();
         }
         menu_interface::get_menu_state()->music_stop();
+        menu_interface::get_menu_state()->change_page(
+            menu_interface::PageType::GameOver
+        );
     }
 
     void set_game_state(GameState *game_);

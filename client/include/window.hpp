@@ -21,7 +21,7 @@ public:
     void update(sf::Event event);
     void render(sf::Drawable &l_drawable);
 
-    void reopen();
+    void reopen(std::string title, const sf::Vector2u &size);
 
 private:
     void create();

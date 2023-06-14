@@ -52,6 +52,8 @@ public:
     static void get_hero();
     static void get_opponent();
 
+    static bool are_we_win();
+
     static std::vector<std::pair<int, int>> select_spell(int spell_id);
     static void do_spell(int spell_id, namespace_proto::Cell cell);
 };

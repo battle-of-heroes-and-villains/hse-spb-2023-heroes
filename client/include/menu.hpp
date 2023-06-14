@@ -52,6 +52,7 @@ public:
     void music_play();
 
     game_interface::Window *get_window();
+    menu_interface::PageType get_page() const;
     void change_page(PageType new_page);
     void print_error();
     void render();
