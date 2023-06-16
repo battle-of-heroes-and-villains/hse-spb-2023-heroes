@@ -58,6 +58,7 @@ void Spell::update(sf::Event event, Window *window) {
         m_button.handling_event(event, window->get_render_window());
     m_table.setOutlineThickness(0);
     m_table.setFillColor(m_button_color);
+    m_icon.setScale(1, 1);
     if (event_type == EventType::FirstPress ||
         event_type == EventType::SecondPress) {
         if (m_is_name_showed) {
@@ -76,6 +77,7 @@ void Spell::update(sf::Event event, Window *window) {
     } else if (event_type == EventType::Targeting) {
         m_table.setFillColor(m_table.getOutlineColor());
         m_table.setOutlineThickness(5);
+        m_icon.setScale(1.1f, 1.1f);
     }
 }
 
