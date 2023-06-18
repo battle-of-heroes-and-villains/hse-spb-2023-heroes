@@ -17,6 +17,7 @@ public:
         sf::Vector2f position,
         sf::Vector2f size,
         sf::Color color,
+        sf::Color pressed_color,
         interface::Fonts font,
         unsigned character_size,
         const std::string &tittle,

@@ -26,7 +26,7 @@ public:
     void show_data();
     void clear();
     bool update(sf::Event event, game_interface::Window *window);
-    void render(sf::RenderWindow *window) const;
+    void render(sf::RenderWindow *window);
 
 private:
     sf::RectangleShape m_table;
@@ -38,6 +38,10 @@ private:
     interface::Button m_button;
 
     sf::Sound m_type_sound;
+
+    bool m_is_cursor_showed;
+    sf::Clock m_timer;
+    sf::RectangleShape m_cursor;
 };
 }  // namespace menu_interface
 
