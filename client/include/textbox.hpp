@@ -36,6 +36,8 @@ private:
     bool m_is_showed{true};
     sf::Text m_label;
     interface::Button m_button;
+
+    sf::Sound m_type_sound;
 };
 }  // namespace menu_interface
 

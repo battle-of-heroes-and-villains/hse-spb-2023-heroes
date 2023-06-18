@@ -31,6 +31,7 @@ private:
     interface::Button m_button;
     int m_id;
     bool m_is_name_showed;
+    sf::Sound m_click_sound;
 };
 }  // namespace game_interface
 

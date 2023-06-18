@@ -42,6 +42,7 @@ private:
     interface::Button m_button;
     PageType m_current_page;
     PageType m_next_page;
+    sf::Sound m_click_sound;
 };
 
 class Menu {

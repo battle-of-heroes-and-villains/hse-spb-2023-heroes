@@ -34,6 +34,7 @@ private:
     sf::Color m_button_color;
     interface::Button m_button;
     ButtonType m_button_type{ButtonType::None};
+    sf::Sound m_click_sound;
 };
 }  // namespace game_interface
 

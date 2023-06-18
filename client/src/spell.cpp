@@ -8,7 +8,8 @@ Spell::Spell(
     sf::Color color,
     sf::Color pressed_color,
     const namespace_proto::Spell &spell
-) {
+)
+    : m_click_sound(ResourceManager::load_sound(interface::Sounds::Click)) {
     m_id = spell.id();
 
     m_button = interface::Button(position, size);
@@ -61,6 +62,7 @@ void Spell::update(sf::Event event, Window *window) {
     m_icon.setScale(1, 1);
     if (event_type == EventType::FirstPress ||
         event_type == EventType::SecondPress) {
+        m_click_sound.play();
         if (m_is_name_showed) {
             get_game_state()->get_game_menu_bar()->apply_spell();
             m_is_name_showed = false;

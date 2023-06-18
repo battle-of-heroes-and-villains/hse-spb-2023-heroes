@@ -1,4 +1,5 @@
 #include "textbox.hpp"
+#include "resource_manager.hpp"
 
 namespace menu_interface {
 TextBox::TextBox(
@@ -7,7 +8,10 @@ TextBox::TextBox(
     interface::Fonts font,
     unsigned int character_size,
     bool is_active
-) {
+)
+    : m_type_sound(
+          game_interface::ResourceManager::load_sound(interface::Sounds::Type)
+      ) {
     m_table.setSize(size);
     m_table.setFillColor(sf::Color::White);
     m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
@@ -30,6 +34,9 @@ TextBox::TextBox(
         position.y - size.y / 2 + character_size / 2
     );
     m_is_active = is_active;
+
+    m_type_sound.setPitch(1.8);
+    m_type_sound.setVolume(60);
 }
 
 bool TextBox::is_active() const {
@@ -83,6 +90,9 @@ bool TextBox::update(sf::Event event, game_interface::Window *window) {
         m_label.setString(m_data);
     } else {
         m_label.setString(m_hidden_data);
+    }
+    if (event.type == sf::Event::TextEntered) {
+        m_type_sound.play();
     }
     return result;
 }

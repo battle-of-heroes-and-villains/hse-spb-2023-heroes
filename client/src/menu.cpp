@@ -14,7 +14,10 @@ MenuButton::MenuButton(
     PageType current_page,
     PageType next_page,
     sf::Color font_color = sf::Color::White
-) {
+)
+    : m_click_sound(
+          game_interface::ResourceManager::load_sound(interface::Sounds::Click)
+      ) {
     m_table.setSize(size);
     m_table.setFillColor(color);
     m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
@@ -65,6 +68,7 @@ bool MenuButton::update(sf::Event event, game_interface::Window *window) {
     m_table.setFillColor(m_button_color);
     set_label_size(m_character_size);
     if (result == game_interface::EventType::FirstPress) {
+        m_click_sound.play();
         return true;
     } else if (result == game_interface::EventType::Targeting) {
         interface::get_cursor().loadFromSystem(sf::Cursor::Hand);
@@ -303,16 +307,12 @@ Menu::Menu()
         );
     }
     m_buttons[10] = MenuButton(
-        sf::Vector2f(
-            window_size.x / 2, window_size.y / 2
-        ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "menu",
+        sf::Vector2f(window_size.x / 2, window_size.y / 2), button_size,
+        button_color, interface::Fonts::CaptionFont, 24, "menu",
         PageType::GameOver, PageType::GameChoose
     );
     m_buttons[11] = MenuButton(
-        sf::Vector2f(
-            window_size.x / 2, window_size.y / 2 + 2 * button_size.y
-        ),
+        sf::Vector2f(window_size.x / 2, window_size.y / 2 + 2 * button_size.y),
         button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
         PageType::GameOver, PageType::Exit
     );
@@ -328,6 +328,7 @@ Menu::Menu()
     m_sound_icon.setPosition({window_size.x - 50, window_size.y - 50});
     m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0)
     );
+    m_soundtrack.setLoop(true);
 }
 
 game_interface::Window *Menu::get_window() {
