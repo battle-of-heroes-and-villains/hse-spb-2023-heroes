@@ -46,6 +46,7 @@ class GameState : public State {
 
 public:
     void display_state() override {
+        //get_client_state()->m_user.mutable_user()->set_id(-1);
         Client::get_hero();
         get_client_state()->m_opponent.set_type(-1);
         get_client_state()->active_game = true;
@@ -61,7 +62,7 @@ public:
             }
         }
         game_interface::get_game_state()->music_stop();
-        receiver.detach();
+        receiver.join();
     }
 
     void set_menu_state(MenuState *menu_) {

@@ -269,8 +269,18 @@ class ServerServices final : public ::namespace_proto::Server::Service {
         auto move = std::make_unique<namespace_proto::OpponentMove>();
         move->set_enum_(namespace_proto::none);
         game_state_ref->set_allocated_opponent_move(move.get());
+
+        // get_server_state()->game_sessions.erase(get_server_state()->game_sessions.find(request->game_id()));
         game_session_ref->get_first_player().get_context()->TryCancel();
-        game_session_ref->get_second_player().get_context()->TryCancel();
+        game_session_ref->get_response_queues()->erase(
+            game_session_ref->get_first_player().get_id()
+        );
+        if (!(game_session_ref->get_type())) {
+            game_session_ref->get_second_player().get_context()->TryCancel();
+            game_session_ref->get_response_queues()->erase(
+                game_session_ref->get_second_player().get_id()
+            );
+        }
         return grpc::Status::OK;
     }
 

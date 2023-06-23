@@ -3,14 +3,13 @@
 #include "state_machine.hpp"
 
 int main() {
-    const std::shared_ptr<::grpc::ChannelInterface> &channel =
-        grpc::CreateChannel(
-            "localhost:50051", grpc::InsecureChannelCredentials()
-        );
+    get_client_state()->channel = grpc::CreateChannel(
+        "localhost:50051", grpc::InsecureChannelCredentials()
+    );
     get_client_state()->m_stub =
-        std::make_unique<namespace_proto::Server::Stub>(channel);
-    get_client_state()->m_user.mutable_user()->set_id(-1);
-
+        std::make_unique<namespace_proto::Server::Stub>(
+            get_client_state()->channel
+        );
     auto *game_state = new GameState;
     auto *menu_state = new MenuState;
     menu_state->set_game_state(game_state);

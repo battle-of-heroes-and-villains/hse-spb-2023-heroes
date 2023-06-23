@@ -181,8 +181,10 @@ int Client::get_mana() {
 }
 
 bool Client::are_we_win() {
-    return get_client_state()->m_game_state.winner() ==
-           get_client_state()->m_user.user().id();
+    return (
+        get_client_state()->m_game_state.winner() ==
+        get_client_state()->m_user.user().id()
+    );
 }
 
 int Client::get_opponent_mana() {
