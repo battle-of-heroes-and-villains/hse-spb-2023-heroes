@@ -69,16 +69,20 @@ void Cell::update_cell_durability() {
         get_client_state()
             ->m_game_state.game_cells(m_coords.get_row() * 10 + column)
             .durability();
+    m_max_durability =
+        get_client_state()
+            ->m_game_state.game_cells(m_coords.get_row() * 10 + column)
+            .max_durability();
 
     if (m_durability == 0) {
         m_cracks_stage = CracksStage::Stage5;
-    } else if (m_durability < 3) {
+    } else if (m_durability < 0.3 * m_max_durability) {
         m_cracks_stage = CracksStage::Stage4;
-    } else if (m_durability < 5) {
+    } else if (m_durability < 0.5 * m_max_durability) {
         m_cracks_stage = CracksStage::Stage3;
-    } else if (m_durability < 7) {
+    } else if (m_durability < 0.7 * m_max_durability) {
         m_cracks_stage = CracksStage::Stage2;
-    } else if (m_durability < 10) {
+    } else if (m_durability < m_max_durability) {
         m_cracks_stage = CracksStage::Stage1;
     } else {
         m_cracks_stage = CracksStage::Stage0;

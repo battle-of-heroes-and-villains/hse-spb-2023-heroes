@@ -8,7 +8,8 @@ Spell::Spell(
     sf::Color color,
     sf::Color pressed_color,
     const namespace_proto::Spell &spell
-) {
+)
+    : m_click_sound(ResourceManager::load_sound(interface::Sounds::Click)) {
     m_id = spell.id();
 
     m_button = interface::Button(position, size);
@@ -58,8 +59,10 @@ void Spell::update(sf::Event event, Window *window) {
         m_button.handling_event(event, window->get_render_window());
     m_table.setOutlineThickness(0);
     m_table.setFillColor(m_button_color);
+    m_icon.setScale(1, 1);
     if (event_type == EventType::FirstPress ||
         event_type == EventType::SecondPress) {
+        m_click_sound.play();
         if (m_is_name_showed) {
             get_game_state()->get_game_menu_bar()->apply_spell();
             m_is_name_showed = false;
@@ -76,6 +79,7 @@ void Spell::update(sf::Event event, Window *window) {
     } else if (event_type == EventType::Targeting) {
         m_table.setFillColor(m_table.getOutlineColor());
         m_table.setOutlineThickness(5);
+        m_icon.setScale(1.1f, 1.1f);
     }
 }
 

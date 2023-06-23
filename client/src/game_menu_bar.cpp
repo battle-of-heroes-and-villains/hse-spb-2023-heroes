@@ -1,5 +1,6 @@
 #include "game_menu_bar.hpp"
 #include <iostream>
+#include "game.hpp"
 #include "resource_manager.hpp"
 
 namespace game_interface {
@@ -42,9 +43,14 @@ GameMenuBar::GameMenuBar(sf::Vector2f wind_size, float menu_height) {
         interface::Fonts::CaptionFont, 22, labels[1], button_types[1]
     );
     m_buttons[2] = MenuButton(
-        {wind_size.x - wind_size.x * 0.07f - button_size.x / 2, button_pos.y},
-        button_size, sf::Color(100, 112, 72), sf::Color(89, 100, 64),
-        interface::Fonts::CaptionFont, 22, labels[2], button_types[2]
+        sf::Vector2f(wind_size.x - 50, wind_size.y - 50), sf::Vector2f(60, 60),
+        sf::Color(100, 112, 72), sf::Color(89, 100, 64),
+        interface::Fonts::CaptionFont, 20, "", ButtonType::Menu
+    );
+    m_sound_icon.setSize({60.0f, 60.0f});
+    m_sound_icon.setOrigin(30.0f, 30.0f);
+    m_sound_icon.setPosition({wind_size.x - 50, wind_size.y - 50});
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0)
     );
 
     // set user's icon
@@ -141,7 +147,11 @@ void GameMenuBar::update(sf::Event event, Window *window) {
         Client::end_session();
     }
     if (m_buttons[2].update(event, window) == ButtonType::Menu) {
-        // menu
+        if (get_game_state()->get_music_status() == sf::SoundSource::Playing) {
+            music_stop();
+        } else {
+            music_play();
+        }
     }
 
     update_mana();
@@ -237,6 +247,7 @@ void GameMenuBar::render(sf::RenderWindow *window) {
     for (auto &button : m_buttons) {
         button.render(window);
     }
+    window->draw(m_sound_icon);
     for (auto &spell : m_spells) {
         spell.render(window);
     }
@@ -263,5 +274,17 @@ std::string GameMenuBar::compress_name(const std::string &name) {
     }
     compressed_name[pos] = '\0';
     return {compressed_name};
+}
+
+void GameMenuBar::music_stop() {
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0)
+    );
+    get_game_state()->music_stop();
+}
+
+void GameMenuBar::music_play() {
+    m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(1)
+    );
+    get_game_state()->music_play();
 }
 }  // namespace game_interface

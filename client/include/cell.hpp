@@ -43,6 +43,7 @@ private:
     CellPropertyType m_cell_property_type;
     CracksStage m_cracks_stage;
     int m_durability;
+    int m_max_durability;
     int m_spell_id;
 
     sf::Sprite m_cell;

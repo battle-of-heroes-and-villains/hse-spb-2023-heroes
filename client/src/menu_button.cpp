@@ -10,7 +10,8 @@ MenuButton::MenuButton(
     unsigned int character_size,
     const std::string &label,
     ButtonType button_type
-) {
+)
+    : m_click_sound(ResourceManager::load_sound(interface::Sounds::Click)) {
     m_rect.setSize(size);
     m_rect.setFillColor(color);
     m_rect.setOrigin(size.x / 2.0f, size.y / 2.0f);
@@ -37,6 +38,7 @@ ButtonType MenuButton::update(sf::Event event, Window *window) {
     m_rect.setFillColor(m_button_color);
     if (result == EventType::FirstPress) {
         EventManager::update_game_menu(m_button_type, window);
+        m_click_sound.play();
         return m_button_type;
     } else if (result == EventType::Targeting) {
         m_rect.setFillColor(m_rect.getOutlineColor());

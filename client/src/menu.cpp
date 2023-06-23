@@ -8,13 +8,17 @@ MenuButton::MenuButton(
     sf::Vector2f position,
     sf::Vector2f size,
     sf::Color color,
+    sf::Color pressed_color,
     interface::Fonts font,
     unsigned int character_size,
     const std::string &tittle,
     PageType current_page,
     PageType next_page,
     sf::Color font_color = sf::Color::White
-) {
+)
+    : m_click_sound(
+          game_interface::ResourceManager::load_sound(interface::Sounds::Click)
+      ) {
     m_table.setSize(size);
     m_table.setFillColor(color);
     m_table.setOrigin(size.x / 2.0f, size.y / 2.0f);
@@ -29,7 +33,7 @@ MenuButton::MenuButton(
 
     m_data.setFont(game_interface::ResourceManager::load_font(font));
     m_data.setFillColor(font_color);
-    m_table.setOutlineColor(sf::Color(78, 87, 56));
+    m_table.setOutlineColor(pressed_color);  // sf::Color(78, 87, 56);
     m_data.setString(sf::String(tittle));
 
     m_character_size = character_size;
@@ -65,6 +69,7 @@ bool MenuButton::update(sf::Event event, game_interface::Window *window) {
     m_table.setFillColor(m_button_color);
     set_label_size(m_character_size);
     if (result == game_interface::EventType::FirstPress) {
+        m_click_sound.play();
         return true;
     } else if (result == game_interface::EventType::Targeting) {
         interface::get_cursor().loadFromSystem(sf::Cursor::Hand);
@@ -110,6 +115,7 @@ Menu::Menu()
         static_cast<sf::Vector2f>(m_window.get_render_window()->getSize());
     sf::Vector2f button_size = sf::Vector2f(210.0f, 60.0f);
     sf::Color button_color = sf::Color(89, 100, 64);
+    sf::Color pressed_button_color = sf::Color(78, 87, 56);
 
     m_background.setTexture(game_interface::ResourceManager::load_texture(
         game_interface::TextureType::MenuBackground
@@ -127,20 +133,22 @@ Menu::Menu()
         sf::Vector2f(
             window_size.x / 2, window_size.y / 2 - 1.5 * button_size.y
         ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "sign up",
-        PageType::Entry, PageType::SignUp
+        button_size, button_color, sf::Color(78, 87, 56),
+        interface::Fonts::CaptionFont, 24, "sign up", PageType::Entry,
+        PageType::SignUp
     );
     m_buttons[1] = MenuButton(
         sf::Vector2f(window_size.x / 2, window_size.y / 2), button_size,
-        button_color, interface::Fonts::CaptionFont, 24, "registration",
-        PageType::Entry, PageType::Registration
+        button_color, pressed_button_color, interface::Fonts::CaptionFont, 24,
+        "registration", PageType::Entry, PageType::Registration
     );
     m_buttons[2] = MenuButton(
         sf::Vector2f(
             window_size.x / 2, window_size.y / 2 + 1.5 * button_size.y
         ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
-        PageType::Entry, PageType::Exit
+        button_size, button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 24, "exit", PageType::Entry,
+        PageType::Exit
     );
 
     // sign up page
@@ -175,8 +183,9 @@ Menu::Menu()
             window_size.x / 2 + 112.5,
             window_size.y / 2 + 1.05 * button_size.y - 2
         ),
-        sf::Vector2f(25, 25), sf::Color::White, interface::Fonts::CaptionFont,
-        30, "", PageType::SignUp, PageType::SignUp, sf::Color(129, 143, 92)
+        sf::Vector2f(25, 25), sf::Color::White, sf::Color(220, 220, 220),
+        interface::Fonts::CaptionFont, 30, "", PageType::SignUp,
+        PageType::SignUp, sf::Color(129, 143, 92)
     );
     m_signup_password.hide_data();
     m_signup_error = Caption(
@@ -190,13 +199,14 @@ Menu::Menu()
         sf::Vector2f(
             window_size.x / 2, window_size.y / 2 + 3.25 * button_size.y
         ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "submit",
-        PageType::SignUp, PageType::GameChoose
+        button_size, button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 24, "submit", PageType::SignUp,
+        PageType::GameChoose
     );
     m_buttons[4] = MenuButton(
         sf::Vector2f(50, 50), sf::Vector2f(60, 60), button_color,
-        interface::Fonts::CaptionFont, 20, "back", PageType::SignUp,
-        PageType::Entry
+        pressed_button_color, interface::Fonts::CaptionFont, 20, "back",
+        PageType::SignUp, PageType::Entry
     );
 
     // registration page
@@ -235,9 +245,9 @@ Menu::Menu()
             window_size.x / 2 + 112.5,
             window_size.y / 2 + 1.8 * button_size.y - 2
         ),
-        sf::Vector2f(25, 25), sf::Color::White, interface::Fonts::CaptionFont,
-        30, "", PageType::Registration, PageType::Registration,
-        sf::Color(129, 143, 92)
+        sf::Vector2f(25, 25), sf::Color::White, sf::Color(220, 220, 220),
+        interface::Fonts::CaptionFont, 30, "", PageType::Registration,
+        PageType::Registration, sf::Color(129, 143, 92)
     );
 
     m_captions[4] = Caption(
@@ -249,13 +259,14 @@ Menu::Menu()
     );
     m_buttons[5] = MenuButton(
         sf::Vector2f(window_size.x / 2, window_size.y / 2 + 4 * button_size.y),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "submit",
-        PageType::Registration, PageType::GameChoose
+        button_size, button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 24, "submit", PageType::Registration,
+        PageType::GameChoose
     );
     m_buttons[6] = MenuButton(
         sf::Vector2f(50, 50), sf::Vector2f(60, 60), button_color,
-        interface::Fonts::CaptionFont, 20, "back", PageType::Registration,
-        PageType::Entry
+        pressed_button_color, interface::Fonts::CaptionFont, 20, "back",
+        PageType::Registration, PageType::Entry
     );
 
     // game choose page
@@ -263,20 +274,22 @@ Menu::Menu()
         sf::Vector2f(
             window_size.x / 2, window_size.y / 2 - 1.5 * button_size.y
         ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24,
-        "single player", PageType::GameChoose, PageType::SinglePlayer
+        button_size, button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 24, "single player",
+        PageType::GameChoose, PageType::SinglePlayer
     );
     m_buttons[8] = MenuButton(
         sf::Vector2f(window_size.x / 2, window_size.y / 2), button_size,
-        button_color, interface::Fonts::CaptionFont, 24, "multi player",
-        PageType::GameChoose, PageType::MultiPlayer
+        button_color, pressed_button_color, interface::Fonts::CaptionFont, 24,
+        "multi player", PageType::GameChoose, PageType::MultiPlayer
     );
     m_buttons[9] = MenuButton(
         sf::Vector2f(
             window_size.x / 2, window_size.y / 2 + 1.5 * button_size.y
         ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
-        PageType::GameChoose, PageType::Exit
+        button_size, button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 24, "exit", PageType::GameChoose,
+        PageType::Exit
     );
 
     // game over page
@@ -303,31 +316,29 @@ Menu::Menu()
         );
     }
     m_buttons[10] = MenuButton(
-        sf::Vector2f(
-            window_size.x / 2, window_size.y / 2
-        ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "menu",
-        PageType::GameOver, PageType::GameChoose
+        sf::Vector2f(window_size.x / 2, window_size.y / 2), button_size,
+        button_color, pressed_button_color, interface::Fonts::CaptionFont, 24,
+        "menu", PageType::GameOver, PageType::GameChoose
     );
     m_buttons[11] = MenuButton(
-        sf::Vector2f(
-            window_size.x / 2, window_size.y / 2 + 2 * button_size.y
-        ),
-        button_size, button_color, interface::Fonts::CaptionFont, 24, "exit",
-        PageType::GameOver, PageType::Exit
+        sf::Vector2f(window_size.x / 2, window_size.y / 2 + 2 * button_size.y),
+        button_size, button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 24, "exit", PageType::GameOver,
+        PageType::Exit
     );
 
     // set sound
     m_sound_button = MenuButton(
         sf::Vector2f(window_size.x - 50, window_size.y - 50),
-        sf::Vector2f(60, 60), button_color, interface::Fonts::CaptionFont, 20,
-        "", PageType::Any, PageType::Any
+        sf::Vector2f(60, 60), button_color, pressed_button_color,
+        interface::Fonts::CaptionFont, 20, "", PageType::Any, PageType::Any
     );
     m_sound_icon.setSize({60.0f, 60.0f});
     m_sound_icon.setOrigin(30.0f, 30.0f);
     m_sound_icon.setPosition({window_size.x - 50, window_size.y - 50});
     m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(0)
     );
+    m_soundtrack.setLoop(true);
 }
 
 game_interface::Window *Menu::get_window() {

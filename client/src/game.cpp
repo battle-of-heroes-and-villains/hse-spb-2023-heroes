@@ -13,6 +13,8 @@ Game::Game()
         game_interface::CellType::Type1
     ));
     m_background.setPosition(0, 0);
+
+    m_soundtrack.setLoop(true);
 }
 
 void Game::update() {
@@ -27,10 +29,6 @@ void Game::update() {
 
 void Game::render() {
     m_window.begin_draw();
-    if (m_soundtrack.getStatus() == sf::SoundSource::Paused ||
-        m_soundtrack.getStatus() == sf::SoundSource::Stopped) {
-        m_soundtrack.play();
-    }
     m_window.get_render_window()->clear(sf::Color(164, 176, 126));
     m_board.render(m_window.get_render_window());
     m_game_menu_bar.render(m_window.get_render_window());
@@ -51,6 +49,14 @@ void Game::render() {
 
 void Game::music_stop() {
     m_soundtrack.pause();
+}
+
+void Game::music_play() {
+    m_soundtrack.play();
+}
+
+sf::Sound::Status Game::get_music_status() const {
+    return m_soundtrack.getStatus();
 }
 
 [[nodiscard]] Game *get_game_state() {

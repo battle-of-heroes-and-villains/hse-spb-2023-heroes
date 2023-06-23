@@ -15,7 +15,7 @@ public:
     void render(sf::RenderWindow *window);
 
 private:
-    std::string compress_name(const std::string &name);
+    static std::string compress_name(const std::string &name);
 
     sf::RectangleShape m_turn_label;
     sf::Text m_data;
@@ -30,10 +30,14 @@ private:
     std::vector<Spell> m_spells;
     int m_opponents_spells_amount;
     std::vector<Spell> m_opponents_spells;
+    sf::RectangleShape m_sound_icon;
 
     static void align_text_origin(sf::Text &data);
     void update_turn();
     void update_mana();
+
+    void music_stop();
+    void music_play();
 };
 }  // namespace game_interface
 

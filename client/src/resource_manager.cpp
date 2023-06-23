@@ -300,6 +300,12 @@ void ResourceManager::load_resources() {
         .loadFromFile(interface::source_dir + "sounds/menu_background.wav");
     ResourceManager::m_sounds[interface::Sounds::GameBackgroundSound]
         .loadFromFile(interface::source_dir + "sounds/game_background.wav");
+    ResourceManager::m_sounds[interface::Sounds::Click].loadFromFile(
+        interface::source_dir + "sounds/click.wav"
+    );
+    ResourceManager::m_sounds[interface::Sounds::Type].loadFromFile(
+        interface::source_dir + "sounds/type.wav"
+    );
 
     ResourceManager::m_cursors[CursorType::Attack].loadFromFile(
         interface::source_dir + "cursors/cursor_sword.png"

@@ -11,6 +11,8 @@ public:
     ~Game() = default;
 
     void music_stop();
+    void music_play();
+    sf::Sound::Status get_music_status() const;
 
     void update();
     void render();
