@@ -20,6 +20,8 @@ public:
     [[nodiscard]] Board *get_board();
     [[nodiscard]] GameMenuBar *get_game_menu_bar();
 
+    void reopen();
+
 private:
     Window m_window;
     sf::Sprite m_background;

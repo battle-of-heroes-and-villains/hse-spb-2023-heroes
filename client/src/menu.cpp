@@ -298,6 +298,7 @@ Menu::Menu()
         {0, 0}, interface::Fonts::TittleFont, 60, "Game over",
         PageType::GameOver
     );
+
     if (Client::are_we_win()) {
         m_captions[6] = Caption(
             sf::Vector2f(
@@ -543,6 +544,29 @@ void Menu::music_play() {
     m_sound_icon.setTexture(&game_interface::ResourceManager::load_sound_icon(1)
     );
     m_soundtrack.play();
+}
+
+void Menu::set_up_winner() {
+    sf::Vector2f window_size =
+        static_cast<sf::Vector2f>(m_window.get_render_window()->getSize());
+    sf::Vector2f button_size = sf::Vector2f(210.0f, 60.0f);
+    if (Client::are_we_win()) {
+        m_captions[6] = Caption(
+            sf::Vector2f(
+                window_size.x / 2, window_size.y / 2 - 2 * button_size.y
+            ),
+            {0, 0}, interface::Fonts::CaptionFont, 24,
+            "you win\nyour enemy lose", PageType::GameOver
+        );
+    } else {
+        m_captions[6] = Caption(
+            sf::Vector2f(
+                window_size.x / 2, window_size.y / 2 - 2 * button_size.y
+            ),
+            {0, 0}, interface::Fonts::CaptionFont, 24,
+            "you lose\nyour enemy win", PageType::GameOver
+        );
+    }
 }
 
 bool Menu::is_exit() const {

@@ -59,6 +59,10 @@ sf::Sound::Status Game::get_music_status() const {
     return m_soundtrack.getStatus();
 }
 
+void Game::reopen() {
+    m_window.reopen("Battle of Heroes and Villains", sf::Vector2u(1920, 1080));
+}
+
 [[nodiscard]] Game *get_game_state() {
     static Game game_state;
     return &game_state;

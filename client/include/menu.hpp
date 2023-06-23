@@ -62,6 +62,7 @@ public:
 
     [[nodiscard]] bool is_exit() const;
     void reopen();
+    void set_up_winner();
 
 private:
     game_interface::Window m_window;
