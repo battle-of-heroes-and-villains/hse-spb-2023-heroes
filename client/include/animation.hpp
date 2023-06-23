@@ -12,6 +12,8 @@ public:
     Animation() = default;
     ~Animation() = default;
 
+    sf::Vector2f get_position() const;
+
     void update_animation(
         sf::Vector2f unit_size,
         sf::Vector2f cell_size,
@@ -19,14 +21,14 @@ public:
         UnitType type
     );
     void update_texture();
-    void reverse();
 
     void play_animation(
         AnimationType type,
         Coords source_cell,
         Coords destination_cell = {-1, -1}
     );
-    bool is_playing() const;
+    [[nodiscard]] bool is_playing() const;
+    [[nodiscard]] bool is_moving() const;
     void update();
     void render(sf::RenderWindow *window);
 
@@ -34,6 +36,8 @@ private:
     sf::IntRect m_current_frame;
     int m_frame_width;
     int m_amount_of_frames;
+    bool m_is_reversed;
+    AnimationType m_animation_type{AnimationType::Nothing};
     sf::Texture m_animation_sheet;
     sf::Sprite m_animation;
     sf::Clock m_clock;
@@ -41,7 +45,7 @@ private:
     UnitType m_unit_type;
     sf::Vector2f m_unit_size;
     sf::Vector2f m_cell_size;
-    sf::Vector2f m_delta;
+    sf::Vector2f m_delta_distance;
     int m_repeats;
     float m_delta_time;
 };

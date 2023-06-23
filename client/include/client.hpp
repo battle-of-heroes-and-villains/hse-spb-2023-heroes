@@ -14,6 +14,11 @@ public:
     namespace_proto::Hero m_hero;
     namespace_proto::Hero m_opponent;
     namespace_proto::GameState m_game_state;
+    std::unique_ptr<grpc::ClientReader<namespace_proto::GameState>> reader;
+    std::shared_ptr<::grpc::ChannelInterface> channel;
+    std::atomic<bool> active_animation{true};
+    std::atomic<bool> active_game{true};
+    std::condition_variable variable;
     mutable std::mutex m_mutex;
 };
 
@@ -47,6 +52,8 @@ public:
 
     static void get_hero();
     static void get_opponent();
+
+    static bool are_we_win();
 
     static std::vector<std::pair<int, int>> select_spell(int spell_id);
     static void do_spell(int spell_id, namespace_proto::Cell cell);

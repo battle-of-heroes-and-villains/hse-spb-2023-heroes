@@ -21,7 +21,8 @@ public:
     void set_unit(Unit *unit);
 
     void update_cell_durability();
-    void update_cell_texture(CellType type);
+    void update_cell_texture(CellPropertyType type);
+    void change_cell_durability();
 
     void add_selection();
     void remove_selection();
@@ -30,7 +31,7 @@ public:
 
     void handling_event(sf::Event event, Unit **selected_unit);
     EventType is_mouse_target(sf::Window *window);
-    bool change_cursor(sf::Window *window);
+    void change_cursor(sf::Window *window);
 
     void update_cell();
     void render(sf::RenderWindow *window);
@@ -39,11 +40,14 @@ private:
     sf::Vector2f m_cell_size;
     Coords m_coords;
     CellType m_cell_type;
-    CellType m_cell_property_type;
+    CellPropertyType m_cell_property_type;
+    CracksStage m_cracks_stage;
     int m_durability;
+    int m_max_durability;
     int m_spell_id;
 
     sf::Sprite m_cell;
+    sf::Sprite m_cracks;
     sf::Sprite m_cell_property;
     interface::Button m_button;
     Unit *m_unit{nullptr};

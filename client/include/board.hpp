@@ -23,7 +23,7 @@ public:
         int spell_id
     );
 
-    void play_animation(Coords source_cell, Coords destination_cell);
+    void play_animation();
 
     void remove_enable_for_spelling_cells();
     void handling_event(sf::Event event, sf::Window *window);

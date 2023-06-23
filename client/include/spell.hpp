@@ -12,26 +12,26 @@ public:
     Spell(
         sf::Vector2f position,
         sf::Vector2f size,
+        sf::Color color,
+        sf::Color pressed_color,
         const namespace_proto::Spell &spell
     );
     ~Spell() = default;
 
-    void remove();
-    void set_name();
+    void set_default_state();
     void update(sf::Event event, Window *window);
     void render(sf::RenderWindow *window);
 
 private:
     sf::RectangleShape m_table;
-    sf::Text m_data;
+    sf::RectangleShape m_icon;
+    sf::Text m_name;
+    sf::Text m_description;
+    sf::Color m_button_color;
     interface::Button m_button;
     int m_id;
-    std::string m_name;
-    std::string m_description;
-    int m_mana;
     bool m_is_name_showed;
-
-    void update_data();
+    sf::Sound m_click_sound;
 };
 }  // namespace game_interface
 
