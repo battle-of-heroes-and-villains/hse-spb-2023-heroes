@@ -40,7 +40,7 @@ View unit's characteristics (target to unit and press 'i' to see them).
 
 Apply spell.
 
-[//]: # (![]&#40;https://github.com/battle-of-heroes-and-villains/hse-spb-2023-heroes/blob/main/client/game_examples/spell.png&#41;)
+![](https://github.com/battle-of-heroes-and-villains/hse-spb-2023-heroes/blob/main/client/game_examples/spell.png)
 
 ### Spells list
 
