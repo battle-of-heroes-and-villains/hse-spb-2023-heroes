@@ -9,81 +9,12 @@ sf::Vector2f Animation::get_position() const {
             m_animation.getGlobalBounds().height};
 }
 
-void Animation::update_animation(
-    sf::Vector2f unit_size,
-    sf::Vector2f cell_size,
-    sf::Vector2f position,
-    UnitType type
-) {
-    m_frame_width = m_animation_sheet.getSize().x / m_amount_of_frames;
-    m_current_frame =
-        sf::IntRect(0, 0, m_frame_width, m_animation_sheet.getSize().y);
-
-    m_animation.setTexture(m_animation_sheet);
-    m_animation.setTextureRect(m_current_frame);
-    m_animation.setScale(
-        (m_is_reversed ? -1 : 1) * unit_size.y / m_animation_sheet.getSize().y,
-        unit_size.y / m_animation_sheet.getSize().y
-    );
-
-    if (!m_is_playing) {
-        m_animation.setPosition(position);
-    }
-    m_animation.setOrigin(
-        m_animation.getTextureRect().width / 2,
-        m_animation.getTextureRect().height / 2
-    );
-
-    m_unit_type = type;
-    m_unit_size = unit_size;
-    m_cell_size = cell_size;
+bool Animation::is_playing() const {
+    return m_is_playing;
 }
 
-void Animation::update() {
-    if (!m_is_playing) {
-        return;
-    }
-    if (m_clock.getElapsedTime().asSeconds() > m_delta_time) {
-        if (m_current_frame.left == m_frame_width * (m_amount_of_frames - 1)) {
-            m_current_frame.left = 0;
-        } else {
-            m_current_frame.left += m_frame_width;
-        }
-        m_animation.setPosition(
-            m_animation.getPosition().x + m_delta_distance.x,
-            m_animation.getPosition().y + m_delta_distance.y
-        );
-        m_repeats--;
-        if (!m_repeats) {
-            m_is_playing = false;
-        }
-        m_animation.setTextureRect(m_current_frame);
-        m_clock.restart();
-    }
-}
-
-void Animation::render(sf::RenderWindow *window) {
-    if (m_is_playing) {
-        window->draw(m_animation);
-    }
-}
-
-void Animation::update_texture() {
-    m_frame_width = m_animation_sheet.getSize().x / m_amount_of_frames;
-    m_current_frame =
-        sf::IntRect(0, 0, m_frame_width, m_animation_sheet.getSize().y);
-
-    m_animation.setTexture(m_animation_sheet);
-    m_animation.setTextureRect(m_current_frame);
-    m_animation.setScale(
-        (m_is_reversed ? -1 : 1) * m_unit_size.y /
-            m_animation_sheet.getSize().y,
-        m_unit_size.y / m_animation_sheet.getSize().y
-    );
-    m_animation.setOrigin(
-        m_animation.getTextureRect().width / 2,
-        m_animation.getTextureRect().height / 2
-    );
+bool Animation::is_moving() const {
+    return m_animation_type == AnimationType::Move && m_is_playing;
 }
 
 void Animation::play_animation(
@@ -140,11 +71,80 @@ void Animation::play_animation(
     update_texture();
 }
 
-bool Animation::is_playing() const {
-    return m_is_playing;
+void Animation::update_animation(
+    sf::Vector2f unit_size,
+    sf::Vector2f cell_size,
+    sf::Vector2f position,
+    UnitType type
+) {
+    m_frame_width = m_animation_sheet.getSize().x / m_amount_of_frames;
+    m_current_frame =
+        sf::IntRect(0, 0, m_frame_width, m_animation_sheet.getSize().y);
+
+    m_animation.setTexture(m_animation_sheet);
+    m_animation.setTextureRect(m_current_frame);
+    m_animation.setScale(
+        (m_is_reversed ? -1 : 1) * unit_size.y / m_animation_sheet.getSize().y,
+        unit_size.y / m_animation_sheet.getSize().y
+    );
+
+    if (!m_is_playing) {
+        m_animation.setPosition(position);
+    }
+    m_animation.setOrigin(
+        m_animation.getTextureRect().width / 2,
+        m_animation.getTextureRect().height / 2
+    );
+
+    m_unit_type = type;
+    m_unit_size = unit_size;
+    m_cell_size = cell_size;
 }
 
-bool Animation::is_moving() const {
-    return m_animation_type == AnimationType::Move && m_is_playing;
+void Animation::update_texture() {
+    m_frame_width = m_animation_sheet.getSize().x / m_amount_of_frames;
+    m_current_frame =
+        sf::IntRect(0, 0, m_frame_width, m_animation_sheet.getSize().y);
+
+    m_animation.setTexture(m_animation_sheet);
+    m_animation.setTextureRect(m_current_frame);
+    m_animation.setScale(
+        (m_is_reversed ? -1 : 1) * m_unit_size.y /
+            m_animation_sheet.getSize().y,
+        m_unit_size.y / m_animation_sheet.getSize().y
+    );
+    m_animation.setOrigin(
+        m_animation.getTextureRect().width / 2,
+        m_animation.getTextureRect().height / 2
+    );
+}
+
+void Animation::update() {
+    if (!m_is_playing) {
+        return;
+    }
+    if (m_clock.getElapsedTime().asSeconds() > m_delta_time) {
+        if (m_current_frame.left == m_frame_width * (m_amount_of_frames - 1)) {
+            m_current_frame.left = 0;
+        } else {
+            m_current_frame.left += m_frame_width;
+        }
+        m_animation.setPosition(
+            m_animation.getPosition().x + m_delta_distance.x,
+            m_animation.getPosition().y + m_delta_distance.y
+        );
+        m_repeats--;
+        if (!m_repeats) {
+            m_is_playing = false;
+        }
+        m_animation.setTextureRect(m_current_frame);
+        m_clock.restart();
+    }
+}
+
+void Animation::render(sf::RenderWindow *window) {
+    if (m_is_playing) {
+        window->draw(m_animation);
+    }
 }
 }  // namespace game_interface

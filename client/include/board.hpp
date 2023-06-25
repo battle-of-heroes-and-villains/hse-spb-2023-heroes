@@ -12,7 +12,7 @@ public:
     explicit Board(sf::Vector2i window_size);
     ~Board() = default;
 
-    [[nodiscard]] sf::Vector2f get_cell_position(Coords coords) const;
+    void play_animation();
 
     void add_available_for_moving_cells(
         std::vector<std::pair<int, int>> selected_cells
@@ -22,10 +22,8 @@ public:
         std::vector<std::pair<int, int>> selected_cells,
         int spell_id
     );
-
-    void play_animation();
-
     void remove_enable_for_spelling_cells();
+
     void handling_event(sf::Event event, sf::Window *window);
     void update_board(const namespace_proto::GameState &game_state);
     void render(sf::RenderWindow *window);
@@ -42,6 +40,8 @@ private:
     Unit *selected_unit;
     std::vector<std::pair<int, int>> m_available_for_moving_cells;
     std::vector<std::pair<int, int>> m_enable_for_spelling_cells;
+
+    [[nodiscard]] sf::Vector2f get_cell_position(Coords coords) const;
 };
 }  // namespace game_interface
 #endif  // BATTLE_OF_HEROES_BOARD_HPP

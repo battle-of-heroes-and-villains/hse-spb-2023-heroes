@@ -10,23 +10,23 @@ void UnitInfo::update_characteristics(const namespace_proto::Unit &unit) {
     m_weight = unit.weight();
 }
 
-[[nodiscard]] Coords Unit::get_coords() const {
+Coords Unit::get_coords() const {
     return m_coords;
 }
 
-[[nodiscard]] int Unit::get_hero_id() const {
+int Unit::get_hero_id() const {
     return m_unit_info.m_hero_id;
 }
 
-[[nodiscard]] int Unit::get_health() const {
+int Unit::get_health() const {
     return m_unit_info.m_max_health * m_unit_info.m_amount_of_units;
 }
 
-[[nodiscard]] int Unit::get_damage() const {
+int Unit::get_damage() const {
     return m_unit_info.m_damage;
 }
 
-[[nodiscard]] bool Unit::is_moving() const {
+bool Unit::is_moving() const {
     return m_animation.is_moving();
 }
 
@@ -162,7 +162,6 @@ void Unit::play_animation(AnimationType type, Coords destination_cell) {
 }
 
 void Unit::update_table_position(sf::Vector2f new_position) {
-    // new_position is a point of the unit's width middle and unit's bottom
     m_table.setPosition(sf::Vector2f(
         new_position.x, new_position.y - m_table.getGlobalBounds().height
     ));

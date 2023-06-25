@@ -34,7 +34,7 @@ enum class AnimationType { Move, Attack, GetAttacked, Dead, Nothing };
 
 enum class EventType { FirstPress, SecondPress, Move, Targeting, Nothing };
 
-enum class ButtonType { None, Play, Pass, Menu, Exit, Skip, GiveUp, Spell };
+enum class ButtonType { None, Menu, Exit, Skip, GiveUp };
 
 enum class CursorType { Attack, Spell };
 }  // namespace game_interface

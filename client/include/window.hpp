@@ -14,14 +14,16 @@ public:
 
     void begin_draw();
     void end_draw();
+
     [[nodiscard]] sf::RenderWindow *get_render_window();
     [[nodiscard]] bool is_done() const;
+
     void set_is_done();
     void toggle_fullscreen();
+    void reopen(std::string title, const sf::Vector2u &size);
+
     void update(sf::Event event);
     void render(sf::Drawable &l_drawable);
-
-    void reopen(std::string title, const sf::Vector2u &size);
 
 private:
     void create();

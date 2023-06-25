@@ -13,8 +13,8 @@ public:
     Cell() = default;
     explicit Cell(Coords coords, sf::Vector2f position, sf::Vector2f size);
 
-    bool is_have_unit() const;
-    bool is_available_for_moving() const;
+    [[nodiscard]] bool is_have_unit() const;
+    [[nodiscard]] bool is_available_for_moving() const;
     [[nodiscard]] Unit *get_unit();
     [[nodiscard]] sf::Vector2f get_cell_position();
 

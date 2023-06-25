@@ -573,7 +573,7 @@ bool Menu::is_exit() const {
     return m_current_page == PageType::Exit;
 }
 
-[[nodiscard]] Menu *get_menu_state() {
+Menu *get_menu_state() {
     static Menu menu{};
     return &menu;
 }

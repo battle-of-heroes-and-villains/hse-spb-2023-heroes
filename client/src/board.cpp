@@ -156,38 +156,6 @@ void Board::handling_event(sf::Event event, sf::Window *window) {
     }
 }
 
-void Board::render(sf::RenderWindow *window) {
-    interface::get_cursor_state() = false;
-    for (auto &row : m_board) {
-        for (auto &cell : row) {
-            if (cell.is_have_unit()) {
-                cell.get_unit()->update_statistic(
-                    cell.is_mouse_target(window), window
-                );
-            }
-            cell.change_cursor(window);
-            cell.render(window);
-        }
-    }
-    if (!interface::get_cursor_state()) {
-        interface::get_cursor().loadFromSystem(sf::Cursor::Arrow);
-        window->setMouseCursor(interface::get_cursor());
-    }
-    for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
-        if (m_unit_is_alive[unit_id]) {
-            m_units[unit_id].render(window);
-        } else {
-            m_units[unit_id].render_animation(window);
-        }
-    }
-
-    for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
-        if (m_unit_is_alive[unit_id]) {
-            m_units[unit_id].render_statistic(window);
-        }
-    }
-}
-
 void Board::update_board(const namespace_proto::GameState &game_state) {
     bool is_second =
         (game_state.second_user() == get_client_state()->m_user.user().id());
@@ -219,6 +187,38 @@ void Board::update_board(const namespace_proto::GameState &game_state) {
     for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
         if (!m_unit_is_updated[unit_id]) {
             m_unit_is_alive[unit_id] = false;
+        }
+    }
+}
+
+void Board::render(sf::RenderWindow *window) {
+    interface::get_cursor_state() = false;
+    for (auto &row : m_board) {
+        for (auto &cell : row) {
+            if (cell.is_have_unit()) {
+                cell.get_unit()->update_statistic(
+                    cell.is_mouse_target(window), window
+                );
+            }
+            cell.change_cursor(window);
+            cell.render(window);
+        }
+    }
+    if (!interface::get_cursor_state()) {
+        interface::get_cursor().loadFromSystem(sf::Cursor::Arrow);
+        window->setMouseCursor(interface::get_cursor());
+    }
+    for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
+        if (m_unit_is_alive[unit_id]) {
+            m_units[unit_id].render(window);
+        } else {
+            m_units[unit_id].render_animation(window);
+        }
+    }
+
+    for (int unit_id = 0; unit_id < m_units.size(); unit_id++) {
+        if (m_unit_is_alive[unit_id]) {
+            m_units[unit_id].render_statistic(window);
         }
     }
 }

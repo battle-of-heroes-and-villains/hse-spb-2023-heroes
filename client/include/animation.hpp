@@ -12,7 +12,15 @@ public:
     Animation() = default;
     ~Animation() = default;
 
-    sf::Vector2f get_position() const;
+    [[nodiscard]] sf::Vector2f get_position() const;
+    [[nodiscard]] bool is_playing() const;
+    [[nodiscard]] bool is_moving() const;
+
+    void play_animation(
+        AnimationType type,
+        Coords source_cell,
+        Coords destination_cell = {-1, -1}
+    );
 
     void update_animation(
         sf::Vector2f unit_size,
@@ -22,13 +30,6 @@ public:
     );
     void update_texture();
 
-    void play_animation(
-        AnimationType type,
-        Coords source_cell,
-        Coords destination_cell = {-1, -1}
-    );
-    [[nodiscard]] bool is_playing() const;
-    [[nodiscard]] bool is_moving() const;
     void update();
     void render(sf::RenderWindow *window);
 

@@ -46,10 +46,10 @@ class GameState : public State {
 
 public:
     void display_state() override {
+        Client::get_hero();
         if (game_interface::get_game_state()->get_window()->is_done()) {
             game_interface::get_game_state()->reopen();
         }
-        Client::get_hero();
         get_client_state()->m_opponent.set_type(-1);
         get_client_state()->active_game = true;
         std::thread receiver(&Client::run_receiver);
