@@ -1,4 +1,4 @@
-![](https://github.com/battle-of-heroes-and-villains/hse-spb-2023-heroes/blob/main/client/game_examples/game_start.png)
+![](https://github.com/battle-of-heroes-and-villains/hse-spb-2023-heroes/blob/main/client/game_examples/caption.png)
 
 ---
 
